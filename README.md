@@ -1,4 +1,4 @@
-# nestly
+# Nestly
 finance tracker
 
 👉 Get started with the following commands:
