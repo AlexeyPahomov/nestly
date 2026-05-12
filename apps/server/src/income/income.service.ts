@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateIncomeDto } from './dto/create-income.dto/create-income.dto';
+import { CreateIncomeDto } from './dto/create-income.dto';
 
 @Injectable()
 export class IncomeService {

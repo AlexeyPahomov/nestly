@@ -14,6 +14,8 @@ model Income {
   source        String?
   period_month  DateTime
   created_at    DateTime @default(now())
+
+  allocations   Allocation[]
 }
 
 model Category {
@@ -22,13 +24,18 @@ model Category {
   name       String
   type       String
   created_at DateTime @default(now())
+
+  allocations Allocation[]
+  expenses    Expense[]
 }
 
 model Allocation {
   id          String   @id @default(uuid())
   user_id     String
   income_id   String
+  income      Income @relation(fields: [income_id], references: [id])
   category_id String
+  category    Category @relation(fields: [category_id], references: [id])
   amount      Decimal
   created_at  DateTime @default(now())
 }
@@ -37,6 +44,7 @@ model Expense {
   id          String   @id @default(uuid())
   user_id     String
   category_id String
+  category    Category @relation(fields: [category_id], references: [id])
   amount      Decimal
   description String?
   date        DateTime

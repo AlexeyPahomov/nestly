@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import type { Income } from '../generated/prisma/client';
-import { CreateIncomeDto } from './dto/create-income.dto/create-income.dto';
+import { CreateIncomeDto } from './dto/create-income.dto';
 import { IncomeService } from './income.service';
 
 @Controller('income')
