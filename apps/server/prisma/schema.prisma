@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Income {
+  id            String   @id @default(uuid())
+  user_id       String
+  amount        Decimal
+  source        String?
+  period_month  DateTime
+  created_at    DateTime @default(now())
+}
+
+model Category {
+  id         String   @id @default(uuid())
+  user_id    String
+  name       String
+  type       String
+  created_at DateTime @default(now())
+}
+
+model Allocation {
+  id          String   @id @default(uuid())
+  user_id     String
+  income_id   String
+  category_id String
+  amount      Decimal
+  created_at  DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  user_id     String
+  category_id String
+  amount      Decimal
+  description String?
+  date        DateTime
+  created_at  DateTime @default(now())
+}
