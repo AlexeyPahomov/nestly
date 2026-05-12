@@ -15,6 +15,12 @@ let s = fs.readFileSync(clientPath, 'utf8');
 const needle =
   "globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))";
 if (!s.includes(needle)) {
+  if (s.includes("globalThis['__dirname'] = __dirname")) {
+    process.exit(0);
+  }
+  console.warn(
+    '[patch-prisma-client] Ожидаемая строка import.meta в client.ts не найдена, пропуск.',
+  );
   process.exit(0);
 }
 
