@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { IncomeModule } from './income/income.module';
 import { AllocationModule } from './allocation/allocation.module';
@@ -13,5 +14,6 @@ import { ExpenseModule } from './expense/expense.module';
     CategoryModule,
     ExpenseModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
