@@ -1,0 +1,16 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import type { CreateIncomePayload, Income } from '../model/types'
+import { createIncome } from './incomeApi'
+import { incomeKeys } from './incomeQueryKeys'
+
+export function useCreateIncomeMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<Income, Error, CreateIncomePayload>({
+    mutationFn: (payload) => createIncome(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: incomeKeys.lists() })
+    },
+  })
+}

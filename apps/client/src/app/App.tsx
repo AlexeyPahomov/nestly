@@ -1,9 +1,12 @@
-function App() {
-  return (
-    <>
-      <h1>Get started</h1>
-    </>
-  );
-}
+import { RouterProvider } from 'react-router-dom'
 
-export default App;
+import { QueryProvider } from './providers/QueryProvider'
+import { router } from './router/router'
+
+export default function App() {
+  return (
+    <QueryProvider>
+      <RouterProvider router={router} />
+    </QueryProvider>
+  )
+}
