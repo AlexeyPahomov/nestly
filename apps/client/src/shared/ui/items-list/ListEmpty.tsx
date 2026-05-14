@@ -1,11 +1,11 @@
-import { Card, CardContent } from '@/shared/ui';
+import { Card, CardContent } from '../card/Card'
 
 type ListEmptyProps = {
-  message?: string;
-};
+  message?: string
+}
 
 export function ListEmpty({
-  message = 'Пока нет доходов. Добавьте первую запись.',
+  message = 'Пока нет записей.',
 }: ListEmptyProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -15,5 +15,5 @@ export function ListEmpty({
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

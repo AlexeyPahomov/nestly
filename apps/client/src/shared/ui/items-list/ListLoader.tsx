@@ -1,4 +1,5 @@
-import { Card, CardContent, Spinner } from '@/shared/ui';
+import { Card, CardContent } from '../card/Card'
+import { Spinner } from '../spinner/Spinner'
 
 export function ListLoader() {
   return (
@@ -10,5 +11,5 @@ export function ListLoader() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
