@@ -1,6 +1,16 @@
-import { Outlet } from 'react-router-dom'
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { Sidebar } from '../../widgets/sidebar/ui/Sidebar'
+import { Spinner } from '@/shared/ui'
+import { Sidebar } from '@/widgets/sidebar';
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-[40vh] flex-col items-center justify-center">
+      <Spinner className="size-8 text-zinc-500" />
+    </div>
+  );
+}
 
 export function AppLayout() {
   return (
@@ -8,8 +18,10 @@ export function AppLayout() {
       <Sidebar />
 
       <main className="flex-1 p-8">
-        <Outlet />
+        <Suspense fallback={<RouteFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
-  )
+  );
 }
