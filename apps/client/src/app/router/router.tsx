@@ -1,10 +1,27 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import type { ComponentType, LazyExoticComponent } from 'react'
 
-import { AppLayout } from '../layout/AppLayout'
-import { AllocationPage } from '../../pages/allocation-page'
-import { CategoryPage } from '../../pages/category-page'
-import { ExpensePage } from '../../pages/expense-page'
-import { IncomePage } from '../../pages/income-page'
+import { AppLayout } from '@/app/layout/AppLayout'
+import {
+  APP_DEFAULT_SEGMENT,
+  APP_ROUTES,
+  appRouteHref,
+  type AppRouteId,
+} from '@/app/config/routes'
+
+import {
+  LazyAllocationPage,
+  LazyCategoryPage,
+  LazyExpensePage,
+  LazyIncomePage,
+} from './lazyPages'
+
+const lazyPageByRouteId: Record<AppRouteId, LazyExoticComponent<ComponentType>> = {
+  income: LazyIncomePage,
+  allocation: LazyAllocationPage,
+  expenses: LazyExpensePage,
+  categories: LazyCategoryPage,
+}
 
 export const router = createBrowserRouter([
   {
@@ -13,20 +30,12 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <IncomePage />,
+        element: <Navigate to={appRouteHref(APP_DEFAULT_SEGMENT)} replace />,
       },
-      {
-        path: 'allocation',
-        element: <AllocationPage />,
-      },
-      {
-        path: 'expenses',
-        element: <ExpensePage />,
-      },
-      {
-        path: 'categories',
-        element: <CategoryPage />,
-      },
+      ...APP_ROUTES.map((route) => {
+        const Page = lazyPageByRouteId[route.id]
+        return { path: route.segment, element: <Page /> }
+      }),
     ],
   },
 ])

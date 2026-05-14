@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import type { Income } from '../model/types'
+import type { Income } from '@/entities/income/model/types'
 import { getIncomes } from './incomeApi'
 import { incomeKeys } from './incomeQueryKeys'
 

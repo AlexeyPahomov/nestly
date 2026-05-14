@@ -5,7 +5,7 @@ import { SidebarItem } from './SidebarItem'
 
 export function Sidebar() {
   return (
-    <aside className="w-64 border-r border-zinc-200 bg-white p-6">
+    <aside className="w-64 shrink-0 border-r border-zinc-200 bg-white p-6">
       <div className="mb-10">
         <h1 className="text-2xl font-bold">{APP_NAME}</h1>
       </div>

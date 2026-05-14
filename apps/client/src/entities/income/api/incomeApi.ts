@@ -1,5 +1,5 @@
-import { apiGet, apiPost } from '../../../shared/api/client'
-import type { CreateIncomePayload, Income } from '../model/types'
+import { apiGet, apiPost } from '@/shared/api/client'
+import type { CreateIncomePayload, Income } from '@/entities/income/model/types'
 
 const INCOME_PATH = '/income'
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import type { CreateIncomePayload, Income } from '../model/types'
+import type { CreateIncomePayload, Income } from '@/entities/income/model/types'
 import { createIncome } from './incomeApi'
 import { incomeKeys } from './incomeQueryKeys'
 
