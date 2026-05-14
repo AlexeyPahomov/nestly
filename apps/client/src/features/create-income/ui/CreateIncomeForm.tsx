@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@/shared/ui'
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, MonthPicker } from '@/shared/ui'
 
 import { useCreateIncomeForm } from '../model/useCreateIncomeForm'
 
@@ -41,14 +41,12 @@ export function CreateIncomeForm() {
             onChange={form.handleChange}
           />
 
-          <Input
+          <MonthPicker
             id="income-period"
             label="Месяц"
-            name="period_month"
-            type="month"
             value={form.values.period_month}
-            onChange={form.handleChange}
-            className="max-w-xs"
+            onChange={(period_month) => form.patchValues({ period_month })}
+            disabled={form.submitting}
           />
 
           {form.validationError ? (

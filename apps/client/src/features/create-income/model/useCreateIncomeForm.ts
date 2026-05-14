@@ -17,7 +17,7 @@ const emptyFormValues = (): CreateIncomeFormValues => ({
 
 export function useCreateIncomeForm() {
   const mutation = useCreateIncomeMutation()
-  const { values, handleChange, setValues } = useForm<CreateIncomeFormValues>(emptyFormValues())
+  const { values, handleChange, patchValues, setValues } = useForm<CreateIncomeFormValues>(emptyFormValues())
 
   const [validationError, setValidationError] = useState<string | null>(null)
 
@@ -51,6 +51,7 @@ export function useCreateIncomeForm() {
   return {
     values,
     handleChange,
+    patchValues,
     validationError,
     serverError,
     submitting,

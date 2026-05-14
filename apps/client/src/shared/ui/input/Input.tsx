@@ -1,14 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { cn } from '@/shared/lib/utils';
+import { formLabelClassName } from '@/shared/config/formUi'
+import { cn } from '@/shared/lib/utils'
 
 type InputProps = React.ComponentProps<'input'> & {
-  label?: React.ReactNode;
+  label?: React.ReactNode
   /** Классы обёртки (когда передан `label`). */
-  containerClassName?: string;
-};
-
-const formLabelClassName = 'mb-1 block text-sm font-medium text-zinc-700';
+  containerClassName?: string
+}
 
 function Input({
   className,
@@ -18,9 +17,8 @@ function Input({
   containerClassName,
   ...props
 }: InputProps) {
-  const generatedId = React.useId();
-  const inputId =
-    id ?? (label != null && label !== '' ? generatedId : undefined);
+  const generatedId = React.useId()
+  const inputId = id ?? (label != null && label !== '' ? generatedId : undefined)
 
   const control = (
     <input
@@ -33,10 +31,10 @@ function Input({
       )}
       {...props}
     />
-  );
+  )
 
   if (label == null || label === '') {
-    return control;
+    return control
   }
 
   return (
@@ -46,7 +44,7 @@ function Input({
       </label>
       {control}
     </div>
-  );
+  )
 }
 
-export { Input, type InputProps };
+export { Input, type InputProps }

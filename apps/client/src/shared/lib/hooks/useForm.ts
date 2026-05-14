@@ -16,6 +16,7 @@ export function useForm<T extends Record<string, string>>(
   values: T
   handleChange: (event: FormChangeEvent) => void
   setValues: Dispatch<SetStateAction<T>>
+  patchValues: (patch: Partial<T>) => void
 } {
   const [values, setValues] = useState<T>(initialValues)
 
@@ -25,5 +26,9 @@ export function useForm<T extends Record<string, string>>(
     setValues((prev) => ({ ...prev, [name]: value }) as T)
   }, [])
 
-  return { values, handleChange, setValues }
+  const patchValues = useCallback((patch: Partial<T>) => {
+    setValues((prev) => ({ ...prev, ...patch }) as T)
+  }, [])
+
+  return { values, handleChange, setValues, patchValues }
 }
