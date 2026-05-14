@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { config } from 'dotenv';
 
@@ -6,23 +6,37 @@ import { config } from 'dotenv';
  * Импортируйте этот модуль первым в `main.ts`, до `AppModule`:
  * иначе DI создаёт PrismaService до вызова `config()` и `DATABASE_URL` пустой.
  *
- * Поднимаемся от cwd вверх и подгружаем все найденные `.env` (от корня к cwd),
- * чтобы локальный `apps/server/.env` мог переопределить корневой.
+ * Загружается только `apps/server/.env`
  */
-const paths: string[] = [];
-let dir = process.cwd();
-for (let i = 0; i < 10; i++) {
-  const candidate = resolve(dir, '.env');
-  if (existsSync(candidate)) {
-    paths.push(candidate);
+function findServerPackageRoot(from: string): string | undefined {
+  let dir = from;
+  for (let i = 0; i < 10; i++) {
+    const pkgPath = resolve(dir, 'package.json');
+    if (existsSync(pkgPath)) {
+      try {
+        const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as {
+          name?: string;
+        };
+        if (pkg.name === 'server') {
+          return dir;
+        }
+      } catch {
+        // ignore invalid package.json
+      }
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
   }
-  const parent = dirname(dir);
-  if (parent === dir) {
-    break;
-  }
-  dir = parent;
+  return undefined;
 }
 
-for (const p of paths.reverse()) {
-  config({ path: p, override: true });
+const serverRoot = findServerPackageRoot(__dirname);
+if (serverRoot) {
+  const envPath = resolve(serverRoot, '.env');
+  if (existsSync(envPath)) {
+    config({ path: envPath, override: true });
+  }
 }
