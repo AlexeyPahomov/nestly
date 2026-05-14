@@ -1,26 +1,10 @@
-import { getApiBaseUrl } from '../config/api'
+import { getApiBaseUrl } from '@/shared/config/api'
+import { messageFromResponseBody } from '@/shared/lib/errors'
 
 function joinUrl(path: string): string {
-  const base = getApiBaseUrl()
+  const base = getApiBaseUrl().replace(/\/$/, '')
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  if (base.startsWith('http')) {
-    return `${base}${normalizedPath}`
-  }
   return `${base}${normalizedPath}`
-}
-
-function extractErrorMessage(body: unknown): string | null {
-  if (typeof body !== 'object' || body === null) {
-    return null
-  }
-  const msg = (body as { message?: unknown }).message
-  if (typeof msg === 'string') {
-    return msg
-  }
-  if (Array.isArray(msg) && msg.every((x) => typeof x === 'string')) {
-    return msg.join(', ')
-  }
-  return null
 }
 
 async function parseJsonSafe(response: Response): Promise<unknown> {
@@ -47,10 +31,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiRequest<T>(
-  path: string,
-  init?: RequestInit,
-): Promise<T> {
+export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(joinUrl(path), {
     ...init,
     headers: {
@@ -62,7 +43,7 @@ export async function apiRequest<T>(
   const body = await parseJsonSafe(response)
 
   if (!response.ok) {
-    const message = extractErrorMessage(body) ?? `HTTP ${response.status}`
+    const message = messageFromResponseBody(body) ?? `HTTP ${response.status}`
     throw new ApiError(message, response.status, body)
   }
 
