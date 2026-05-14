@@ -1,5 +1,5 @@
-import { PlaceholderPage } from '@/shared/ui'
+import { PagePlaceholder } from '@/shared/ui'
 
 export function ExpensePage() {
-  return <PlaceholderPage title="Expenses">Expense page</PlaceholderPage>
+  return <PagePlaceholder title="Expenses">Expense page</PagePlaceholder>
 }

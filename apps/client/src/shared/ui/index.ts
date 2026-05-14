@@ -42,5 +42,5 @@ export {
   CardTitle,
 } from './card/Card'
 export { PageSection } from './page-section/PageSection'
-export { PlaceholderPage } from './placeholder-page/PlaceholderPage'
+export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'

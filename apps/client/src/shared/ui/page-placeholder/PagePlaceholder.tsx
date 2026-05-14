@@ -3,12 +3,12 @@ import type { ReactNode } from 'react'
 import { Card, CardContent } from '../card/Card'
 import { PageSection } from '../page-section/PageSection'
 
-type PlaceholderPageProps = {
+type PagePlaceholderProps = {
   title: string
   children: ReactNode
 }
 
-function PlaceholderPage({ title, children }: PlaceholderPageProps) {
+function PagePlaceholder({ title, children }: PagePlaceholderProps) {
   return (
     <PageSection title={title}>
       <Card>
@@ -20,4 +20,4 @@ function PlaceholderPage({ title, children }: PlaceholderPageProps) {
   )
 }
 
-export { PlaceholderPage }
+export { PagePlaceholder }

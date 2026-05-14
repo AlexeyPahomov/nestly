@@ -1,5 +1,5 @@
-import { PlaceholderPage } from '@/shared/ui'
+import { PagePlaceholder } from '@/shared/ui'
 
 export function AllocationPage() {
-  return <PlaceholderPage title="Allocation">Allocation page</PlaceholderPage>
+  return <PagePlaceholder title="Allocation">Allocation page</PagePlaceholder>
 }
