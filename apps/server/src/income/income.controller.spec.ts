@@ -15,6 +15,7 @@ describe('IncomeController', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
+            remove: jest.fn(),
           },
         },
       ],

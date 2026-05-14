@@ -16,7 +16,25 @@ describe('IncomeService', () => {
             income: {
               create: jest.fn(),
               findMany: jest.fn(),
+              findFirst: jest.fn(),
+              delete: jest.fn(),
             },
+            allocation: {
+              deleteMany: jest.fn(),
+            },
+            $transaction: jest.fn(
+              async (fn: (tx: unknown) => Promise<unknown>) => {
+                const tx = {
+                  allocation: {
+                    deleteMany: jest.fn(() => Promise.resolve({ count: 0 })),
+                  },
+                  income: {
+                    delete: jest.fn(() => Promise.resolve({})),
+                  },
+                };
+                return fn(tx);
+              },
+            ),
           },
         },
       ],

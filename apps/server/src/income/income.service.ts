@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
+import type { Income } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateIncomeDto } from './dto/create-income.dto';
 
@@ -7,7 +8,7 @@ import { CreateIncomeDto } from './dto/create-income.dto';
 export class IncomeService {
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateIncomeDto) {
+  create(dto: CreateIncomeDto): Promise<Income> {
     return this.prisma.income.create({
       data: {
         // TODO убрать хардкод после добавления пользователей
@@ -19,9 +20,22 @@ export class IncomeService {
     });
   }
 
-  findAll() {
+  findAll(): Promise<Income[]> {
     return this.prisma.income.findMany({
       orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async remove(id: string, userId: string): Promise<void> {
+    const existing = await this.prisma.income.findFirst({
+      where: { id, user_id: userId },
+    });
+    if (!existing) {
+      throw new NotFoundException();
+    }
+    await this.prisma.$transaction(async (tx) => {
+      await tx.allocation.deleteMany({ where: { income_id: id } });
+      await tx.income.delete({ where: { id } });
     });
   }
 }

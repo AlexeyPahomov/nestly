@@ -61,3 +61,7 @@ export async function apiPost<T>(path: string, json: unknown): Promise<T> {
     body: JSON.stringify(json),
   })
 }
+
+export async function apiDelete<T = void>(path: string): Promise<T> {
+  return apiRequest<T>(path, { method: 'DELETE' })
+}
