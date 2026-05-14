@@ -4,6 +4,6 @@ import { ExpenseService } from './expense.service';
 
 @Module({
   controllers: [ExpenseController],
-  providers: [ExpenseService]
+  providers: [ExpenseService],
 })
 export class ExpenseModule {}
