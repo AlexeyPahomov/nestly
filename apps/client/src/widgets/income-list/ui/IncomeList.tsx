@@ -2,53 +2,27 @@ import { useDeleteIncomeMutation } from '@/entities/income/api/useDeleteIncomeMu
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery';
 import { IncomeCard } from '@/entities/income/ui/IncomeCard';
 import { getErrorMessage } from '@/shared/lib/errors';
-import { Card, CardContent, Spinner } from '@/shared/ui';
+import { Spinner } from '@/shared/ui';
+
+import { ListEmpty } from './ListEmpty';
+import { ListError } from './ListError';
+import { ListLoader } from './ListLoader';
 
 export function IncomeList() {
   const { data, isPending, isError, error, isFetching } = useIncomesQuery();
   const deleteMutation = useDeleteIncomeMutation();
 
   if (isPending) {
-    return (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center gap-3 py-10">
-            <Spinner className="size-8 text-zinc-500" />
-            <p className="text-sm text-muted-foreground">Загрузка…</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ListLoader />;
   }
 
   if (isError && data === undefined) {
-    return (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <Card className="border-destructive/40 bg-destructive/5 ring-destructive/20">
-          <CardContent>
-            <p className="text-sm font-medium text-destructive">
-              {getErrorMessage(error, 'Не удалось загрузить доходы')}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ListError error={error} />;
   }
 
   const items = data ?? [];
-
   if (items.length === 0) {
-    return (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <Card className="border-dashed border-muted-foreground/30">
-          <CardContent className="py-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Пока нет доходов. Добавьте первую запись.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ListEmpty />;
   }
 
   return (

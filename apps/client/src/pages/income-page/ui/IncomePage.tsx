@@ -1,6 +1,6 @@
 import { CreateIncomeForm } from '@/features/create-income/ui/CreateIncomeForm'
 import { PageSection } from '@/shared/ui'
-import { IncomeList } from '@/widgets/income-list/ui/IncomeList'
+import { IncomeList } from '@/widgets/income-list'
 
 export function IncomePage() {
   return (
