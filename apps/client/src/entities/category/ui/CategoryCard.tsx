@@ -1,3 +1,5 @@
+import { CATEGORY_TYPE_LABELS } from '@nestly/shared'
+
 import type { Category } from '../model/types'
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui'
@@ -11,7 +13,9 @@ export function CategoryCard({ category }: CategoryCardProps) {
     <Card size="sm">
       <CardHeader>
         <CardTitle>{category.name}</CardTitle>
-        <CardDescription className="capitalize">{category.type}</CardDescription>
+        <CardDescription>
+          {CATEGORY_TYPE_LABELS[category.type]}
+        </CardDescription>
       </CardHeader>
     </Card>
   )

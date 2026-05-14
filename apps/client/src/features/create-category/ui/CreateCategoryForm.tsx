@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, type CategoryType } from '@nestly/shared'
+import { CATEGORY_TYPES, CATEGORY_TYPE_LABELS } from '@nestly/shared'
 
 import {
   Button,
@@ -12,15 +12,9 @@ import {
 
 import { useCreateCategoryForm } from '../model/useCreateCategoryForm'
 
-const TYPE_LABELS: Record<CategoryType, string> = {
-  income: 'Доход',
-  expense: 'Расход',
-  savings: 'Накопления',
-}
-
 const typeOptions = CATEGORY_TYPES.map((value) => ({
   value,
-  label: TYPE_LABELS[value],
+  label: CATEGORY_TYPE_LABELS[value],
 }))
 
 export function CreateCategoryForm() {
