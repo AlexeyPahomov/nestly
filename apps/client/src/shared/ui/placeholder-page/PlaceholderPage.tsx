@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
-import { Card, CardContent } from '../card'
-import { PageSection } from '../page-section'
+import { Card, CardContent } from '../card/Card'
+import { PageSection } from '../page-section/PageSection'
 
 type PlaceholderPageProps = {
   title: string

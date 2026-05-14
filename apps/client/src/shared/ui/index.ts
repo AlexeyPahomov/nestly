@@ -1,4 +1,5 @@
-export { Button } from './button'
+export { Button } from './button/Button'
+export { Input } from './input/Input'
 export {
   Card,
   CardAction,
@@ -7,7 +8,7 @@ export {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './card'
-export { PageSection } from './page-section'
-export { PlaceholderPage } from './placeholder-page'
-export { Spinner } from './spinner'
+} from './card/Card'
+export { PageSection } from './page-section/PageSection'
+export { PlaceholderPage } from './placeholder-page/PlaceholderPage'
+export { Spinner } from './spinner/Spinner'
