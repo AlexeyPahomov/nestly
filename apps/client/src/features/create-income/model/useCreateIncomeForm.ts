@@ -4,7 +4,7 @@ import { useCreateIncomeMutation } from '@/entities/income/api/useCreateIncomeMu
 import { DEV_USER_ID } from '@/shared/lib/constants'
 import { currentMonthInputValue } from '@/shared/lib/date'
 import { getErrorMessage } from '@/shared/lib/errors'
-import { useForm } from '@/shared/lib/useForm'
+import { useForm } from '@/shared/lib/hooks/useForm'
 
 import type { CreateIncomeFormValues } from './types'
 import { validateCreateIncomeForm } from './validation'
