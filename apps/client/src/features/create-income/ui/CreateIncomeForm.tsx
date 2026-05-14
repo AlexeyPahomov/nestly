@@ -1,4 +1,12 @@
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, MonthPicker } from '@/shared/ui'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  MonthPicker,
+} from '@/shared/ui'
 
 import { useCreateIncomeForm } from '../model/useCreateIncomeForm'
 
@@ -52,10 +60,12 @@ export function CreateIncomeForm() {
           {form.validationError ? (
             <p className="text-sm text-red-600">{form.validationError}</p>
           ) : null}
-          {form.serverError ? <p className="text-sm text-red-600">{form.serverError}</p> : null}
+          {form.serverError ? (
+            <p className="text-sm text-red-600">{form.serverError}</p>
+          ) : null}
 
-          <Button type="submit" disabled={form.submitting} size="lg" className="min-w-40">
-            {form.submitting ? 'Сохранение…' : 'Добавить доход'}
+          <Button type="submit" isLoading={form.submitting} size="lg" className="min-w-40">
+            Добавить доход
           </Button>
         </form>
       </CardContent>

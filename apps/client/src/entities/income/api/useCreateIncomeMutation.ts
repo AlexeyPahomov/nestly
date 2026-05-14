@@ -8,7 +8,7 @@ export function useCreateIncomeMutation() {
   const queryClient = useQueryClient()
 
   return useMutation<Income, Error, CreateIncomePayload>({
-    mutationFn: (payload) => createIncome(payload),
+    mutationFn: createIncome,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: incomeKeys.lists() })
     },

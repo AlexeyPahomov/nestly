@@ -1,7 +1,21 @@
-export { Button } from './button/Button'
+export { Button, buttonVariants } from './button'
 export { Calendar, CalendarDayButton } from './calendar/Calendar'
 export { Input } from './input/Input'
 export { MonthPicker } from './month-picker/MonthPicker'
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from './select'
+export type { SelectOption, SelectProps } from './select'
 export {
   Popover,
   PopoverAnchor,

@@ -1,4 +1,6 @@
+import type { CategoryType } from '@nestly/shared'
+
 export class CreateCategoryDto {
   name: string;
-  type: 'expense' | 'saving';
+  type: CategoryType;
 }

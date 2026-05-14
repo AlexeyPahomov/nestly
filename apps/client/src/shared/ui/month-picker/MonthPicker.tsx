@@ -11,7 +11,7 @@ import {
 import { formatMonthLabel } from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
 
-import { buttonVariants } from '../button/variants';
+import { buttonVariants } from '../button/variants'
 import { Calendar } from '../calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover/Popover';
 
