@@ -3,10 +3,9 @@ import { formatAmount } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import { Card, CardContent, Progress } from '@/shared/ui'
 
-import {
-  CategoryBudgetIcon,
-  categoryIconWrapClassName,
-} from '../lib/categoryVisual'
+import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
+
+import { categoryIconWrapClassName } from '../lib/categoryVisual'
 import {
   envelopeBalanceToneClassName,
   envelopeCardToneClassName,
@@ -68,9 +67,9 @@ export function CategoryBudgetCard({
               categoryIconWrapClassName(tone),
             )}
           >
-            <CategoryBudgetIcon
-              categoryId={category.id}
-              isSavings={isSavings}
+            <CategoryLucideIcon
+              categoryName={category.name}
+              categoryType={category.type}
               className="size-5"
               aria-hidden
             />

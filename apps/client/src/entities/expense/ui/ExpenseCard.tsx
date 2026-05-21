@@ -45,7 +45,6 @@ export function ExpenseCard({
       <ExpenseCategoryBadge
         name={categoryName}
         categoryType={categoryType}
-        categoryId={expense.category_id}
       />
 
       {description ? (
