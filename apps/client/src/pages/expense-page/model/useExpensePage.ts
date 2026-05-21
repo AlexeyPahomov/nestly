@@ -49,8 +49,9 @@ export function useExpensePage() {
       computeTreasurySummary(
         incomesQuery.data ?? [],
         allocationsQuery.data ?? [],
+        budgetItems,
       ),
-    [incomesQuery.data, allocationsQuery.data],
+    [incomesQuery.data, allocationsQuery.data, budgetItems],
   )
 
   const sortedExpenses = useMemo(() => {

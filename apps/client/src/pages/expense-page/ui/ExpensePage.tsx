@@ -45,9 +45,9 @@ export function ExpensePage() {
       <div className="grid min-h-0 flex-1 grid-rows-[auto_auto_minmax(0,1fr)] gap-4">
         <div className="shrink-0">
           <BudgetSummary
-            totalFunds={treasurySummary.totalFunds}
             availableToAllocate={treasurySummary.availableToAllocate}
-            allocatedTotal={treasurySummary.allocatedTotal}
+            categoryRemainingTotal={treasurySummary.categoryRemainingTotal}
+            totalSpent={treasurySummary.totalSpent}
           />
         </div>
 

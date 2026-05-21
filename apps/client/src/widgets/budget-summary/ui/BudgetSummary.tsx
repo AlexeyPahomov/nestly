@@ -1,52 +1,121 @@
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui'
+import { ChevronDownIcon } from 'lucide-react';
+import { type KeyboardEvent, useId, useState } from 'react';
+
+import { formatAmount } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import { Card } from '@/shared/ui';
 
 type BudgetSummaryProps = {
-  totalFunds: number
-  availableToAllocate: number
-  allocatedTotal: number
+  availableToAllocate: number;
+  categoryRemainingTotal: number;
+  totalSpent: number;
+};
+
+const metricRowClassName = 'flex items-baseline justify-between gap-4';
+
+function MetricValue({
+  value,
+  className,
+}: {
+  value: number;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        'shrink-0 font-semibold tabular-nums text-zinc-900',
+        className,
+      )}
+    >
+      {formatAmount(value)}
+    </span>
+  );
 }
 
 export function BudgetSummary({
-  totalFunds,
   availableToAllocate,
-  allocatedTotal,
+  categoryRemainingTotal,
+  totalSpent,
 }: BudgetSummaryProps) {
-  const hasUnallocated = availableToAllocate > 0
+  const [open, setOpen] = useState(false);
+  const detailsId = useId();
+  const hasUnallocated = availableToAllocate > 0;
+  const envelopeOver = categoryRemainingTotal < 0;
+
+  const toggle = () => setOpen((value) => !value);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggle();
+    }
+  };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Казна</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2 text-sm">
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">Всего средств</span>
-          <span className="font-semibold tabular-nums text-zinc-900">
-            {formatAmount(totalFunds)}
-          </span>
-        </div>
-        <div className="flex justify-between gap-4 border-t border-zinc-100 pt-2">
-          <span className="font-medium text-zinc-900">
-            Свободно к распределению
-          </span>
-          <span
+    <Card
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      aria-controls={detailsId}
+      aria-label={open ? 'Свернуть сводку казны' : 'Развернуть сводку казны'}
+      className={cn(
+        'relative cursor-pointer gap-0 transition-colors hover:bg-zinc-50/50',
+        'outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+        open ? 'py-2' : 'py-2',
+      )}
+      onClick={toggle}
+      onKeyDown={handleKeyDown}
+    >
+      <ChevronDownIcon
+        className={cn(
+          'pointer-events-none absolute right-3 top-3.5 z-10 size-4 text-muted-foreground transition-transform duration-300',
+          open && 'rotate-180',
+        )}
+        aria-hidden
+      />
+
+      <div className={cn('space-y-2 px-4 pr-10 text-sm', !open && 'space-y-0')}>
+        <div className={metricRowClassName}>
+          <span className="font-medium text-zinc-900">Свободно</span>
+          <MetricValue
+            value={availableToAllocate}
             className={cn(
-              'text-lg font-bold tabular-nums',
-              hasUnallocated ? 'text-emerald-700' : 'text-zinc-900',
+              'text-lg font-bold',
+              hasUnallocated ? 'text-emerald-700' : undefined,
             )}
-          >
-            {formatAmount(availableToAllocate)}
-          </span>
+          />
         </div>
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">Зарезервировано в конвертах</span>
-          <span className="font-semibold tabular-nums text-zinc-900">
-            {formatAmount(allocatedTotal)}
-          </span>
+
+        <div
+          id={detailsId}
+          className={cn(
+            'nestly-collapse grid space-y-2',
+            open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+          )}
+          aria-hidden={!open}
+        >
+          <div className="min-h-0 space-y-2 overflow-hidden border-t border-zinc-100 ">
+            <div className={metricRowClassName}>
+              <span className="text-muted-foreground">
+                Остаток по категориям
+              </span>
+              <MetricValue
+                value={categoryRemainingTotal}
+                className={cn(
+                  envelopeOver && 'text-red-600',
+                  !envelopeOver &&
+                    categoryRemainingTotal > 0 &&
+                    'text-emerald-700',
+                )}
+              />
+            </div>
+            <div className={metricRowClassName}>
+              <span className="text-muted-foreground">Потрачено</span>
+              <MetricValue value={totalSpent} />
+            </div>
+          </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
-  )
+  );
 }
