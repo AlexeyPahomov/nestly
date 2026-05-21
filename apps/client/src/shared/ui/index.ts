@@ -45,6 +45,7 @@ export {
 export { PageSection } from './page-section/PageSection'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'
+export { Progress } from './progress'
 export {
   Tooltip,
   TooltipContent,

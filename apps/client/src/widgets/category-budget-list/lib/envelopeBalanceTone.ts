@@ -53,6 +53,12 @@ const hoverToneClassName: Record<EnvelopeBalanceTone, string> = {
   over: 'hover:bg-red-50/60',
 }
 
+const progressIndicatorToneClassName: Record<EnvelopeBalanceTone, string> = {
+  healthy: 'bg-emerald-600',
+  low: 'bg-amber-600',
+  over: 'bg-red-600',
+}
+
 export function envelopeCardToneClassName(tone: EnvelopeBalanceTone): string {
   return cardToneClassName[tone]
 }
@@ -63,4 +69,10 @@ export function envelopeBalanceToneClassName(tone: EnvelopeBalanceTone): string 
 
 export function envelopeHoverToneClassName(tone: EnvelopeBalanceTone): string {
   return hoverToneClassName[tone]
+}
+
+export function envelopeProgressIndicatorClassName(
+  tone: EnvelopeBalanceTone,
+): string {
+  return progressIndicatorToneClassName[tone]
 }

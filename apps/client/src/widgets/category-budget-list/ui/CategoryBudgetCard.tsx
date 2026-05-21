@@ -1,25 +1,27 @@
-import { Landmark } from 'lucide-react';
+import { Landmark } from 'lucide-react'
 
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
-import { formatAmount } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui';
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
+import { formatAmount } from '@/shared/lib/format'
+import { cn } from '@/shared/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle, Progress } from '@/shared/ui'
 
 import {
   envelopeBalanceToneClassName,
   envelopeCardToneClassName,
   envelopeHoverToneClassName,
+  envelopeProgressIndicatorClassName,
   formatEnvelopeBalance,
   getEnvelopeBalanceTone,
-} from '../lib/envelopeBalanceTone';
-import type { CategoryBudgetListItem } from '../model/types';
+} from '../lib/envelopeBalanceTone'
+import { getEnvelopeUsage } from '../lib/envelopeUsage'
+import type { CategoryBudgetListItem } from '../model/types'
 
 type CategoryBudgetCardProps = {
-  item: CategoryBudgetListItem;
-  selected?: boolean;
-  stressOverBudget?: boolean;
-  onSelect?: (categoryId: string) => void;
-};
+  item: CategoryBudgetListItem
+  selected?: boolean
+  stressOverBudget?: boolean
+  onSelect?: (categoryId: string) => void
+}
 
 export function CategoryBudgetCard({
   item,
@@ -27,16 +29,19 @@ export function CategoryBudgetCard({
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item;
-  const isSavings = isSavingsCategory(category.type);
+  const { category, allocated, spent, remaining } = item
+  const isSavings = isSavingsCategory(category.type)
   const tone = getEnvelopeBalanceTone(
     allocated,
     remaining,
     !isSavings && stressOverBudget,
-  );
+  )
+  const usage = getEnvelopeUsage(allocated, spent)
 
   const balanceLabel =
-    tone === 'over' ? 'Перерасход' : isSavings ? 'В резерве' : 'Свободно';
+    tone === 'over' ? 'Перерасход' : isSavings ? 'В резерве' : 'Свободно'
+
+  const usageCaption = isSavings ? 'использовано резерва' : 'использовано'
 
   return (
     <Card
@@ -50,7 +55,7 @@ export function CategoryBudgetCard({
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
-      <CardHeader className="flex items-center gap-2">
+      <CardHeader className="flex items-center gap-2 pb-2">
         {isSavings ? (
           <Landmark
             className={cn(
@@ -68,25 +73,32 @@ export function CategoryBudgetCard({
           {category.name}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-1 text-sm">
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">
-            {isSavings ? 'Зарезервировано' : 'Распределено'}
-          </span>
-          <span className="tabular-nums font-medium text-zinc-900">
+      <CardContent className="space-y-2.5 text-sm">
+        <div className="flex items-baseline justify-between gap-2 tabular-nums">
+          <span className="font-medium text-zinc-900">
+            {formatAmount(spent)}
+            <span className="mx-1 font-normal text-muted-foreground">/</span>
             {formatAmount(allocated)}
           </span>
-        </div>
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">
-            {isSavings ? 'Изъято из резерва' : 'Потрачено'}
+          <span
+            className={cn(
+              'text-xs font-semibold',
+              envelopeBalanceToneClassName(tone),
+            )}
+          >
+            {usage.displayPercent}%
           </span>
-          <span className="tabular-nums font-medium text-zinc-900">
-            {formatAmount(spent)}
-          </span>
         </div>
-        <div className="flex justify-between gap-4 border-t border-zinc-100 pt-1">
-          <span className="font-medium text-zinc-900">{balanceLabel}</span>
+
+        <Progress
+          value={usage.barPercent}
+          className="h-1.5 bg-zinc-200/80"
+          indicatorClassName={envelopeProgressIndicatorClassName(tone)}
+          aria-label={`${usageCaption}: ${usage.displayPercent}%`}
+        />
+
+        <div className="flex justify-between gap-4 border-t border-zinc-100/90 pt-1.5">
+          <span className="text-muted-foreground">{balanceLabel}</span>
           <span
             className={cn(
               'tabular-nums font-bold',
@@ -98,5 +110,5 @@ export function CategoryBudgetCard({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
