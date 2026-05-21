@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation'
+import type { Expense } from '@/entities/expense/model/types'
 import { PageSection } from '@/shared/ui'
 import { BudgetSummary } from '@/widgets/budget-summary'
 import { ExpenseList } from '@/widgets/expense-list'
@@ -11,6 +13,8 @@ import { ExpenseWorkspace } from './ExpenseWorkspace'
 
 export function ExpensePage() {
   const [stressCategoryId, setStressCategoryId] = useState<string | null>(null)
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
+  const deleteExpenseMutation = useDeleteExpenseMutation()
 
   const {
     selectedCategoryId,
@@ -58,6 +62,8 @@ export function ExpensePage() {
           allocations={allocations}
           budgetItems={budgetItems}
           selectedCategoryId={selectedCategoryId}
+          editingExpense={editingExpense}
+          onCancelEdit={() => setEditingExpense(null)}
           stressCategoryId={stressCategoryId}
           onStressCategoryChange={handleStressCategoryChange}
           onCategorySelect={setSelectedCategoryId}
@@ -75,6 +81,22 @@ export function ExpensePage() {
             isError={expensesQuery.isError}
             error={expensesQuery.error}
             isFetching={expensesQuery.isFetching}
+            editingExpenseId={editingExpense?.id ?? null}
+            deletingExpenseId={
+              deleteExpenseMutation.isPending
+                ? (deleteExpenseMutation.variables ?? null)
+                : null
+            }
+            onEdit={(item) => {
+              setEditingExpense(item)
+              setSelectedCategoryId(item.category_id)
+            }}
+            onDelete={(id) => {
+              if (editingExpense?.id === id) {
+                setEditingExpense(null)
+              }
+              deleteExpenseMutation.mutate(id)
+            }}
           />
         </div>
       </div>

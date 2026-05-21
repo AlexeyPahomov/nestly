@@ -19,6 +19,8 @@ type CreateExpenseFormActionsProps = {
   topUpError: string | null
   canTopUp: boolean
   onQuickTopUp: (amount: number) => void
+  submitLabel: string
+  onCancelEdit?: () => void
 }
 
 export function CreateExpenseFormActions({
@@ -32,6 +34,8 @@ export function CreateExpenseFormActions({
   topUpError,
   canTopUp,
   onQuickTopUp,
+  submitLabel,
+  onCancelEdit,
 }: CreateExpenseFormActionsProps) {
   const previewPresence = useCollapsePresence(
     budgetPreview !== null,
@@ -75,15 +79,28 @@ export function CreateExpenseFormActions({
         />
       ) : null}
 
-      <Button
-        type="submit"
-        isLoading={isRecording}
-        size="lg"
-        className="min-w-40"
-        disabled={isBusy || noCategories}
-      >
-        Добавить расход
-      </Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="submit"
+          isLoading={isRecording}
+          size="lg"
+          className="min-w-40"
+          disabled={isBusy || noCategories}
+        >
+          {submitLabel}
+        </Button>
+        {onCancelEdit ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="lg"
+            disabled={isBusy}
+            onClick={onCancelEdit}
+          >
+            Отмена
+          </Button>
+        ) : null}
+      </div>
     </div>
   )
 }

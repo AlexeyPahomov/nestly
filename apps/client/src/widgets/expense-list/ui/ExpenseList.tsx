@@ -11,6 +11,10 @@ export interface ExpenseListProps {
   error: unknown
   isFetching?: boolean
   className?: string
+  editingExpenseId?: string | null
+  deletingExpenseId?: string | null
+  onEdit?: (item: ExpenseListItem) => void
+  onDelete?: (id: string) => void
 }
 
 export function ExpenseList({
@@ -20,6 +24,10 @@ export function ExpenseList({
   error,
   isFetching = false,
   className,
+  editingExpenseId = null,
+  deletingExpenseId = null,
+  onEdit,
+  onDelete,
 }: ExpenseListProps) {
   return (
     <ItemsList
@@ -32,11 +40,20 @@ export function ExpenseList({
       title="История расходов"
       emptyMessage="Пока нет расходов. Добавьте первую трату выше."
       errorFallback="Не удалось загрузить расходы"
+      listClassName="space-y-2"
     >
       {(items) =>
         items.map((item) => (
           <li key={item.id}>
-            <ExpenseCard expense={item} categoryName={item.categoryName} />
+            <ExpenseCard
+              expense={item}
+              categoryName={item.categoryName}
+              categoryType={item.categoryType}
+              isEditing={editingExpenseId === item.id}
+              isDeleting={deletingExpenseId === item.id}
+              onEdit={onEdit ? () => onEdit(item) : undefined}
+              onDelete={onDelete ? () => onDelete(item.id) : undefined}
+            />
           </li>
         ))
       }

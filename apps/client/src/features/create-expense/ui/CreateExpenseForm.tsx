@@ -2,6 +2,7 @@ import type { ChangeEvent } from 'react'
 
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
+import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -28,6 +29,8 @@ type CreateExpenseFormProps = {
   incomes: Income[]
   allocations: Allocation[]
   selectedCategoryId?: string
+  editingExpense?: Expense | null
+  onCancelEdit?: () => void
   onStressCategoryChange?: (categoryId: string | null) => void
   className?: string
 }
@@ -48,6 +51,8 @@ export function CreateExpenseForm({
   incomes,
   allocations,
   selectedCategoryId,
+  editingExpense = null,
+  onCancelEdit,
   onStressCategoryChange,
   className,
 }: CreateExpenseFormProps) {
@@ -55,11 +60,13 @@ export function CreateExpenseForm({
     budgets,
     incomes,
     allocations,
+    editingExpense,
+    onEditComplete: onCancelEdit,
     onStressCategoryChange,
   })
 
   useSyncSelectedCategory(
-    selectedCategoryId,
+    editingExpense ? undefined : selectedCategoryId,
     form.values.category_id,
     (categoryId) => form.handleChange('category_id', categoryId),
   )
@@ -77,7 +84,9 @@ export function CreateExpenseForm({
   return (
     <Card className={cn('h-fit w-full max-h-full', className)}>
       <CardHeader className="shrink-0">
-        <CardTitle>Новый расход</CardTitle>
+        <CardTitle>
+          {form.isEditing ? 'Редактировать расход' : 'Новый расход'}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -155,6 +164,8 @@ export function CreateExpenseForm({
             topUpError={form.topUpError}
             canTopUp={form.canQuickTopUp}
             onQuickTopUp={(amount) => void form.handleQuickTopUp(amount)}
+            submitLabel={form.isEditing ? 'Сохранить' : 'Добавить расход'}
+            onCancelEdit={form.isEditing ? onCancelEdit : undefined}
           />
         </form>
       </CardContent>

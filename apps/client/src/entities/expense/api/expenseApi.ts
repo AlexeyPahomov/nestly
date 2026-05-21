@@ -1,7 +1,12 @@
-import { apiGet, apiPost } from '@/shared/api/client'
+import { apiDelete, apiGet, apiPatch, apiPost } from '@/shared/api/client'
+import { DEV_USER_ID } from '@/shared/lib/constants'
 import { toMoneyNumber } from '@/shared/lib/money'
 
-import type { CreateExpensePayload, Expense } from '../model/types'
+import type {
+  CreateExpensePayload,
+  Expense,
+  UpdateExpensePayload,
+} from '../model/types'
 
 const EXPENSE_PATH = '/expense'
 
@@ -34,4 +39,20 @@ export function getExpenses(): Promise<Expense[]> {
 
 export function createExpense(payload: CreateExpensePayload): Promise<Expense> {
   return apiPost<ExpenseApiRow>(EXPENSE_PATH, payload).then(mapExpense)
+}
+
+export function updateExpense(
+  id: string,
+  payload: UpdateExpensePayload,
+): Promise<Expense> {
+  const q = new URLSearchParams({ user_id: DEV_USER_ID })
+  return apiPatch<ExpenseApiRow>(
+    `${EXPENSE_PATH}/${encodeURIComponent(id)}?${q}`,
+    payload,
+  ).then(mapExpense)
+}
+
+export function deleteExpense(id: string): Promise<void> {
+  const q = new URLSearchParams({ user_id: DEV_USER_ID })
+  return apiDelete<void>(`${EXPENSE_PATH}/${encodeURIComponent(id)}?${q}`)
 }

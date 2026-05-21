@@ -17,3 +17,11 @@ export type CreateExpensePayload = {
   description?: string
   date: string
 }
+
+/** Тело PATCH /expense/:id. */
+export type UpdateExpensePayload = {
+  category_id: string
+  amount: number
+  description?: string
+  date: string
+}

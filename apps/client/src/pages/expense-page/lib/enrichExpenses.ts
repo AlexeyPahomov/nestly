@@ -6,12 +6,16 @@ export function enrichExpensesWithCategory(
   expenses: readonly Expense[],
   categories: readonly Category[],
 ): ExpenseListItem[] {
-  const nameById = new Map(categories.map((c) => [c.id, c.name]))
+  const categoryById = new Map(categories.map((c) => [c.id, c]))
 
-  return expenses.map((expense) => ({
-    ...expense,
-    categoryName: nameById.get(expense.category_id) ?? 'Без категории',
-  }))
+  return expenses.map((expense) => {
+    const category = categoryById.get(expense.category_id)
+    return {
+      ...expense,
+      categoryName: category?.name ?? 'Без категории',
+      categoryType: category?.type ?? 'expense',
+    }
+  })
 }
 
 export function sortExpensesNewestFirst(

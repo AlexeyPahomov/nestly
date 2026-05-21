@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
+import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 import { CreateExpenseForm } from '@/features/create-expense/ui/CreateExpenseForm'
@@ -26,6 +27,8 @@ type ExpenseWorkspaceProps = {
   allocations: Allocation[]
   budgetItems: CategoryBudgetListItem[]
   selectedCategoryId: string | null
+  editingExpense?: Expense | null
+  onCancelEdit?: () => void
   stressCategoryId: string | null
   onStressCategoryChange: (categoryId: string | null) => void
   onCategorySelect: (categoryId: string) => void
@@ -42,6 +45,8 @@ export function ExpenseWorkspace({
   allocations,
   budgetItems,
   selectedCategoryId,
+  editingExpense = null,
+  onCancelEdit,
   stressCategoryId,
   onStressCategoryChange,
   onCategorySelect,
@@ -66,6 +71,8 @@ export function ExpenseWorkspace({
           incomes={incomes}
           allocations={allocations}
           selectedCategoryId={selectedCategoryId ?? undefined}
+          editingExpense={editingExpense}
+          onCancelEdit={onCancelEdit}
           onStressCategoryChange={onStressCategoryChange}
         />
       </div>
