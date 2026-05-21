@@ -1,9 +1,9 @@
-import { Landmark } from 'lucide-react'
+import { Landmark } from 'lucide-react';
 
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui'
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
+import { formatAmount } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui';
 
 import {
   envelopeBalanceToneClassName,
@@ -11,15 +11,15 @@ import {
   envelopeHoverToneClassName,
   formatEnvelopeBalance,
   getEnvelopeBalanceTone,
-} from '../lib/envelopeBalanceTone'
-import type { CategoryBudgetListItem } from '../model/types'
+} from '../lib/envelopeBalanceTone';
+import type { CategoryBudgetListItem } from '../model/types';
 
 type CategoryBudgetCardProps = {
-  item: CategoryBudgetListItem
-  selected?: boolean
-  stressOverBudget?: boolean
-  onSelect?: (categoryId: string) => void
-}
+  item: CategoryBudgetListItem;
+  selected?: boolean;
+  stressOverBudget?: boolean;
+  onSelect?: (categoryId: string) => void;
+};
 
 export function CategoryBudgetCard({
   item,
@@ -27,20 +27,16 @@ export function CategoryBudgetCard({
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item
-  const isSavings = isSavingsCategory(category.type)
+  const { category, allocated, spent, remaining } = item;
+  const isSavings = isSavingsCategory(category.type);
   const tone = getEnvelopeBalanceTone(
     allocated,
     remaining,
     !isSavings && stressOverBudget,
-  )
+  );
 
   const balanceLabel =
-    tone === 'over'
-      ? 'Перерасход'
-      : isSavings
-        ? 'В резерве'
-        : 'Свободно'
+    tone === 'over' ? 'Перерасход' : isSavings ? 'В резерве' : 'Свободно';
 
   return (
     <Card
@@ -102,5 +98,5 @@ export function CategoryBudgetCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

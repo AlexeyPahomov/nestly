@@ -145,8 +145,8 @@ export function CreateExpenseForm({
           ) : null}
 
           <CreateExpenseFormActions
-            showOverBudgetWarning={showOverBudgetWarning}
             budgetPreview={form.budgetPreview}
+            showOverBudgetActions={showOverBudgetWarning}
             savingsTransfer={savingsTransfer}
             noCategories={noCategories}
             isBusy={form.isBusy}
@@ -154,7 +154,6 @@ export function CreateExpenseForm({
             isTopUpPending={form.isTopUpPending}
             topUpError={form.topUpError}
             canTopUp={form.canQuickTopUp}
-            onRecordExpense={() => void form.handleSubmit()}
             onQuickTopUp={(amount) => void form.handleQuickTopUp(amount)}
           />
         </form>
