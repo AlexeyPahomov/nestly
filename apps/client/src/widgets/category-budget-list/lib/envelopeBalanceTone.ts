@@ -33,26 +33,26 @@ export function formatEnvelopeBalance(remaining: number): string {
 }
 
 const cardToneClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'border-emerald-200/90 bg-emerald-50/45',
-  low: 'border-amber-200/90 bg-amber-50/55',
-  over: 'border-red-300/90 bg-red-50 ring-1 ring-red-200/80',
+  healthy: 'bg-white ring-zinc-200/80',
+  low: 'bg-white ring-zinc-200/80',
+  over: 'bg-white ring-zinc-200/80',
 }
 
 const balanceToneClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'text-emerald-700',
-  low: 'text-amber-700',
+  healthy: 'text-blue-700',
+  low: 'text-orange-700',
   over: 'text-red-600',
 }
 
 const hoverToneClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'hover:bg-emerald-50/80',
-  low: 'hover:bg-amber-50/80',
-  over: 'hover:bg-red-50/60',
+  healthy: 'hover:bg-zinc-50/80',
+  low: 'hover:bg-zinc-50/80',
+  over: 'hover:bg-zinc-50/80',
 }
 
 const progressIndicatorToneClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'bg-emerald-600',
-  low: 'bg-amber-600',
+  healthy: 'bg-blue-600',
+  low: 'bg-orange-500',
   over: 'bg-red-600',
 }
 

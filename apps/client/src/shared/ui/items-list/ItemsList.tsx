@@ -31,6 +31,8 @@ export type ItemsListProps<T> = {
   layout?: ItemsListLayout;
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
   children: (items: T[]) => ReactNode;
+  /** Блок под списком (например, «Показать ещё»). */
+  listFooter?: ReactNode;
 };
 
 const listUlFillClassName =
@@ -54,6 +56,7 @@ export function ItemsList<T>({
   onListScroll,
   layout = 'fill',
   children,
+  listFooter,
 }: ItemsListProps<T>) {
   const rootClassName = cn(
     'flex flex-col',
@@ -120,16 +123,19 @@ export function ItemsList<T>({
           ) : null}
           {showEmpty ? <ListEmpty message={emptyMessage} /> : null}
           {showList ? (
-            <ul
-              className={cn(
-                listUlClassName,
-                'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
-                listClassName,
-              )}
-              onScroll={onListScroll}
-            >
-              {children(items)}
-            </ul>
+            <>
+              <ul
+                className={cn(
+                  listUlClassName,
+                  'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
+                  listClassName,
+                )}
+                onScroll={onListScroll}
+              >
+                {children(items)}
+              </ul>
+              {listFooter}
+            </>
           ) : null}
         </div>
       </div>

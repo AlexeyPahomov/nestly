@@ -11,7 +11,7 @@ import {
   expensePageScrollPaneClassName,
 } from '../lib/expensePageLayout';
 import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
-import { useBudgetSummaryOpen } from '../model/useBudgetSummaryOpen';
+import { useExpensePagePaneBoost } from '../model/useBudgetSummaryOpen';
 import { useExpensePage } from '../model/useExpensePage';
 
 import { ExpenseWorkspace } from './ExpenseWorkspace';
@@ -20,13 +20,8 @@ export function ExpensePage() {
   const [stressCategoryId, setStressCategoryId] = useState<string | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const deleteExpenseMutation = useDeleteExpenseMutation();
-  const {
-    open: summaryOpen,
-    setOpen: setSummaryOpen,
-    paneBoost,
-    onCategoryBudgetListScroll,
-    onExpenseListScroll,
-  } = useBudgetSummaryOpen();
+  const { paneBoost, onCategoryBudgetListScroll, onExpenseListScroll } =
+    useExpensePagePaneBoost();
 
   const {
     selectedCategoryId,
@@ -61,10 +56,8 @@ export function ExpensePage() {
       <div className={expensePageGridClassName(paneBoost)}>
         <div className="shrink-0">
           <BudgetSummary
-            open={summaryOpen}
-            onOpenChange={setSummaryOpen}
+            totalFunds={treasurySummary.totalFunds}
             availableToAllocate={treasurySummary.availableToAllocate}
-            categoryRemainingTotal={treasurySummary.categoryRemainingTotal}
             totalSpent={treasurySummary.totalSpent}
           />
         </div>
@@ -95,6 +88,7 @@ export function ExpensePage() {
             className="min-h-0 flex-1"
             onListScroll={onExpenseListScroll}
             expenses={sortedExpenses}
+            categories={expenseCategories}
             isPending={expensesQuery.isPending}
             isError={expensesQuery.isError}
             error={expensesQuery.error}

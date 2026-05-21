@@ -16,6 +16,7 @@ export function computeTreasurySummary(
   const { remaining, spent } = sumBudgetTotals(budgetItems)
 
   return {
+    totalFunds,
     availableToAllocate: totalFunds - allocatedTotal,
     categoryRemainingTotal: remaining,
     totalSpent: spent,

@@ -15,7 +15,7 @@ export type MonthlyBurnInsight = {
   daysRemainingLabel: string;
   paceDelta: number;
   paceDirection: MonthlyBurnPaceDirection;
-  paceMessage: string | null;
+  paceMessage: string;
 };
 
 const PACE_MESSAGE_THRESHOLD_PERCENT = 3;
@@ -59,9 +59,9 @@ export function getMonthlyBurnPace(
 export function formatMonthlyBurnPaceMessage(
   paceDelta: number,
   direction: MonthlyBurnPaceDirection,
-): string | null {
+): string {
   if (direction === 'on_track') {
-    return null;
+    return 'Темп в норме';
   }
 
   const magnitude = Math.abs(paceDelta);
@@ -80,13 +80,13 @@ export function monthlyBurnPaceClassName(
     case 'below':
       return 'font-medium text-emerald-800';
     default:
-      return 'text-muted-foreground';
+      return 'text-zinc-500';
   }
 }
 
 /** Фиксированная высота блока инсайта (2 строки) — одинаковые карточки в сетке. */
 export const monthlyBurnInsightSlotClassName =
-  'min-h-2 shrink-0 space-y-1 border-t border-zinc-100/90 text-xs leading-relaxed';
+  'min-h-4 shrink-0 text-xs leading-relaxed';
 
 /** Инсайт «сжигания» бюджета за календарный месяц (линейный темп vs факт). */
 export function getMonthlyBurnInsight(

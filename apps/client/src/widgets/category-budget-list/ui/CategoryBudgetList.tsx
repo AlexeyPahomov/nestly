@@ -43,7 +43,7 @@ export function CategoryBudgetList({
     <ItemsList
       className={className}
       onListScroll={onListScroll}
-      listClassName="grid w-full grid-cols-2 items-stretch gap-3 space-y-0"
+      listClassName="grid w-full grid-cols-1 items-stretch gap-3 space-y-0 sm:grid-cols-2 lg:grid-cols-3"
       isPending={isPending}
       isError={isError}
       error={error}
@@ -64,7 +64,8 @@ export function CategoryBudgetList({
             className={cn(
               'flex h-full w-full min-w-0 flex-col',
               listItemHighlightBaseClassName,
-              isSavingsCategory(item.category.type) && 'col-span-2',
+              isSavingsCategory(item.category.type) &&
+                'sm:col-span-2 lg:col-span-3',
               isSelected && listItemHighlightActiveClassName,
             )}
           >

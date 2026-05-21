@@ -65,7 +65,12 @@ export function ExpenseWorkspace({
         stressCategoryId={stressCategoryId}
         onCategorySelect={onCategorySelect}
         headerEnd={
-          <Button type="button" size="lg" onClick={dialog.openForAdd}>
+          <Button
+            type="button"
+            size="lg"
+            className="rounded-xl px-4"
+            onClick={dialog.openForAdd}
+          >
             Добавить расход
           </Button>
         }

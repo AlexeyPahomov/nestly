@@ -1,10 +1,16 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 import type { Expense } from '@/entities/expense/model/types'
 import type { CategoryType } from '@nestly/shared'
 import { formatAmount, formatExpenseDate } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
-import { Button, Card, CardContent } from '@/shared/ui'
+import { Button } from '@/shared/ui'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/ui/popover/Popover'
 
 import { ExpenseCategoryBadge } from './ExpenseCategoryBadge'
 
@@ -25,78 +31,90 @@ export function ExpenseCard({
   onDelete,
   isDeleting = false,
 }: ExpenseCardProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
   const description = expense.description?.trim()
   const hasActions = onEdit != null || onDelete != null
 
   return (
-    <Card
-      size="sm"
-      className="group !py-0 transition-colors hover:bg-zinc-50/90 hover:ring-zinc-300/80"
+    <div
+      className={cn(
+        'flex items-center gap-3 rounded-xl bg-white px-3 py-3 ring-1 ring-zinc-200/80',
+        'transition-colors hover:bg-zinc-50/60',
+      )}
     >
-      <CardContent className="flex flex-nowrap items-center gap-2 py-2.5 sm:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          <ExpenseCategoryBadge
-            name={categoryName}
-            categoryType={categoryType}
-          />
-          {description ? (
-            <span className="min-w-0 truncate text-sm text-muted-foreground">
-              {description}
-            </span>
-          ) : null}
-        </div>
+      <ExpenseCategoryBadge
+        name={categoryName}
+        categoryType={categoryType}
+        categoryId={expense.category_id}
+      />
 
-        <span className="shrink-0 text-right text-lg font-bold tabular-nums text-zinc-900">
-          {formatAmount(expense.amount)}
+      {description ? (
+        <span className="hidden min-w-0 flex-1 truncate text-sm text-zinc-500 sm:block">
+          {description}
         </span>
+      ) : (
+        <span className="hidden flex-1 sm:block" />
+      )}
 
-        {hasActions ? (
-          <div
-            className={cn(
-              'flex shrink-0 items-center gap-0.5 transition-opacity',
-              'opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100',
-            )}
-          >
+      <span className="shrink-0 text-base font-bold tabular-nums text-zinc-900">
+        {formatAmount(expense.amount)}
+      </span>
+
+      <span className="hidden shrink-0 text-sm tabular-nums text-zinc-500 md:inline">
+        {formatExpenseDate(expense.date)}
+      </span>
+
+      {hasActions ? (
+        <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="shrink-0 text-zinc-400 hover:text-zinc-700"
+              aria-label="Действия с расходом"
+              disabled={isDeleting}
+            >
+              <MoreVertical />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-40 p-1">
             {onEdit ? (
               <Button
                 type="button"
                 variant="ghost"
-                size="icon-xs"
-                className="text-zinc-500 hover:text-zinc-900"
-                aria-label="Изменить расход"
+                size="sm"
+                className="w-full justify-start gap-2"
                 disabled={isDeleting}
-                onClick={(event) => {
-                  event.stopPropagation()
+                onClick={() => {
+                  setMenuOpen(false)
                   onEdit()
                 }}
               >
-                <Pencil />
+                <Pencil className="size-4" />
+                Изменить
               </Button>
             ) : null}
             {onDelete ? (
               <Button
                 type="button"
                 variant="ghost"
-                size="icon-xs"
-                className="text-zinc-500 hover:text-destructive"
-                aria-label="Удалить расход"
+                size="sm"
+                className="w-full justify-start gap-2 text-destructive hover:text-destructive"
                 disabled={isDeleting}
                 isLoading={isDeleting}
-                onClick={(event) => {
-                  event.stopPropagation()
+                onClick={() => {
+                  setMenuOpen(false)
                   onDelete()
                 }}
               >
-                <Trash2 />
+                <Trash2 className="size-4" />
+                Удалить
               </Button>
             ) : null}
-          </div>
-        ) : null}
-
-        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-          {formatExpenseDate(expense.date)}
-        </span>
-      </CardContent>
-    </Card>
+          </PopoverContent>
+        </Popover>
+      ) : null}
+    </div>
   )
 }

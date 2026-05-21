@@ -32,13 +32,10 @@ export function MonthlyBurnInsightBlock({
       <p
         className={cn(
           'min-h-4.5',
-          insight.paceMessage
-            ? monthlyBurnPaceClassName(insight.paceDirection)
-            : 'invisible',
+          monthlyBurnPaceClassName(insight.paceDirection),
         )}
-        aria-hidden={!insight.paceMessage}
       >
-        {insight.paceMessage ?? 'Темп в норме'}
+        {insight.paceMessage}
       </p>
     </div>
   );

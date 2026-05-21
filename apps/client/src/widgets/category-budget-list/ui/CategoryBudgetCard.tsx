@@ -1,10 +1,12 @@
-import { Landmark } from 'lucide-react'
-
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import { formatAmount } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle, Progress } from '@/shared/ui'
+import { Card, CardContent, Progress } from '@/shared/ui'
 
+import {
+  CategoryBudgetIcon,
+  categoryIconWrapClassName,
+} from '../lib/categoryVisual'
 import {
   envelopeBalanceToneClassName,
   envelopeCardToneClassName,
@@ -14,11 +16,11 @@ import {
   getEnvelopeBalanceLabel,
   getEnvelopeBalanceTone,
 } from '../lib/envelopeBalanceTone'
-import { monthlyBurnInsightSlotClassName } from '../lib/monthlyBurnInsight'
 import { getEnvelopeUsage } from '../lib/envelopeUsage'
 import type { CategoryBudgetListItem } from '../model/types'
 
 import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight'
+import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard'
 
 type CategoryBudgetCardProps = {
   item: CategoryBudgetListItem
@@ -33,81 +35,82 @@ export function CategoryBudgetCard({
 }: CategoryBudgetCardProps) {
   const { category, allocated, spent, remaining } = item
   const isSavings = isSavingsCategory(category.type)
+
+  if (isSavings) {
+    return <SavingsCategoryBudgetCard item={item} onSelect={onSelect} />
+  }
+
   const tone = getEnvelopeBalanceTone(
     allocated,
     remaining,
-    !isSavings && stressOverBudget,
+    stressOverBudget,
   )
   const usage = getEnvelopeUsage(allocated, spent)
-
   const balanceLabel = getEnvelopeBalanceLabel(isSavings)
-
-  const usageCaption = isSavings ? 'использовано резерва' : 'использовано'
+  const usageCaption = 'использовано бюджета'
 
   return (
     <Card
       size="sm"
       className={cn(
-        'h-full w-full min-w-0 transition-colors',
+        'h-full w-full min-w-0 gap-0 overflow-hidden py-0 transition-colors',
         envelopeCardToneClassName(tone),
         onSelect && 'cursor-pointer',
         onSelect && envelopeHoverToneClassName(tone),
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
-      <CardHeader className="flex items-center gap-2 pb-2">
-        {isSavings ? (
-          <Landmark
-            className={cn(
-              'size-3.5 shrink-0',
-              tone === 'over'
-                ? 'text-red-600'
-                : tone === 'low'
-                  ? 'text-amber-700'
-                  : 'text-emerald-700',
-            )}
-            aria-hidden
-          />
-        ) : null}
-        <CardTitle className="min-w-0 truncate leading-snug">
-          {category.name}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col space-y-2.5 text-sm">
-        <div className="flex items-baseline justify-between gap-2 tabular-nums">
-          <span className="font-medium text-zinc-900">
-            {formatAmount(spent)}
-            <span className="mx-1 font-normal text-muted-foreground">/</span>
-            {formatAmount(allocated)}
-          </span>
+      <CardContent className="flex flex-1 flex-col gap-3 p-4 text-sm">
+        <div className="flex items-start gap-3">
           <span
             className={cn(
-              'text-xs font-semibold',
-              envelopeBalanceToneClassName(tone),
+              'flex size-10 shrink-0 items-center justify-center rounded-full',
+              categoryIconWrapClassName(tone),
             )}
           >
-            {usage.displayPercent}%
+            <CategoryBudgetIcon
+              categoryId={category.id}
+              isSavings={isSavings}
+              className="size-5"
+              aria-hidden
+            />
           </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-base font-semibold text-zinc-900">
+              {category.name}
+            </h3>
+          </div>
+          <div className="shrink-0 text-right tabular-nums">
+            <p className="font-medium text-zinc-900">
+              {formatAmount(spent)}
+              <span className="mx-1 font-normal text-zinc-400">/</span>
+              {formatAmount(allocated)}
+            </p>
+            <p
+              className={cn(
+                'text-xs font-semibold',
+                envelopeBalanceToneClassName(tone),
+              )}
+            >
+              {usage.displayPercent}%
+            </p>
+          </div>
         </div>
 
         <Progress
           value={usage.barPercent}
-          className="h-1.5 bg-zinc-200/80"
+          className="h-2.5 bg-zinc-100"
           indicatorClassName={envelopeProgressIndicatorClassName(tone)}
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
 
-        {!isSavings ? (
-          <MonthlyBurnInsightBlock allocated={allocated} spent={spent} />
-        ) : (
-          <div className={monthlyBurnInsightSlotClassName} aria-hidden />
-        )}
+        <MonthlyBurnInsightBlock allocated={allocated} spent={spent} />
 
-        <div className="mt-auto flex justify-between gap-4 border-t border-zinc-100/90 pt-1.5">
-          <span className="text-muted-foreground">{balanceLabel}</span>
+        <div className="mt-auto flex items-center justify-between gap-4 border-t border-zinc-100 pt-2">
+          <span className="text-zinc-500">{balanceLabel}</span>
           <span
             className={cn(
-              'tabular-nums font-bold',
+              'text-base font-bold tabular-nums',
               envelopeBalanceToneClassName(tone),
             )}
           >
