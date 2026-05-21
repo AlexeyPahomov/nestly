@@ -1,11 +1,12 @@
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, Progress } from '@/shared/ui'
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
+import { formatAmount } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import { Card, CardContent, Progress } from '@/shared/ui';
 
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
+import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps';
 
-import { categoryIconWrapClassName } from '../lib/categoryVisual'
+import { categoryIconWrapClassName } from '../lib/categoryVisual';
 import {
   envelopeBalanceToneClassName,
   envelopeCardToneClassName,
@@ -14,39 +15,35 @@ import {
   formatEnvelopeBalance,
   getEnvelopeBalanceLabel,
   getEnvelopeBalanceTone,
-} from '../lib/envelopeBalanceTone'
-import { getEnvelopeUsage } from '../lib/envelopeUsage'
-import type { CategoryBudgetListItem } from '../model/types'
+} from '../lib/envelopeBalanceTone';
+import { getEnvelopeUsage } from '../lib/envelopeUsage';
+import type { CategoryBudgetListItem } from '../model/types';
 
-import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight'
-import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard'
+import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight';
+import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard';
 
 type CategoryBudgetCardProps = {
-  item: CategoryBudgetListItem
-  stressOverBudget?: boolean
-  onSelect?: (categoryId: string) => void
-}
+  item: CategoryBudgetListItem;
+  stressOverBudget?: boolean;
+  onSelect?: (categoryId: string) => void;
+};
 
 export function CategoryBudgetCard({
   item,
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item
-  const isSavings = isSavingsCategory(category.type)
+  const { category, allocated, spent, remaining } = item;
+  const isSavings = isSavingsCategory(category.type);
 
   if (isSavings) {
-    return <SavingsCategoryBudgetCard item={item} onSelect={onSelect} />
+    return <SavingsCategoryBudgetCard item={item} onSelect={onSelect} />;
   }
 
-  const tone = getEnvelopeBalanceTone(
-    allocated,
-    remaining,
-    stressOverBudget,
-  )
-  const usage = getEnvelopeUsage(allocated, spent)
-  const balanceLabel = getEnvelopeBalanceLabel(isSavings)
-  const usageCaption = 'использовано бюджета'
+  const tone = getEnvelopeBalanceTone(allocated, remaining, stressOverBudget);
+  const usage = getEnvelopeUsage(allocated, spent);
+  const balanceLabel = getEnvelopeBalanceLabel(isSavings);
+  const usageCaption = 'использовано бюджета';
 
   return (
     <Card
@@ -59,7 +56,7 @@ export function CategoryBudgetCard({
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
-      <CardContent className="flex flex-1 flex-col gap-3 p-4 text-sm">
+      <CardContent className="flex flex-1 flex-col gap-3 px-4 py-1 text-sm">
         <div className="flex items-start gap-3">
           <span
             className={cn(
@@ -68,14 +65,13 @@ export function CategoryBudgetCard({
             )}
           >
             <CategoryLucideIcon
-              categoryName={category.name}
-              categoryType={category.type}
+              {...toCategoryLucideIconProps(category)}
               className="size-5"
               aria-hidden
             />
           </span>
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-zinc-900">
+          <div className="min-w-0 flex-1 self-start">
+            <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
               {category.name}
             </h3>
           </div>
@@ -118,5 +114,5 @@ export function CategoryBudgetCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -137,6 +137,7 @@ export function ExpenseList({
                 expense={item}
                 categoryName={item.categoryName}
                 categoryType={item.categoryType}
+                categoryIcon={item.categoryIcon}
                 isDeleting={deletingExpenseId === item.id}
                 onEdit={onEdit ? () => onEdit(item) : undefined}
                 onDelete={onDelete ? () => onDelete(item.id) : undefined}

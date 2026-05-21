@@ -23,6 +23,7 @@ model Category {
   user_id    String
   name       String
   type       String
+  icon       String   @default("shopping-cart")
   created_at DateTime @default(now())
 
   allocations Allocation[]

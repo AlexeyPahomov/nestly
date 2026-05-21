@@ -1,14 +1,11 @@
-import { isCategoryType } from '@nestly/shared'
+import { isCategoryIconKey, isCategoryType } from '@nestly/shared'
 
-import type {
-  CreateCategoryFormValues,
-  ValidCreateCategoryFormPayload,
-} from './types'
+import type { CategoryFormValues, ValidCategoryFormPayload } from './types'
 
-export function validateCreateCategoryForm(
-  values: CreateCategoryFormValues,
+export function validateCategoryForm(
+  values: CategoryFormValues,
 ):
-  | { ok: true; payload: ValidCreateCategoryFormPayload }
+  | { ok: true; payload: ValidCategoryFormPayload }
   | { ok: false; error: string } {
   const name = values.name.trim()
   if (!name) {
@@ -19,8 +16,12 @@ export function validateCreateCategoryForm(
     return { ok: false as const, error: 'Выберите тип категории' }
   }
 
+  if (!isCategoryIconKey(values.icon)) {
+    return { ok: false as const, error: 'Выберите иконку категории' }
+  }
+
   return {
     ok: true as const,
-    payload: { name, type: values.type },
+    payload: { name, type: values.type, icon: values.icon },
   }
 }

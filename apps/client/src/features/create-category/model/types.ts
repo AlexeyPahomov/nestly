@@ -1,11 +1,12 @@
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryPayload } from '@/entities/category/model/types'
+import type { CategoryIconKey, CategoryType } from '@nestly/shared'
 
-export type CreateCategoryFormValues = {
+export type CategoryFormValues = {
   name: string
   type: string
+  icon: CategoryIconKey
 }
 
-export type ValidCreateCategoryFormPayload = {
-  name: string
+export type ValidCategoryFormPayload = CategoryPayload & {
   type: CategoryType
 }

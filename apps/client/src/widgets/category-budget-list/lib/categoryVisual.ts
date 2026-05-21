@@ -1,8 +1,4 @@
-import { getCategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
-
 import type { EnvelopeBalanceTone } from './envelopeBalanceTone'
-
-export { getCategoryLucideIcon as getCategoryIcon }
 
 const toneAccentClassName: Record<EnvelopeBalanceTone, string> = {
   healthy: 'bg-blue-50 text-blue-600',

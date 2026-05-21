@@ -1,25 +1,40 @@
+import type { ReactNode } from 'react'
+
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
+import type { Category } from '@/entities/category/model/types'
 import { CategoryCard } from '@/entities/category/ui/CategoryCard'
 import { ItemsList } from '@/shared/ui'
 
-export function CategoryList() {
+export type CategoryListProps = {
+  className?: string
+  headerEnd?: ReactNode
+  onEdit?: (category: Category) => void
+}
+
+export function CategoryList({
+  className,
+  headerEnd,
+  onEdit,
+}: CategoryListProps) {
   const { data, isPending, isError, error, isFetching } = useCategoriesQuery()
 
   return (
     <ItemsList
+      className={className}
       isPending={isPending}
       isError={isError}
       error={error}
       data={data}
       isFetching={isFetching}
-      title="Список категорий"
+      headerEnd={headerEnd}
       emptyMessage="Пока нет категорий. Добавьте первую."
       errorFallback="Не удалось загрузить категории"
+      listClassName="!space-y-2"
     >
       {(items) =>
         items.map((category) => (
           <li key={category.id}>
-            <CategoryCard category={category} />
+            <CategoryCard category={category} onEdit={onEdit} />
           </li>
         ))
       }

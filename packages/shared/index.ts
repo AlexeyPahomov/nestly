@@ -1,2 +1,3 @@
-export * from './domain/category'
-export * from './lib/money'
+export * from './domain/category.js'
+export * from './domain/categoryIcon.js'
+export * from './lib/money.js'

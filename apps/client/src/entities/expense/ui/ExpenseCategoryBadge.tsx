@@ -7,7 +7,7 @@ import { cn } from '@/shared/lib/utils'
 type ExpenseCategoryBadgeProps = {
   name: string
   categoryType: CategoryType
-  categoryId?: string
+  icon?: string | null
 }
 
 const savingsStyles =
@@ -17,6 +17,7 @@ const expenseStyles = 'bg-blue-50 text-blue-700 ring-blue-200/80'
 export function ExpenseCategoryBadge({
   name,
   categoryType,
+  icon,
 }: ExpenseCategoryBadgeProps) {
   const isSavings = isSavingsCategory(categoryType)
 
@@ -31,6 +32,7 @@ export function ExpenseCategoryBadge({
         <CategoryLucideIcon
           categoryName={name}
           categoryType={categoryType}
+          icon={icon}
           className="size-4"
           aria-hidden
         />

@@ -2,11 +2,10 @@ import type { ReactNode, UIEventHandler } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
-import { Spinner } from '../spinner/Spinner';
-
 import { ListEmpty } from './ListEmpty';
 import { ListError } from './ListError';
 import { ListLoader } from './ListLoader';
+import { ItemsListHeader } from './ItemsListHeader';
 
 export type ItemsListLayout = 'fill' | 'fit';
 
@@ -16,7 +15,7 @@ export type ItemsListProps<T> = {
   error: unknown;
   data: T[] | undefined;
   isFetching: boolean;
-  title: string;
+  title?: string;
   emptyMessage?: string;
   errorFallback?: string;
   /** Элемент справа в строке заголовка (например, кнопка действия). */
@@ -72,29 +71,15 @@ export function ItemsList<T>({
   const showEmpty = !isPending && !showError && items.length === 0;
   const showList = !isPending && !showError && items.length > 0;
 
-  const listHeader = (
-    <div className="flex shrink-0 flex-col gap-1">
-      <div className="flex items-center justify-between gap-2 px-2">
-        <h2 className="text-lg font-semibold text-zinc-900">{title}</h2>
-        {headerEnd || (isFetching && !isPending) ? (
-          <div className="flex shrink-0 items-center gap-2">
-            {headerEnd}
-            {isFetching && !isPending ? (
-              <Spinner
-                className="size-4 shrink-0 text-zinc-500"
-                aria-label="Обновление списка"
-              />
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-      {headerAddon}
-    </div>
-  );
-
   return (
     <div className={cn(rootClassName, 'gap-3')} aria-busy={isPending}>
-      {listHeader}
+      <ItemsListHeader
+        title={title}
+        headerEnd={headerEnd}
+        headerAddon={headerAddon}
+        isFetching={isFetching}
+        isPending={isPending}
+      />
 
       <div className="relative flex min-h-0 flex-1 flex-col">
         <div

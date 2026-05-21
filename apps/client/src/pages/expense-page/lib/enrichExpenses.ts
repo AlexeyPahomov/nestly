@@ -14,6 +14,7 @@ export function enrichExpensesWithCategory(
       ...expense,
       categoryName: category?.name ?? 'Без категории',
       categoryType: category?.type ?? 'expense',
+      categoryIcon: category?.icon ?? null,
     }
   })
 }

@@ -5,4 +5,5 @@ import type { CategoryType } from '@nestly/shared'
 export type ExpenseListItem = Expense & {
   categoryName: string
   categoryType: CategoryType
+  categoryIcon: string | null
 }

@@ -1,24 +1,24 @@
-import { ChevronRight, Landmark, Lock } from 'lucide-react'
+import { ChevronRight, Landmark, Lock } from 'lucide-react';
 
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, Progress } from '@/shared/ui'
+import { formatAmount } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import { Card, CardContent, Progress } from '@/shared/ui';
 
-import { getEnvelopeUsage } from '../lib/envelopeUsage'
-import type { CategoryBudgetListItem } from '../model/types'
+import { getEnvelopeUsage } from '../lib/envelopeUsage';
+import type { CategoryBudgetListItem } from '../model/types';
 
 type SavingsCategoryBudgetCardProps = {
-  item: CategoryBudgetListItem
-  onSelect?: (categoryId: string) => void
-}
+  item: CategoryBudgetListItem;
+  onSelect?: (categoryId: string) => void;
+};
 
 export function SavingsCategoryBudgetCard({
   item,
   onSelect,
 }: SavingsCategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item
-  const usage = getEnvelopeUsage(allocated, spent)
-  const setAside = remaining > 0 ? remaining : spent
+  const { category, allocated, spent, remaining } = item;
+  const usage = getEnvelopeUsage(allocated, spent);
+  const setAside = remaining > 0 ? remaining : spent;
 
   return (
     <Card
@@ -34,27 +34,14 @@ export function SavingsCategoryBudgetCard({
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
             <Landmark className="size-5" aria-hidden />
           </span>
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-zinc-900">
+          <div className="min-w-0 flex-1 self-start">
+            <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
               {category.name}
             </h3>
           </div>
-          <div className="shrink-0 text-right text-sm tabular-nums">
-            <p className="font-medium text-zinc-900">
-              {formatAmount(spent)}
-              <span className="mx-1 font-normal text-zinc-400">/</span>
-              {formatAmount(allocated)}
-            </p>
-            <p className="text-xs font-medium text-emerald-700">
-              {usage.displayPercent}% от цели
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
+          <div className="shrink-0 text-right">
             <p className="text-sm text-zinc-500">Отложено</p>
-            <p className="text-3xl font-bold tracking-tight text-emerald-700 tabular-nums">
+            <p className="text-2xl font-bold leading-tight tracking-tight text-emerald-700 tabular-nums sm:text-3xl">
               {formatAmount(setAside)}
             </p>
           </div>
@@ -79,5 +66,5 @@ export function SavingsCategoryBudgetCard({
         />
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,5 +1,7 @@
 import { CATEGORY_TYPES, CATEGORY_TYPE_LABELS } from '@nestly/shared'
 
+import type { Category } from '@/entities/category/model/types'
+import { cn } from '@/shared/lib/utils'
 import {
   Button,
   Card,
@@ -10,64 +12,111 @@ import {
   Select,
 } from '@/shared/ui'
 
-import { useCreateCategoryForm } from '../model/useCreateCategoryForm'
+import { categoryFormDialogTitle } from '../lib/categoryFormDialogCopy'
+import { useCategoryForm } from '../model/useCategoryForm'
+
+import { CategoryIconPicker } from './CategoryIconPicker'
 
 const typeOptions = CATEGORY_TYPES.map((value) => ({
   value,
   label: CATEGORY_TYPE_LABELS[value],
 }))
 
-export function CreateCategoryForm() {
-  const form = useCreateCategoryForm()
+export type CreateCategoryFormVariant = 'card' | 'plain'
+
+export type CreateCategoryFormProps = {
+  editingCategory?: Category | null
+  onCancel?: () => void
+  onComplete?: () => void
+  variant?: CreateCategoryFormVariant
+  className?: string
+}
+
+export function CreateCategoryForm({
+  editingCategory = null,
+  onCancel,
+  onComplete,
+  variant = 'card',
+  className,
+}: CreateCategoryFormProps) {
+  const form = useCategoryForm({ editingCategory, onComplete })
+
+  const fields = (
+    <form
+      className="space-y-4"
+      onSubmit={(event) => {
+        event.preventDefault()
+        void form.submit()
+      }}
+    >
+      <Input
+        id="category-name"
+        label="Название"
+        name="name"
+        type="text"
+        autoComplete="off"
+        placeholder="Например, Продукты"
+        value={form.values.name}
+        onChange={form.handleChange}
+      />
+
+      <Select
+        id="category-type"
+        label="Тип"
+        value={form.values.type}
+        onValueChange={(type) => form.patchValues({ type })}
+        options={typeOptions}
+        placeholder="Выберите тип"
+        disabled={form.submitting}
+      />
+
+      <CategoryIconPicker
+        value={form.values.icon}
+        onChange={(icon) => form.patchValues({ icon })}
+        disabled={form.submitting}
+      />
+
+      {form.validationError ? (
+        <p className="text-sm text-red-600">{form.validationError}</p>
+      ) : null}
+      {form.serverError ? (
+        <p className="text-sm text-red-600">{form.serverError}</p>
+      ) : null}
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="submit"
+          isLoading={form.submitting}
+          size="lg"
+          className="min-w-40"
+        >
+          {form.isEditing ? 'Сохранить' : 'Добавить категорию'}
+        </Button>
+        {onCancel ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="lg"
+            disabled={form.submitting}
+            onClick={onCancel}
+          >
+            Отмена
+          </Button>
+        ) : null}
+      </div>
+    </form>
+  )
+
+  if (variant === 'plain') {
+    return <div className={cn('w-full', className)}>{fields}</div>
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Новая категория</CardTitle>
+    <Card className={cn('h-fit w-full max-h-full', className)}>
+      <CardHeader className="shrink-0">
+        <CardTitle>{categoryFormDialogTitle(form.isEditing)}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <form
-          className="space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault()
-            void form.submit()
-          }}
-        >
-          <Input
-            id="category-name"
-            label="Название"
-            name="name"
-            type="text"
-            autoComplete="off"
-            placeholder="Например, Продукты"
-            value={form.values.name}
-            onChange={form.handleChange}
-          />
-
-          <Select
-            id="category-type"
-            label="Тип"
-            value={form.values.type}
-            onValueChange={(type) => {
-              form.patchValues({ type })
-            }}
-            options={typeOptions}
-            placeholder="Выберите тип"
-            disabled={form.submitting}
-          />
-
-          {form.validationError ? (
-            <p className="text-sm text-red-600">{form.validationError}</p>
-          ) : null}
-          {form.serverError ? (
-            <p className="text-sm text-red-600">{form.serverError}</p>
-          ) : null}
-
-          <Button type="submit" isLoading={form.submitting} size="lg" className="min-w-40">
-            Добавить категорию
-          </Button>
-        </form>
-      </CardContent>
+      <CardContent>{fields}</CardContent>
     </Card>
   )
 }

@@ -1,3 +1,3 @@
 import { CategoryFieldsDto } from './category-fields.dto';
 
-export class CreateCategoryDto extends CategoryFieldsDto {}
+export class UpdateCategoryDto extends CategoryFieldsDto {}

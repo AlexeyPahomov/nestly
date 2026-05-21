@@ -18,6 +18,7 @@ type ExpenseCardProps = {
   expense: Expense
   categoryName: string
   categoryType: CategoryType
+  categoryIcon?: string | null
   onEdit?: () => void
   onDelete?: () => void
   isDeleting?: boolean
@@ -27,6 +28,7 @@ export function ExpenseCard({
   expense,
   categoryName,
   categoryType,
+  categoryIcon,
   onEdit,
   onDelete,
   isDeleting = false,
@@ -45,6 +47,7 @@ export function ExpenseCard({
       <ExpenseCategoryBadge
         name={categoryName}
         categoryType={categoryType}
+        icon={categoryIcon}
       />
 
       {description ? (
