@@ -1,17 +1,25 @@
-import { Landmark } from 'lucide-react';
+import { Landmark } from 'lucide-react'
 
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
-import type { CategoryBudgetListItem } from '@/widgets/category-budget-list/model/types';
-import { formatAmount } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui';
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
+import { formatAmount } from '@/shared/lib/format'
+import { cn } from '@/shared/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui'
+
+import {
+  envelopeBalanceToneClassName,
+  envelopeCardToneClassName,
+  envelopeHoverToneClassName,
+  formatEnvelopeBalance,
+  getEnvelopeBalanceTone,
+} from '../lib/envelopeBalanceTone'
+import type { CategoryBudgetListItem } from '../model/types'
 
 type CategoryBudgetCardProps = {
-  item: CategoryBudgetListItem;
-  selected?: boolean;
-  stressOverBudget?: boolean;
-  onSelect?: (categoryId: string) => void;
-};
+  item: CategoryBudgetListItem
+  selected?: boolean
+  stressOverBudget?: boolean
+  onSelect?: (categoryId: string) => void
+}
 
 export function CategoryBudgetCard({
   item,
@@ -19,48 +27,48 @@ export function CategoryBudgetCard({
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item;
-  const isSavings = isSavingsCategory(category.type);
-  const isOverBudget = !isSavings && (remaining < 0 || stressOverBudget);
-  const isReserveLow = isSavings && remaining < 0;
+  const { category, allocated, spent, remaining } = item
+  const isSavings = isSavingsCategory(category.type)
+  const tone = getEnvelopeBalanceTone(
+    allocated,
+    remaining,
+    !isSavings && stressOverBudget,
+  )
 
-  const balanceLabel = isSavings
-    ? 'В резерве'
-    : isOverBudget
+  const balanceLabel =
+    tone === 'over'
       ? 'Перерасход'
-      : 'Свободно';
-  const balanceValue =
-    isOverBudget || isReserveLow
-      ? formatAmount(Math.abs(remaining))
-      : formatAmount(remaining);
+      : isSavings
+        ? 'В резерве'
+        : 'Свободно'
 
   return (
     <Card
       size="sm"
       className={cn(
         'transition-colors',
-        isSavings &&
-          'border-emerald-200/80 bg-emerald-50/50 ring-1 ring-emerald-100/80',
+        envelopeCardToneClassName(tone),
         selected && 'ring-2 ring-zinc-900',
-        isOverBudget && 'border-red-200 bg-red-50/40',
-        onSelect && 'cursor-pointer hover:bg-zinc-50',
-        isSavings && onSelect && 'hover:bg-emerald-50/80',
+        onSelect && 'cursor-pointer',
+        onSelect && envelopeHoverToneClassName(tone),
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
       <CardHeader className="flex items-center gap-2">
         {isSavings ? (
           <Landmark
-            className="size-3.5 shrink-0 text-emerald-700"
+            className={cn(
+              'size-3.5 shrink-0',
+              tone === 'over'
+                ? 'text-red-600'
+                : tone === 'low'
+                  ? 'text-amber-700'
+                  : 'text-emerald-700',
+            )}
             aria-hidden
           />
         ) : null}
-        <CardTitle
-          className={cn(
-            'min-w-0 truncate leading-snug',
-            isSavings && 'text-emerald-950',
-          )}
-        >
+        <CardTitle className="min-w-0 truncate leading-snug">
           {category.name}
         </CardTitle>
       </CardHeader>
@@ -86,17 +94,13 @@ export function CategoryBudgetCard({
           <span
             className={cn(
               'tabular-nums font-bold',
-              isOverBudget || isReserveLow
-                ? 'text-red-600'
-                : isSavings
-                  ? 'text-emerald-800'
-                  : 'text-zinc-900',
+              envelopeBalanceToneClassName(tone),
             )}
           >
-            {balanceValue}
+            {formatEnvelopeBalance(remaining, tone)}
           </span>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
