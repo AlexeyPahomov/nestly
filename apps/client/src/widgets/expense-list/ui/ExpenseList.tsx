@@ -1,20 +1,20 @@
-import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard'
-import { cn } from '@/shared/lib/utils'
-import { ItemsList } from '@/shared/ui'
+import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
+import { cn } from '@/shared/lib/utils';
+import { ItemsList } from '@/shared/ui';
 
-import type { ExpenseListItem } from '../model/types'
+import type { ExpenseListItem } from '../model/types';
 
 export interface ExpenseListProps {
-  expenses?: ExpenseListItem[]
-  isPending: boolean
-  isError: boolean
-  error: unknown
-  isFetching?: boolean
-  className?: string
-  editingExpenseId?: string | null
-  deletingExpenseId?: string | null
-  onEdit?: (item: ExpenseListItem) => void
-  onDelete?: (id: string) => void
+  expenses?: ExpenseListItem[];
+  isPending: boolean;
+  isError: boolean;
+  error: unknown;
+  isFetching?: boolean;
+  className?: string;
+  editingExpenseId?: string | null;
+  deletingExpenseId?: string | null;
+  onEdit?: (item: ExpenseListItem) => void;
+  onDelete?: (id: string) => void;
 }
 
 export function ExpenseList({
@@ -58,5 +58,5 @@ export function ExpenseList({
         ))
       }
     </ItemsList>
-  )
+  );
 }

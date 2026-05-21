@@ -1,20 +1,20 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react';
 
-import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation'
-import type { Expense } from '@/entities/expense/model/types'
-import { PageSection } from '@/shared/ui'
-import { BudgetSummary } from '@/widgets/budget-summary'
-import { ExpenseList } from '@/widgets/expense-list'
+import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation';
+import type { Expense } from '@/entities/expense/model/types';
+import { PageSection } from '@/shared/ui';
+import { BudgetSummary } from '@/widgets/budget-summary';
+import { ExpenseList } from '@/widgets/expense-list';
 
-import { toBudgetSnapshots } from '../lib/toBudgetSnapshots'
-import { useExpensePage } from '../model/useExpensePage'
+import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
+import { useExpensePage } from '../model/useExpensePage';
 
-import { ExpenseWorkspace } from './ExpenseWorkspace'
+import { ExpenseWorkspace } from './ExpenseWorkspace';
 
 export function ExpensePage() {
-  const [stressCategoryId, setStressCategoryId] = useState<string | null>(null)
-  const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
-  const deleteExpenseMutation = useDeleteExpenseMutation()
+  const [stressCategoryId, setStressCategoryId] = useState<string | null>(null);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const deleteExpenseMutation = useDeleteExpenseMutation();
 
   const {
     selectedCategoryId,
@@ -30,23 +30,23 @@ export function ExpensePage() {
     budgetError,
     isBudgetFetching,
     expensesQuery,
-  } = useExpensePage()
+  } = useExpensePage();
 
   const budgetSnapshots = useMemo(
     () => toBudgetSnapshots(budgetItems),
     [budgetItems],
-  )
+  );
 
   const handleStressCategoryChange = useCallback(
     (categoryId: string | null) => {
-      setStressCategoryId((prev) => (prev === categoryId ? prev : categoryId))
+      setStressCategoryId((prev) => (prev === categoryId ? prev : categoryId));
     },
     [],
-  )
+  );
 
   return (
     <PageSection title="Расходы" className="min-h-0 gap-4">
-      <div className="grid min-h-0 flex-1 grid-rows-[auto_auto_minmax(0,1fr)] gap-4">
+      <div className="grid min-h-0 flex-1 grid-rows-[auto_auto_minmax(0,1fr)] gap-4 px-0.5">
         <div className="shrink-0">
           <BudgetSummary
             availableToAllocate={treasurySummary.availableToAllocate}
@@ -88,18 +88,18 @@ export function ExpensePage() {
                 : null
             }
             onEdit={(item) => {
-              setEditingExpense(item)
-              setSelectedCategoryId(item.category_id)
+              setEditingExpense(item);
+              setSelectedCategoryId(item.category_id);
             }}
             onDelete={(id) => {
               if (editingExpense?.id === id) {
-                setEditingExpense(null)
+                setEditingExpense(null);
               }
-              deleteExpenseMutation.mutate(id)
+              deleteExpenseMutation.mutate(id);
             }}
           />
         </div>
       </div>
     </PageSection>
-  )
+  );
 }
