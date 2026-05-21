@@ -1,3 +1,5 @@
+import type { UIEventHandler } from 'react';
+
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
 import {
   listItemHighlightActiveClassName,
@@ -19,6 +21,7 @@ export interface ExpenseListProps {
   deletingExpenseId?: string | null;
   onEdit?: (item: ExpenseListItem) => void;
   onDelete?: (id: string) => void;
+  onListScroll?: UIEventHandler<HTMLUListElement>;
 }
 
 export function ExpenseList({
@@ -32,10 +35,12 @@ export function ExpenseList({
   deletingExpenseId = null,
   onEdit,
   onDelete,
+  onListScroll,
 }: ExpenseListProps) {
   return (
     <ItemsList
       className={cn('min-h-0', className)}
+      onListScroll={onListScroll}
       isPending={isPending}
       isError={isError}
       error={error}

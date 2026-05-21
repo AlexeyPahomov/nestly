@@ -9,6 +9,9 @@ type BudgetSummaryProps = {
   availableToAllocate: number;
   categoryRemainingTotal: number;
   totalSpent: number;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
 const metricRowClassName = 'flex items-baseline justify-between gap-4';
@@ -36,13 +39,25 @@ export function BudgetSummary({
   availableToAllocate,
   categoryRemainingTotal,
   totalSpent,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
 }: BudgetSummaryProps) {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : uncontrolledOpen;
   const detailsId = useId();
   const hasUnallocated = availableToAllocate > 0;
   const envelopeOver = categoryRemainingTotal < 0;
 
-  const toggle = () => setOpen((value) => !value);
+  const setOpen = (next: boolean) => {
+    if (!isControlled) {
+      setUncontrolledOpen(next);
+    }
+    onOpenChange?.(next);
+  };
+
+  const toggle = () => setOpen(!open);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {

@@ -1,3 +1,5 @@
+import type { UIEventHandler } from 'react'
+
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
 import type { Expense } from '@/entities/expense/model/types'
@@ -26,6 +28,7 @@ type ExpenseWorkspaceProps = {
   isBudgetError: boolean
   budgetError: unknown
   isBudgetFetching: boolean
+  onBudgetListScroll?: UIEventHandler<HTMLUListElement>
 }
 
 export function ExpenseWorkspace({
@@ -44,6 +47,7 @@ export function ExpenseWorkspace({
   isBudgetError,
   budgetError,
   isBudgetFetching,
+  onBudgetListScroll,
 }: ExpenseWorkspaceProps) {
   const dialog = useExpenseFormDialog(editingExpense, onCancelEdit)
 
@@ -51,6 +55,7 @@ export function ExpenseWorkspace({
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <CategoryBudgetList
         className="min-h-0 flex-1 overflow-hidden"
+        onListScroll={onBudgetListScroll}
         budgetItems={budgetItems}
         isPending={isBudgetPending}
         isError={isBudgetError}

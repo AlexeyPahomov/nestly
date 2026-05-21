@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, UIEventHandler } from 'react';
 
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
 import {
@@ -23,6 +23,7 @@ export type CategoryBudgetListProps = {
   onCategorySelect?: (categoryId: string) => void;
   headerEnd?: ReactNode;
   className?: string;
+  onListScroll?: UIEventHandler<HTMLUListElement>;
 };
 
 export function CategoryBudgetList({
@@ -36,10 +37,12 @@ export function CategoryBudgetList({
   onCategorySelect,
   headerEnd,
   className,
+  onListScroll,
 }: CategoryBudgetListProps) {
   return (
     <ItemsList
       className={className}
+      onListScroll={onListScroll}
       listClassName="grid w-full grid-cols-2 items-stretch gap-3 space-y-0"
       isPending={isPending}
       isError={isError}

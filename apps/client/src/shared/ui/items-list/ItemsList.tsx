@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, UIEventHandler } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
@@ -25,6 +25,8 @@ export type ItemsListProps<T> = {
   className?: string;
   /** Доп. классы для `<ul>` (например, grid-колонки). */
   listClassName?: string;
+  /** Скролл прокручиваемого `<ul>` (layout `fill`). */
+  onListScroll?: UIEventHandler<HTMLUListElement>;
   /** `fill` — на всю высоту контейнера со скроллом; `fit` — по высоте элементов */
   layout?: ItemsListLayout;
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
@@ -49,6 +51,7 @@ export function ItemsList<T>({
   headerAddon,
   className,
   listClassName,
+  onListScroll,
   layout = 'fill',
   children,
 }: ItemsListProps<T>) {
@@ -123,6 +126,7 @@ export function ItemsList<T>({
                 'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
                 listClassName,
               )}
+              onScroll={onListScroll}
             >
               {children(items)}
             </ul>

@@ -11,6 +11,7 @@ import {
   expensePageScrollPaneClassName,
 } from '../lib/expensePageLayout';
 import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
+import { useBudgetSummaryOpen } from '../model/useBudgetSummaryOpen';
 import { useExpensePage } from '../model/useExpensePage';
 
 import { ExpenseWorkspace } from './ExpenseWorkspace';
@@ -19,6 +20,13 @@ export function ExpensePage() {
   const [stressCategoryId, setStressCategoryId] = useState<string | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const deleteExpenseMutation = useDeleteExpenseMutation();
+  const {
+    open: summaryOpen,
+    setOpen: setSummaryOpen,
+    paneBoost,
+    onCategoryBudgetListScroll,
+    onExpenseListScroll,
+  } = useBudgetSummaryOpen();
 
   const {
     selectedCategoryId,
@@ -50,9 +58,11 @@ export function ExpensePage() {
 
   return (
     <PageSection title="Расходы" className="min-h-0 gap-4">
-      <div className={expensePageGridClassName}>
+      <div className={expensePageGridClassName(paneBoost)}>
         <div className="shrink-0">
           <BudgetSummary
+            open={summaryOpen}
+            onOpenChange={setSummaryOpen}
             availableToAllocate={treasurySummary.availableToAllocate}
             categoryRemainingTotal={treasurySummary.categoryRemainingTotal}
             totalSpent={treasurySummary.totalSpent}
@@ -76,12 +86,14 @@ export function ExpensePage() {
             isBudgetError={isBudgetError}
             budgetError={budgetError}
             isBudgetFetching={isBudgetFetching}
+            onBudgetListScroll={onCategoryBudgetListScroll}
           />
         </div>
 
         <div className={expensePageScrollPaneClassName}>
           <ExpenseList
             className="min-h-0 flex-1"
+            onListScroll={onExpenseListScroll}
             expenses={sortedExpenses}
             isPending={expensesQuery.isPending}
             isError={expensesQuery.isError}
