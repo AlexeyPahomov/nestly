@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
+import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
 import type { Category } from '@/entities/category/model/types'
 import { useExpensesQuery } from '@/entities/expense/api/useExpensesQuery'
 
@@ -25,6 +26,7 @@ export function useExpensePage() {
   )
 
   const categoriesQuery = useCategoriesQuery()
+  const incomesQuery = useIncomesQuery()
   const allocationsQuery = useAllAllocationsQuery()
   const expensesQuery = useExpensesQuery()
 
@@ -54,24 +56,37 @@ export function useExpensePage() {
 
   const isBudgetPending =
     categoriesQuery.isPending ||
+    incomesQuery.isPending ||
     allocationsQuery.isPending ||
     expensesQuery.isPending
 
   const isBudgetError =
-    categoriesQuery.isError || allocationsQuery.isError || expensesQuery.isError
+    categoriesQuery.isError ||
+    incomesQuery.isError ||
+    allocationsQuery.isError ||
+    expensesQuery.isError
 
   const budgetError =
-    categoriesQuery.error ?? allocationsQuery.error ?? expensesQuery.error
+    categoriesQuery.error ??
+    incomesQuery.error ??
+    allocationsQuery.error ??
+    expensesQuery.error
 
   const isBudgetFetching =
     categoriesQuery.isFetching ||
+    incomesQuery.isFetching ||
     allocationsQuery.isFetching ||
     expensesQuery.isFetching
+
+  const incomes = incomesQuery.data ?? []
+  const allocations = allocationsQuery.data ?? []
 
   return {
     selectedCategoryId,
     setSelectedCategoryId,
     expenseCategories,
+    incomes,
+    allocations,
     budgetItems,
     budgetTotals,
     sortedExpenses,
@@ -80,6 +95,7 @@ export function useExpensePage() {
     budgetError,
     isBudgetFetching,
     categoriesQuery,
+    incomesQuery,
     allocationsQuery,
     expensesQuery,
   }

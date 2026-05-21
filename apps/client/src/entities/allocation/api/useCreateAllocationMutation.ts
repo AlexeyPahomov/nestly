@@ -12,10 +12,8 @@ export function useCreateAllocationMutation() {
 
   return useMutation<Allocation, Error, CreateAllocationPayload>({
     mutationFn: createAllocation,
-    onSuccess: (_, variables) => {
-      void queryClient.invalidateQueries({
-        queryKey: allocationKeys.list(variables.income_id),
-      })
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: allocationKeys.all })
     },
   })
 }

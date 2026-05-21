@@ -1,28 +1,23 @@
-import type { CSSProperties } from 'react';
+import { useCallback, useMemo, useState } from 'react'
 
-import { CreateExpenseForm } from '@/features/create-expense/ui/CreateExpenseForm';
-import { useExpensePage } from '@/pages/expense-page/model/useExpensePage';
-import { useElementHeight } from '@/shared/lib/useElementHeight';
-import { cn } from '@/shared/lib/utils';
-import { PageSection } from '@/shared/ui';
-import { BudgetSummary } from '@/widgets/budget-summary';
-import { CategoryBudgetList } from '@/widgets/category-budget-list';
-import { ExpenseList } from '@/widgets/expense-list';
+import { PageSection } from '@/shared/ui'
+import { BudgetSummary } from '@/widgets/budget-summary'
+import { ExpenseList } from '@/widgets/expense-list'
 
-/** 3fr + 2fr ≈ 60/40; gap учитывается grid, без переполнения по ширине */
-const workspaceRowClassName =
-  'grid shrink-0 grid-cols-1 gap-4 md:grid-cols-[3fr_2fr] md:items-start';
+import { toBudgetSnapshots } from '../lib/toBudgetSnapshots'
+import { useExpensePage } from '../model/useExpensePage'
 
-const categoriesColumnClassName =
-  'flex min-h-0 min-w-0 flex-col md:overflow-hidden md:max-h-[var(--expense-form-h)]';
-
-const formColumnClassName = 'min-w-0';
+import { ExpenseWorkspace } from './ExpenseWorkspace'
 
 export function ExpensePage() {
+  const [stressCategoryId, setStressCategoryId] = useState<string | null>(null)
+
   const {
     selectedCategoryId,
     setSelectedCategoryId,
     expenseCategories,
+    incomes,
+    allocations,
     budgetItems,
     budgetTotals,
     sortedExpenses,
@@ -31,15 +26,19 @@ export function ExpensePage() {
     budgetError,
     isBudgetFetching,
     expensesQuery,
-  } = useExpensePage();
+  } = useExpensePage()
 
-  const { ref: expenseFormRef, height: expenseFormHeight } =
-    useElementHeight<HTMLDivElement>();
+  const budgetSnapshots = useMemo(
+    () => toBudgetSnapshots(budgetItems),
+    [budgetItems],
+  )
 
-  const categoriesColumnStyle =
-    expenseFormHeight != null
-      ? ({ '--expense-form-h': `${expenseFormHeight}px` } as CSSProperties)
-      : undefined;
+  const handleStressCategoryChange = useCallback(
+    (categoryId: string | null) => {
+      setStressCategoryId((prev) => (prev === categoryId ? prev : categoryId))
+    },
+    [],
+  )
 
   return (
     <PageSection title="Расходы" className="min-h-0 gap-4">
@@ -52,30 +51,21 @@ export function ExpensePage() {
           />
         </div>
 
-        <div className={workspaceRowClassName}>
-          <div
-            className={cn(categoriesColumnClassName)}
-            style={categoriesColumnStyle}
-          >
-            <CategoryBudgetList
-              className="min-h-0 flex-1"
-              budgetItems={budgetItems}
-              isPending={isBudgetPending}
-              isError={isBudgetError}
-              error={budgetError}
-              isFetching={isBudgetFetching}
-              selectedCategoryId={selectedCategoryId}
-              onCategorySelect={setSelectedCategoryId}
-            />
-          </div>
-
-          <div ref={expenseFormRef} className={formColumnClassName}>
-            <CreateExpenseForm
-              categories={expenseCategories}
-              selectedCategoryId={selectedCategoryId ?? undefined}
-            />
-          </div>
-        </div>
+        <ExpenseWorkspace
+          categories={expenseCategories}
+          budgets={budgetSnapshots}
+          incomes={incomes}
+          allocations={allocations}
+          budgetItems={budgetItems}
+          selectedCategoryId={selectedCategoryId}
+          stressCategoryId={stressCategoryId}
+          onStressCategoryChange={handleStressCategoryChange}
+          onCategorySelect={setSelectedCategoryId}
+          isBudgetPending={isBudgetPending}
+          isBudgetError={isBudgetError}
+          budgetError={budgetError}
+          isBudgetFetching={isBudgetFetching}
+        />
 
         <div className="flex h-full min-h-0 flex-col overflow-hidden">
           <ExpenseList
@@ -89,5 +79,5 @@ export function ExpensePage() {
         </div>
       </div>
     </PageSection>
-  );
+  )
 }

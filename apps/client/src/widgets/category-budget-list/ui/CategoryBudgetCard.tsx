@@ -6,16 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui'
 type CategoryBudgetCardProps = {
   item: CategoryBudgetListItem
   selected?: boolean
+  /** Подсветка перерасхода по превью формы (ещё до сохранения). */
+  stressOverBudget?: boolean
   onSelect?: (categoryId: string) => void
 }
 
 export function CategoryBudgetCard({
   item,
   selected,
+  stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
   const { category, allocated, spent, remaining } = item
-  const isOverBudget = remaining < 0
+  const isOverBudget = remaining < 0 || stressOverBudget
 
   return (
     <Card
@@ -23,6 +26,7 @@ export function CategoryBudgetCard({
       className={cn(
         'transition-colors',
         selected && 'ring-2 ring-zinc-900',
+        isOverBudget && 'border-red-200 bg-red-50/40',
         onSelect && 'cursor-pointer hover:bg-zinc-50',
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}

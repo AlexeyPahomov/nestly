@@ -11,6 +11,7 @@ export type CategoryBudgetListProps = {
   error: unknown
   isFetching?: boolean
   selectedCategoryId?: string | null
+  stressCategoryId?: string | null
   onCategorySelect?: (categoryId: string) => void
   className?: string
 }
@@ -22,12 +23,14 @@ export function CategoryBudgetList({
   error,
   isFetching = false,
   selectedCategoryId,
+  stressCategoryId,
   onCategorySelect,
   className,
 }: CategoryBudgetListProps) {
   return (
     <ItemsList
       className={className}
+      listClassName="grid grid-cols-2 gap-3 space-y-0"
       isPending={isPending}
       isError={isError}
       error={error}
@@ -39,10 +42,11 @@ export function CategoryBudgetList({
     >
       {(items) =>
         items.map((item) => (
-          <li key={item.category.id}>
+          <li key={item.category.id} className="min-w-0">
             <CategoryBudgetCard
               item={item}
               selected={selectedCategoryId === item.category.id}
+              stressOverBudget={stressCategoryId === item.category.id}
               onSelect={onCategorySelect}
             />
           </li>

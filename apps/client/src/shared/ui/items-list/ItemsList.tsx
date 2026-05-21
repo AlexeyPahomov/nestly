@@ -21,6 +21,8 @@ export type ItemsListProps<T> = {
   errorFallback?: string
   headerAddon?: ReactNode
   className?: string
+  /** Доп. классы для `<ul>` (например, grid-колонки). */
+  listClassName?: string
   /** `fill` — на всю высоту контейнера со скроллом; `fit` — по высоте элементов */
   layout?: ItemsListLayout
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
@@ -43,6 +45,7 @@ export function ItemsList<T>({
   errorFallback,
   headerAddon,
   className,
+  listClassName,
   layout = 'fill',
   children,
 }: ItemsListProps<T>) {
@@ -108,6 +111,7 @@ export function ItemsList<T>({
               className={cn(
                 listUlClassName,
                 'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
+                listClassName,
               )}
             >
               {children(items)}

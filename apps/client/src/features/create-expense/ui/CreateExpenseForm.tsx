@@ -1,10 +1,10 @@
-import { useEffect, type ChangeEvent } from 'react'
+import type { ChangeEvent } from 'react'
 
+import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
-import { getErrorMessage } from '@/shared/lib/errors'
+import type { Income } from '@/entities/income/model/types'
 import { cn } from '@/shared/lib/utils'
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -14,12 +14,20 @@ import {
   Select,
 } from '@/shared/ui'
 
+import type { CategoryBudgetSnapshot } from '../model/budget'
 import type { CreateExpenseFormValues } from '../model/types'
 import { useCreateExpenseForm } from '../model/useCreateExpenseForm'
+import { useSyncSelectedCategory } from '../model/useSyncSelectedCategory'
+
+import { CreateExpenseFormActions } from './CreateExpenseFormActions'
 
 type CreateExpenseFormProps = {
   categories: Category[]
+  budgets: CategoryBudgetSnapshot[]
+  incomes: Income[]
+  allocations: Allocation[]
   selectedCategoryId?: string
+  onStressCategoryChange?: (categoryId: string | null) => void
   className?: string
 }
 
@@ -35,16 +43,25 @@ function fieldChangeHandler(
 
 export function CreateExpenseForm({
   categories,
+  budgets,
+  incomes,
+  allocations,
   selectedCategoryId,
+  onStressCategoryChange,
   className,
 }: CreateExpenseFormProps) {
-  const form = useCreateExpenseForm()
+  const form = useCreateExpenseForm({
+    budgets,
+    incomes,
+    allocations,
+    onStressCategoryChange,
+  })
 
-  useEffect(() => {
-    if (selectedCategoryId) {
-      form.handleChange('category_id', selectedCategoryId)
-    }
-  }, [selectedCategoryId, form.handleChange])
+  useSyncSelectedCategory(
+    selectedCategoryId,
+    form.values.category_id,
+    (categoryId) => form.handleChange('category_id', categoryId),
+  )
 
   const categoryOptions = categories.map((category) => ({
     value: category.id,
@@ -53,10 +70,7 @@ export function CreateExpenseForm({
 
   const noCategories = categories.length === 0
   const onFieldChange = fieldChangeHandler(form.handleChange)
-
-  const serverError = form.mutation.isError
-    ? getErrorMessage(form.mutation.error, 'Не удалось сохранить расход')
-    : null
+  const showOverBudgetWarning = form.budgetPreview?.isOverBudget === true
 
   return (
     <Card className={cn('h-fit w-full max-h-full', className)}>
@@ -82,7 +96,7 @@ export function CreateExpenseForm({
             placeholder={
               noCategories ? 'Нет категорий расходов' : 'Выберите категорию'
             }
-            disabled={form.mutation.isPending || noCategories}
+            disabled={form.isBusy || noCategories}
           />
 
           <Input
@@ -96,7 +110,7 @@ export function CreateExpenseForm({
             placeholder="0"
             value={form.values.amount}
             onChange={onFieldChange}
-            disabled={form.mutation.isPending}
+            disabled={form.isBusy}
           />
 
           <Input
@@ -108,7 +122,7 @@ export function CreateExpenseForm({
             placeholder="Продукты, такси…"
             value={form.values.description}
             onChange={onFieldChange}
-            disabled={form.mutation.isPending}
+            disabled={form.isBusy}
           />
 
           <DatePicker
@@ -118,25 +132,28 @@ export function CreateExpenseForm({
             onChange={(date) => {
               form.handleChange('date', date)
             }}
-            disabled={form.mutation.isPending}
+            disabled={form.isBusy}
           />
 
           {form.validationError ? (
             <p className="text-sm text-red-600">{form.validationError}</p>
           ) : null}
-          {serverError ? (
-            <p className="text-sm text-red-600">{serverError}</p>
+          {form.serverError ? (
+            <p className="text-sm text-red-600">{form.serverError}</p>
           ) : null}
 
-          <Button
-            type="submit"
-            isLoading={form.mutation.isPending}
-            size="lg"
-            className="min-w-40"
-            disabled={form.mutation.isPending || noCategories}
-          >
-            Добавить расход
-          </Button>
+          <CreateExpenseFormActions
+            showOverBudgetWarning={showOverBudgetWarning}
+            budgetPreview={form.budgetPreview}
+            noCategories={noCategories}
+            isBusy={form.isBusy}
+            isRecording={form.isRecording}
+            isTopUpPending={form.isTopUpPending}
+            topUpError={form.topUpError}
+            canTopUp={form.canQuickTopUp}
+            onRecordExpense={() => void form.handleSubmit()}
+            onQuickTopUp={(amount) => void form.handleQuickTopUp(amount)}
+          />
         </form>
       </CardContent>
     </Card>
