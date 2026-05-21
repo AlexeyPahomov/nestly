@@ -14,8 +14,11 @@ import {
   getEnvelopeBalanceLabel,
   getEnvelopeBalanceTone,
 } from '../lib/envelopeBalanceTone'
+import { monthlyBurnInsightSlotClassName } from '../lib/monthlyBurnInsight'
 import { getEnvelopeUsage } from '../lib/envelopeUsage'
 import type { CategoryBudgetListItem } from '../model/types'
+
+import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight'
 
 type CategoryBudgetCardProps = {
   item: CategoryBudgetListItem
@@ -45,7 +48,7 @@ export function CategoryBudgetCard({
     <Card
       size="sm"
       className={cn(
-        'transition-colors',
+        'h-full w-full min-w-0 transition-colors',
         envelopeCardToneClassName(tone),
         onSelect && 'cursor-pointer',
         onSelect && envelopeHoverToneClassName(tone),
@@ -70,7 +73,7 @@ export function CategoryBudgetCard({
           {category.name}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2.5 text-sm">
+      <CardContent className="flex flex-1 flex-col space-y-2.5 text-sm">
         <div className="flex items-baseline justify-between gap-2 tabular-nums">
           <span className="font-medium text-zinc-900">
             {formatAmount(spent)}
@@ -94,7 +97,13 @@ export function CategoryBudgetCard({
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
 
-        <div className="flex justify-between gap-4 border-t border-zinc-100/90 pt-1.5">
+        {!isSavings ? (
+          <MonthlyBurnInsightBlock allocated={allocated} spent={spent} />
+        ) : (
+          <div className={monthlyBurnInsightSlotClassName} aria-hidden />
+        )}
+
+        <div className="mt-auto flex justify-between gap-4 border-t border-zinc-100/90 pt-1.5">
           <span className="text-muted-foreground">{balanceLabel}</span>
           <span
             className={cn(
