@@ -11,6 +11,7 @@ import {
   envelopeHoverToneClassName,
   envelopeProgressIndicatorClassName,
   formatEnvelopeBalance,
+  getEnvelopeBalanceLabel,
   getEnvelopeBalanceTone,
 } from '../lib/envelopeBalanceTone'
 import { getEnvelopeUsage } from '../lib/envelopeUsage'
@@ -36,8 +37,7 @@ export function CategoryBudgetCard({
   )
   const usage = getEnvelopeUsage(allocated, spent)
 
-  const balanceLabel =
-    tone === 'over' ? 'Перерасход' : isSavings ? 'В резерве' : 'Свободно'
+  const balanceLabel = getEnvelopeBalanceLabel(isSavings)
 
   const usageCaption = isSavings ? 'использовано резерва' : 'использовано'
 
@@ -102,7 +102,7 @@ export function CategoryBudgetCard({
               envelopeBalanceToneClassName(tone),
             )}
           >
-            {formatEnvelopeBalance(remaining, tone)}
+            {formatEnvelopeBalance(remaining)}
           </span>
         </div>
       </CardContent>

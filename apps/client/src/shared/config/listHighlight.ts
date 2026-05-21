@@ -1,3 +1,5 @@
-/** Обводка выбранного элемента в скроллируемых списках (на `<li>`, не на Card). */
-export const highlightedListItemClassName =
-  'rounded-xl ring-2 ring-zinc-900 ring-offset-2 ring-offset-zinc-100'
+/** База для плавной подсветки элемента списка (`<li>`). */
+export const listItemHighlightBaseClassName =
+  'rounded-xl ring-2 ring-transparent ring-offset-2 ring-offset-zinc-100 transition-[box-shadow,ring-color] duration-300 ease-out motion-reduce:transition-none'
+
+export const listItemHighlightActiveClassName = 'ring-zinc-900'

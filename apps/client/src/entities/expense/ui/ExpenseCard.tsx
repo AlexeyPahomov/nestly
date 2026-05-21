@@ -31,7 +31,7 @@ export function ExpenseCard({
   return (
     <Card
       size="sm"
-      className="group transition-colors hover:bg-zinc-50/90 hover:ring-zinc-300/80"
+      className="group !py-0 transition-colors hover:bg-zinc-50/90 hover:ring-zinc-300/80"
     >
       <CardContent className="flex flex-nowrap items-center gap-2 py-2.5 sm:gap-3">
         <div className="flex min-w-0 flex-1 items-center gap-2">

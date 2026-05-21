@@ -46,17 +46,23 @@ export function sortBudgetItemsByRemainingAsc(
   return [...items].sort((a, b) => a.remaining - b.remaining)
 }
 
-/** Накопления сверху, затем расходные категории по остатку в конверте. */
+/** Накопления сверху, затем расходные: перерасходные, потом остальные. */
 export function sortBudgetItemsForDisplay(
   items: readonly CategoryBudgetItem[],
 ): CategoryBudgetItem[] {
   const savings = items.filter((item) => isSavingsCategory(item.category.type))
   const expenses = items.filter((item) => !isSavingsCategory(item.category.type))
 
-  const savingsSorted = [...savings].sort((a, b) => b.allocated - a.allocated)
-  const expensesSorted = sortBudgetItemsByRemainingAsc(expenses)
+  const overdrawn = expenses
+    .filter((item) => item.remaining < 0)
+    .sort((a, b) => a.remaining - b.remaining)
+  const inBudget = expenses
+    .filter((item) => item.remaining >= 0)
+    .sort((a, b) => a.remaining - b.remaining)
 
-  return [...savingsSorted, ...expensesSorted]
+  const savingsSorted = [...savings].sort((a, b) => b.allocated - a.allocated)
+
+  return [...savingsSorted, ...overdrawn, ...inBudget]
 }
 
 export function sumBudgetTotals(

@@ -5,10 +5,6 @@ import type { ExpenseBudgetPreview } from '../model/budget'
 const LOW_REMAINING_RATIO = 0.2
 
 export function formatPreviewRemaining(preview: ExpenseBudgetPreview): string {
-  if (preview.isOverBudget) {
-    return `−${formatAmount(Math.abs(preview.remainingAfter))}`
-  }
-
   return formatAmount(preview.remainingAfter)
 }
 

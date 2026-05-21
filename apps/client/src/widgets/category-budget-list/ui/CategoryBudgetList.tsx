@@ -1,7 +1,10 @@
 import type { ReactNode } from 'react';
 
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
-import { highlightedListItemClassName } from '@/shared/config/listHighlight';
+import {
+  listItemHighlightActiveClassName,
+  listItemHighlightBaseClassName,
+} from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
@@ -57,8 +60,9 @@ export function CategoryBudgetList({
             key={item.category.id}
             className={cn(
               'min-w-0',
+              listItemHighlightBaseClassName,
               isSavingsCategory(item.category.type) && 'md:col-span-2',
-              isSelected && highlightedListItemClassName,
+              isSelected && listItemHighlightActiveClassName,
             )}
           >
             <CategoryBudgetCard

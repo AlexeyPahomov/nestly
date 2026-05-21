@@ -24,21 +24,18 @@ export function getEnvelopeBalanceTone(
   return 'healthy'
 }
 
-export function formatEnvelopeBalance(
-  remaining: number,
-  tone: EnvelopeBalanceTone,
-): string {
-  if (tone === 'over') {
-    return `−${formatAmount(Math.abs(remaining))}`
-  }
+export function getEnvelopeBalanceLabel(isSavings: boolean): string {
+  return isSavings ? 'В резерве' : 'Остаток'
+}
 
+export function formatEnvelopeBalance(remaining: number): string {
   return formatAmount(remaining)
 }
 
 const cardToneClassName: Record<EnvelopeBalanceTone, string> = {
   healthy: 'border-emerald-200/90 bg-emerald-50/45',
   low: 'border-amber-200/90 bg-amber-50/55',
-  over: 'border-red-200 bg-red-50/45',
+  over: 'border-red-300/90 bg-red-50 ring-1 ring-red-200/80',
 }
 
 const balanceToneClassName: Record<EnvelopeBalanceTone, string> = {

@@ -1,5 +1,8 @@
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
-import { highlightedListItemClassName } from '@/shared/config/listHighlight';
+import {
+  listItemHighlightActiveClassName,
+  listItemHighlightBaseClassName,
+} from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
@@ -41,7 +44,7 @@ export function ExpenseList({
       title="История расходов"
       emptyMessage="Пока нет расходов. Добавьте первую трату выше."
       errorFallback="Не удалось загрузить расходы"
-      listClassName="space-y-2"
+      listClassName="!space-y-2"
     >
       {(items) =>
         items.map((item) => {
@@ -50,7 +53,10 @@ export function ExpenseList({
           return (
           <li
             key={item.id}
-            className={cn(isEditing && highlightedListItemClassName)}
+            className={cn(
+              listItemHighlightBaseClassName,
+              isEditing && listItemHighlightActiveClassName,
+            )}
           >
             <ExpenseCard
               expense={item}
