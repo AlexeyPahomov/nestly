@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AllocationService } from './allocation.service';
 import { CreateAllocationDto } from './dto/create-allocation.dto';
 
@@ -12,7 +19,10 @@ export class AllocationController {
   }
 
   @Get()
-  findAll() {
-    return this.allocationService.findAll();
+  findAll(@Query('incomeId') incomeId?: string) {
+    if (!incomeId) {
+      throw new BadRequestException('incomeId query param is required');
+    }
+    return this.allocationService.findAll(incomeId);
   }
 }

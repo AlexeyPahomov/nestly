@@ -1,5 +1,7 @@
+import { toMoneyNumber } from '@/shared/lib/money'
+
 export function formatAmount(value: string | number): string {
-  const n = typeof value === 'string' ? Number(value) : value
+  const n = toMoneyNumber(value)
   if (Number.isNaN(n)) {
     return '—'
   }

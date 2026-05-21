@@ -1,0 +1,19 @@
+import { apiGet, apiPost } from '@/shared/api/client'
+
+import type { Allocation, CreateAllocationPayload } from '../model/types'
+
+const ALLOCATION_PATH = '/allocation'
+
+export function getAllocations(incomeId: string): Promise<Allocation[]> {
+  if (!incomeId) {
+    return Promise.reject(new Error('getAllocations: incomeId is required'))
+  }
+  const q = new URLSearchParams({ incomeId })
+  return apiGet<Allocation[]>(`${ALLOCATION_PATH}?${q}`)
+}
+
+export function createAllocation(
+  payload: CreateAllocationPayload,
+): Promise<Allocation> {
+  return apiPost<Allocation>(ALLOCATION_PATH, payload)
+}

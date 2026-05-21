@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { sumPrismaMoneyAmounts } from '../lib/money';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 
@@ -21,14 +22,14 @@ export class ExpenseService {
       where: { category_id: dto.category_id },
     });
 
-    const allocated = allocations.reduce((sum, a) => sum + Number(a.amount), 0);
+    const allocated = sumPrismaMoneyAmounts(allocations);
 
     // 3. Считаем уже потраченные деньги
     const expenses = await this.prisma.expense.findMany({
       where: { category_id: dto.category_id },
     });
 
-    const spent = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+    const spent = sumPrismaMoneyAmounts(expenses);
 
     const remaining = allocated - spent;
 

@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { sumPrismaMoneyAmounts, toMoneyNumber } from '../lib/money';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAllocationDto } from './dto/create-allocation.dto';
 
@@ -23,14 +24,11 @@ export class AllocationService {
       },
     });
 
-    const allocatedAmount = allocations.reduce(
-      (sum, item) => sum + Number(item.amount),
-      0,
-    );
+    const allocatedAmount = sumPrismaMoneyAmounts(allocations);
 
     const nextTotal = allocatedAmount + dto.amount;
 
-    if (nextTotal > Number(income.amount)) {
+    if (nextTotal > toMoneyNumber(income.amount.toString())) {
       throw new BadRequestException('Allocation exceeds income amount');
     }
 
@@ -45,12 +43,14 @@ export class AllocationService {
     });
   }
 
-  findAll() {
+  findAll(incomeId: string) {
     return this.prisma.allocation.findMany({
+      where: { income_id: incomeId },
       include: {
         category: true,
         income: true,
       },
+      orderBy: { created_at: 'desc' },
     });
   }
 }
