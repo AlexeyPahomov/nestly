@@ -1,10 +1,14 @@
 import type { ReactNode } from 'react'
 
+import { cn } from '@/shared/lib/utils'
+
 import { Spinner } from '../spinner/Spinner'
 
 import { ListEmpty } from './ListEmpty'
 import { ListError } from './ListError'
 import { ListLoader } from './ListLoader'
+
+export type ItemsListLayout = 'fill' | 'fit'
 
 export type ItemsListProps<T> = {
   isPending: boolean
@@ -16,12 +20,17 @@ export type ItemsListProps<T> = {
   emptyMessage?: string
   errorFallback?: string
   headerAddon?: ReactNode
+  className?: string
+  /** `fill` — на всю высоту контейнера со скроллом; `fit` — по высоте элементов */
+  layout?: ItemsListLayout
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
   children: (items: T[]) => ReactNode
 }
 
-const listUlClassName =
-  'min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-contain pr-1'
+const listUlFillClassName =
+  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-contain pr-1'
+
+const listUlFitClassName = 'list-none space-y-3'
 
 export function ItemsList<T>({
   isPending,
@@ -33,36 +42,79 @@ export function ItemsList<T>({
   emptyMessage,
   errorFallback,
   headerAddon,
+  className,
+  layout = 'fill',
   children,
 }: ItemsListProps<T>) {
-  if (isPending) {
-    return <ListLoader />
-  }
-
-  if (isError && data === undefined) {
-    return <ListError error={error} fallbackMessage={errorFallback} />
-  }
+  const rootClassName = cn(
+    'flex flex-col',
+    layout === 'fill' ? 'min-h-0 flex-1' : 'h-fit w-full max-h-full',
+    className,
+  )
+  const listUlClassName =
+    layout === 'fill' ? listUlFillClassName : listUlFitClassName
 
   const items = data ?? []
-  if (items.length === 0) {
-    return <ListEmpty message={emptyMessage} />
-  }
+  const showLoader = isPending
+  const showError = !isPending && isError && data === undefined
+  const showEmpty = !isPending && !showError && items.length === 0
+  const showList = !isPending && !showError && items.length > 0
+
+  const listHeader = (
+    <div className="flex shrink-0 flex-col gap-1">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-lg font-semibold text-zinc-900">{title}</h2>
+        {isFetching && !isPending ? (
+          <Spinner
+            className="size-4 shrink-0 text-zinc-500"
+            aria-label="Обновление списка"
+          />
+        ) : null}
+      </div>
+      {headerAddon}
+    </div>
+  )
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="flex shrink-0 flex-col gap-1">
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold text-zinc-900">{title}</h2>
-          {isFetching ? (
-            <Spinner
-              className="size-4 shrink-0 text-zinc-500"
-              aria-label="Обновление списка"
-            />
+    <div className={cn(rootClassName, 'gap-3')} aria-busy={isPending}>
+      {listHeader}
+
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <div
+          aria-hidden={!showLoader}
+          className={cn(
+            'flex min-h-0 flex-1 flex-col',
+            'nestly-list-fade',
+            showLoader
+              ? 'opacity-100'
+              : 'pointer-events-none absolute inset-0 z-10 opacity-0',
+          )}
+        >
+          <ListLoader />
+        </div>
+
+        <div
+          className={cn(
+            'nestly-list-fade flex min-h-0 flex-1 flex-col gap-3',
+            showLoader ? 'pointer-events-none opacity-0' : 'opacity-100',
+          )}
+        >
+          {showError ? (
+            <ListError error={error} fallbackMessage={errorFallback} />
+          ) : null}
+          {showEmpty ? <ListEmpty message={emptyMessage} /> : null}
+          {showList ? (
+            <ul
+              className={cn(
+                listUlClassName,
+                'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
+              )}
+            >
+              {children(items)}
+            </ul>
           ) : null}
         </div>
-        {headerAddon}
       </div>
-      <ul className={listUlClassName}>{children(items)}</ul>
     </div>
   )
 }

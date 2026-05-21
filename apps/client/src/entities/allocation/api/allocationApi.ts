@@ -12,6 +12,10 @@ export function getAllocations(incomeId: string): Promise<Allocation[]> {
   return apiGet<Allocation[]>(`${ALLOCATION_PATH}?${q}`)
 }
 
+export function getAllAllocations(): Promise<Allocation[]> {
+  return apiGet<Allocation[]>(ALLOCATION_PATH)
+}
+
 export function createAllocation(
   payload: CreateAllocationPayload,
 ): Promise<Allocation> {

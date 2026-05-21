@@ -19,8 +19,16 @@ export function AppLayout() {
 
       <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-8 py-5">
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-          <Suspense fallback={<RouteFallback />}>
-            <Outlet />
+          <Suspense
+            fallback={
+              <div className="flex min-h-0 flex-1 flex-col">
+                <RouteFallback />
+              </div>
+            }
+          >
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+              <Outlet />
+            </div>
           </Suspense>
         </div>
       </main>

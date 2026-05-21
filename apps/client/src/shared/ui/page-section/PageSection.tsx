@@ -15,7 +15,7 @@ function PageSection({ title, children, className }: PageSectionProps) {
       className={cn('flex min-h-0 flex-1 flex-col gap-6', className)}
     >
       <h1 className="shrink-0 text-3xl font-bold">{title}</h1>
-      {children}
+      <div className="flex min-h-0 flex-1 flex-col">{children}</div>
     </section>
   )
 }

@@ -11,6 +11,23 @@ export function formatAmount(value: string | number): string {
   }).format(n)
 }
 
+export function formatDateLabel(isoDate: string): string {
+  const d = new Date(isoDate)
+  if (Number.isNaN(d.getTime())) {
+    return isoDate
+  }
+  return d.toLocaleDateString('ru-RU', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
+/** Дата расхода для списка и карточек. */
+export function formatExpenseDate(isoDate: string): string {
+  return formatDateLabel(isoDate)
+}
+
 export function formatMonthLabel(isoDate: string): string {
   const d = new Date(isoDate)
   if (Number.isNaN(d.getTime())) {

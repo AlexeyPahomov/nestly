@@ -43,9 +43,9 @@ export class AllocationService {
     });
   }
 
-  findAll(incomeId: string) {
+  findAll(incomeId?: string) {
     return this.prisma.allocation.findMany({
-      where: { income_id: incomeId },
+      where: incomeId ? { income_id: incomeId } : undefined,
       include: {
         category: true,
         income: true,

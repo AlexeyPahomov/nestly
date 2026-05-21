@@ -18,6 +18,38 @@ body {
     sans-serif;
 }
 
+.nestly-list-fade {
+  transition: opacity 300ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nestly-list-fade {
+    transition: none;
+  }
+
+  .nestly-list-enter {
+    animation: none;
+  }
+}
+
+.nestly-scroll-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(212 212 216) transparent;
+}
+
+.nestly-scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nestly-scroll-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nestly-scroll-list::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: rgb(212 212 216);
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;

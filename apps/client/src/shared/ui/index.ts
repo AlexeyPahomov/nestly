@@ -8,6 +8,7 @@ export {
   ListLoader,
 } from './items-list'
 export type { ItemsListProps } from './items-list'
+export { DatePicker } from './date-picker/DatePicker'
 export { MonthPicker } from './month-picker/MonthPicker'
 export {
   Select,
