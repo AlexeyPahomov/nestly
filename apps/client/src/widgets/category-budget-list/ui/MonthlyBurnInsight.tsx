@@ -1,35 +1,37 @@
-import { cn } from '@/shared/lib/utils'
+import { cn } from '@/shared/lib/utils';
 
 import {
   getMonthlyBurnInsight,
   monthlyBurnInsightSlotClassName,
   monthlyBurnPaceClassName,
-} from '../lib/monthlyBurnInsight'
+} from '../lib/monthlyBurnInsight';
 
 type MonthlyBurnInsightProps = {
-  allocated: number
-  spent: number
-  className?: string
-}
+  allocated: number;
+  spent: number;
+  className?: string;
+};
 
 export function MonthlyBurnInsightBlock({
   allocated,
   spent,
   className,
 }: MonthlyBurnInsightProps) {
-  const insight = getMonthlyBurnInsight(allocated, spent)
+  const insight = getMonthlyBurnInsight(allocated, spent);
 
   return (
     <div className={cn(monthlyBurnInsightSlotClassName, className)}>
+      {/* 
+      // TODO нужно ли? на каждой карточке отображается
       <p className="text-muted-foreground">
         До конца месяца:{' '}
         <span className="font-medium tabular-nums text-zinc-800">
           {insight.daysRemainingLabel}
         </span>
-      </p>
+      </p> */}
       <p
         className={cn(
-          'min-h-[1.125rem]',
+          'min-h-4.5',
           insight.paceMessage
             ? monthlyBurnPaceClassName(insight.paceDirection)
             : 'invisible',
@@ -39,5 +41,5 @@ export function MonthlyBurnInsightBlock({
         {insight.paceMessage ?? 'Темп в норме'}
       </p>
     </div>
-  )
+  );
 }
