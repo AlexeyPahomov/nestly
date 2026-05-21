@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { appRouteHref } from '@/app/config/routes';
 import { formatAmount } from '@/shared/lib/format';
-import { Button } from '@/shared/ui';
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui';
 
 import { QUICK_TOP_UP_AMOUNTS } from '../model/constants';
 import type { SavingsTransferHint } from '../lib/savingsTransferHint';
@@ -42,16 +42,23 @@ export function ExpenseOverBudgetActions({
 
       <div className="flex flex-wrap gap-2">
         {QUICK_TOP_UP_AMOUNTS.map((amount) => (
-          <Button
-            key={amount}
-            type="button"
-            variant="outline"
-            size="default"
-            disabled={!canTopUp || actionsDisabled}
-            onClick={() => onQuickTopUp(amount)}
-          >
-            +{formatAmount(amount)} к лимиту
-          </Button>
+          <Tooltip key={amount}>
+            <TooltipTrigger asChild>
+              <span className="inline-flex">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="default"
+                  disabled={!canTopUp || actionsDisabled}
+                  aria-label={`Добавить к лимиту: +${formatAmount(amount)}`}
+                  onClick={() => onQuickTopUp(amount)}
+                >
+                  +{formatAmount(amount)}
+                </Button>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>Добавить к лимиту</TooltipContent>
+          </Tooltip>
         ))}
         <Button
           type="button"

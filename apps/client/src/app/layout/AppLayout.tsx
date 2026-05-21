@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { Spinner } from '@/shared/ui';
+import { Spinner, TooltipProvider } from '@/shared/ui';
 import { Sidebar } from '@/widgets/sidebar';
 
 function RouteFallback() {
@@ -14,6 +14,7 @@ function RouteFallback() {
 
 export function AppLayout() {
   return (
+    <TooltipProvider delayDuration={500}>
     <div className="flex h-screen min-h-0 overflow-hidden bg-zinc-100 text-zinc-900">
       <Sidebar />
 
@@ -33,5 +34,6 @@ export function AppLayout() {
         </div>
       </main>
     </div>
+    </TooltipProvider>
   );
 }

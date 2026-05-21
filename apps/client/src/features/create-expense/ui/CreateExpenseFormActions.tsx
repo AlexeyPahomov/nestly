@@ -1,3 +1,5 @@
+import { useCollapsePresence } from '@/shared/hooks/useCollapsePresence'
+import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'
 
 import type { SavingsTransferHint } from '../lib/savingsTransferHint'
@@ -31,10 +33,35 @@ export function CreateExpenseFormActions({
   canTopUp,
   onQuickTopUp,
 }: CreateExpenseFormActionsProps) {
+  const previewPresence = useCollapsePresence(
+    budgetPreview !== null,
+    budgetPreview,
+  )
+
   return (
     <div className="space-y-3">
-      {budgetPreview ? (
-        <ExpenseBudgetPreviewInline preview={budgetPreview} />
+      {previewPresence.isMounted && previewPresence.displayValue ? (
+        <div
+          className={cn(
+            'nestly-collapse grid',
+            previewPresence.isOpen
+              ? 'grid-rows-[1fr] opacity-100'
+              : 'grid-rows-[0fr] opacity-0',
+          )}
+          aria-hidden={!previewPresence.isOpen}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <div
+              className={cn(
+                previewPresence.isOpen && 'nestly-budget-preview-enter',
+              )}
+            >
+              <ExpenseBudgetPreviewInline
+                preview={previewPresence.displayValue}
+              />
+            </div>
+          </div>
+        </div>
       ) : null}
 
       {showOverBudgetActions ? (
