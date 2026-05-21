@@ -13,8 +13,8 @@ export function ListError({
 }: ListErrorProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <Card className="border-destructive/40 bg-destructive/5 ring-destructive/20">
-        <CardContent>
+      <Card className="flex min-h-0 flex-1 flex-col border-destructive/40 bg-destructive/5 ring-destructive/20">
+        <CardContent className="flex flex-1 flex-col items-center justify-center py-8 text-center">
           <p className="text-sm font-medium text-destructive">
             {getErrorMessage(error, fallbackMessage)}
           </p>

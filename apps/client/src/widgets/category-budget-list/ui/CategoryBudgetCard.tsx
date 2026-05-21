@@ -18,14 +18,12 @@ import type { CategoryBudgetListItem } from '../model/types'
 
 type CategoryBudgetCardProps = {
   item: CategoryBudgetListItem
-  selected?: boolean
   stressOverBudget?: boolean
   onSelect?: (categoryId: string) => void
 }
 
 export function CategoryBudgetCard({
   item,
-  selected,
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
@@ -49,7 +47,6 @@ export function CategoryBudgetCard({
       className={cn(
         'transition-colors',
         envelopeCardToneClassName(tone),
-        selected && 'ring-2 ring-zinc-900',
         onSelect && 'cursor-pointer',
         onSelect && envelopeHoverToneClassName(tone),
       )}

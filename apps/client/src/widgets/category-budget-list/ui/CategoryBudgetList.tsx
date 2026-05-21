@@ -1,4 +1,7 @@
+import type { ReactNode } from 'react';
+
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
+import { highlightedListItemClassName } from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
@@ -15,6 +18,7 @@ export type CategoryBudgetListProps = {
   selectedCategoryId?: string | null;
   stressCategoryId?: string | null;
   onCategorySelect?: (categoryId: string) => void;
+  headerEnd?: ReactNode;
   className?: string;
 };
 
@@ -27,38 +31,44 @@ export function CategoryBudgetList({
   selectedCategoryId,
   stressCategoryId,
   onCategorySelect,
+  headerEnd,
   className,
 }: CategoryBudgetListProps) {
   return (
     <ItemsList
       className={className}
-      listClassName="p-1 grid grid-cols-2 gap-3 space-y-0"
+      listClassName="grid grid-cols-2 gap-3 space-y-0"
       isPending={isPending}
       isError={isError}
       error={error}
       data={budgetItems}
       isFetching={isFetching}
       title="По категориям"
+      headerEnd={headerEnd}
       emptyMessage="Нет категорий расходов или накоплений."
       errorFallback="Не удалось загрузить бюджет"
     >
       {(items) =>
-        items.map((item) => (
+        items.map((item) => {
+          const isSelected = selectedCategoryId === item.category.id;
+
+          return (
           <li
             key={item.category.id}
             className={cn(
               'min-w-0',
               isSavingsCategory(item.category.type) && 'md:col-span-2',
+              isSelected && highlightedListItemClassName,
             )}
           >
             <CategoryBudgetCard
               item={item}
-              selected={selectedCategoryId === item.category.id}
               stressOverBudget={stressCategoryId === item.category.id}
               onSelect={onCategorySelect}
             />
           </li>
-        ))
+          );
+        })
       }
     </ItemsList>
   );

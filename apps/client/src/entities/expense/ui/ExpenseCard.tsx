@@ -15,7 +15,6 @@ type ExpenseCardProps = {
   onEdit?: () => void
   onDelete?: () => void
   isDeleting?: boolean
-  isEditing?: boolean
 }
 
 export function ExpenseCard({
@@ -25,7 +24,6 @@ export function ExpenseCard({
   onEdit,
   onDelete,
   isDeleting = false,
-  isEditing = false,
 }: ExpenseCardProps) {
   const description = expense.description?.trim()
   const hasActions = onEdit != null || onDelete != null
@@ -33,10 +31,7 @@ export function ExpenseCard({
   return (
     <Card
       size="sm"
-      className={cn(
-        'group transition-colors hover:bg-zinc-50/90 hover:ring-zinc-300/80',
-        isEditing && 'ring-2 ring-zinc-900',
-      )}
+      className="group transition-colors hover:bg-zinc-50/90 hover:ring-zinc-300/80"
     >
       <CardContent className="flex flex-nowrap items-center gap-2 py-2.5 sm:gap-3">
         <div className="flex min-w-0 flex-1 items-center gap-2">

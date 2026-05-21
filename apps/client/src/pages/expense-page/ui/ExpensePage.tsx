@@ -6,6 +6,10 @@ import { PageSection } from '@/shared/ui';
 import { BudgetSummary } from '@/widgets/budget-summary';
 import { ExpenseList } from '@/widgets/expense-list';
 
+import {
+  expensePageGridClassName,
+  expensePageScrollPaneClassName,
+} from '../lib/expensePageLayout';
 import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
 import { useExpensePage } from '../model/useExpensePage';
 
@@ -46,7 +50,7 @@ export function ExpensePage() {
 
   return (
     <PageSection title="Расходы" className="min-h-0 gap-4">
-      <div className="grid min-h-0 flex-1 grid-rows-[auto_auto_minmax(0,1fr)] gap-4 px-0.5">
+      <div className={expensePageGridClassName}>
         <div className="shrink-0">
           <BudgetSummary
             availableToAllocate={treasurySummary.availableToAllocate}
@@ -55,25 +59,27 @@ export function ExpensePage() {
           />
         </div>
 
-        <ExpenseWorkspace
-          categories={expenseCategories}
-          budgets={budgetSnapshots}
-          incomes={incomes}
-          allocations={allocations}
-          budgetItems={budgetItems}
-          selectedCategoryId={selectedCategoryId}
-          editingExpense={editingExpense}
-          onCancelEdit={() => setEditingExpense(null)}
-          stressCategoryId={stressCategoryId}
-          onStressCategoryChange={handleStressCategoryChange}
-          onCategorySelect={setSelectedCategoryId}
-          isBudgetPending={isBudgetPending}
-          isBudgetError={isBudgetError}
-          budgetError={budgetError}
-          isBudgetFetching={isBudgetFetching}
-        />
+        <div className={expensePageScrollPaneClassName}>
+          <ExpenseWorkspace
+            categories={expenseCategories}
+            budgets={budgetSnapshots}
+            incomes={incomes}
+            allocations={allocations}
+            budgetItems={budgetItems}
+            selectedCategoryId={selectedCategoryId}
+            editingExpense={editingExpense}
+            onCancelEdit={() => setEditingExpense(null)}
+            stressCategoryId={stressCategoryId}
+            onStressCategoryChange={handleStressCategoryChange}
+            onCategorySelect={setSelectedCategoryId}
+            isBudgetPending={isBudgetPending}
+            isBudgetError={isBudgetError}
+            budgetError={budgetError}
+            isBudgetFetching={isBudgetFetching}
+          />
+        </div>
 
-        <div className="flex h-full min-h-0 flex-col overflow-hidden">
+        <div className={expensePageScrollPaneClassName}>
           <ExpenseList
             className="min-h-0 flex-1"
             expenses={sortedExpenses}

@@ -8,10 +8,9 @@ import { useUpdateExpenseMutation } from '@/entities/expense/api/useUpdateExpens
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import { DEV_USER_ID } from '@/shared/lib/constants'
-import { todayDateInputValue } from '@/shared/lib/date'
 import { getErrorMessage } from '@/shared/lib/errors'
 
-import { expenseToFormValues } from '../lib/expenseFormValues'
+import { resolveCreateExpenseFormValues } from '../lib/expenseFormValues'
 import { budgetPreviewStressKey } from '../lib/stressCategoryId'
 
 import { QUICK_TOP_UP_CHECK_AMOUNT } from './constants'
@@ -22,19 +21,12 @@ import {
 import type { CreateExpenseFormValues } from './types'
 import { validateCreateExpenseForm } from './validation'
 
-const initialValues: CreateExpenseFormValues = {
-  category_id: '',
-  amount: '',
-  description: '',
-  date: todayDateInputValue(),
-}
-
 type UseCreateExpenseFormParams = {
   budgets: CategoryBudgetSnapshot[]
   incomes: Income[]
   allocations: Allocation[]
   editingExpense?: Expense | null
-  onEditComplete?: () => void
+  onComplete?: () => void
   onStressCategoryChange?: (categoryId: string | null) => void
 }
 
@@ -43,10 +35,12 @@ export function useCreateExpenseForm({
   incomes,
   allocations,
   editingExpense = null,
-  onEditComplete,
+  onComplete,
   onStressCategoryChange,
 }: UseCreateExpenseFormParams) {
-  const [values, setValues] = useState<CreateExpenseFormValues>(initialValues)
+  const [values, setValues] = useState(() =>
+    resolveCreateExpenseFormValues(editingExpense),
+  )
   const [validationError, setValidationError] = useState<string | null>(null)
   const [topUpError, setTopUpError] = useState<string | null>(null)
 
@@ -59,17 +53,9 @@ export function useCreateExpenseForm({
   const editingExpenseId = editingExpense?.id ?? null
 
   useEffect(() => {
-    if (editingExpense) {
-      setValues(expenseToFormValues(editingExpense))
-      setValidationError(null)
-      setTopUpError(null)
-      return
-    }
-
-    setValues({
-      ...initialValues,
-      date: todayDateInputValue(),
-    })
+    setValues(resolveCreateExpenseFormValues(editingExpense))
+    setValidationError(null)
+    setTopUpError(null)
   }, [editingExpenseId, editingExpense])
 
   const budgetByCategoryId = useMemo(
@@ -97,9 +83,12 @@ export function useCreateExpenseForm({
   budgetPreviewRef.current = budgetPreview
 
   useEffect(() => {
-    const preview = budgetPreviewRef.current
-    const stressId = preview?.isOverBudget ? preview.categoryId : null
-    onStressCategoryChangeRef.current?.(stressId)
+    const frameId = requestAnimationFrame(() => {
+      const preview = budgetPreviewRef.current
+      const stressId = preview?.isOverBudget ? preview.categoryId : null
+      onStressCategoryChangeRef.current?.(stressId)
+    })
+    return () => cancelAnimationFrame(frameId)
   }, [previewStressKey])
 
   const canQuickTopUp = useMemo(
@@ -151,7 +140,6 @@ export function useCreateExpenseForm({
           id: editingExpense.id,
           payload,
         })
-        onEditComplete?.()
       } else {
         await createMutation.mutateAsync({
           user_id: DEV_USER_ID,
@@ -159,10 +147,9 @@ export function useCreateExpenseForm({
         })
       }
 
-      setValues({
-        ...initialValues,
-        date: todayDateInputValue(),
-      })
+      onComplete?.()
+
+      setValues(resolveCreateExpenseFormValues(null))
     } catch {
       // mutation.error handles UI state
     }
@@ -170,7 +157,7 @@ export function useCreateExpenseForm({
     createMutation,
     editingExpense,
     isEditing,
-    onEditComplete,
+    onComplete,
     updateMutation,
     values,
   ])

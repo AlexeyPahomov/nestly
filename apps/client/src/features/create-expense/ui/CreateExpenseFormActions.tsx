@@ -21,6 +21,8 @@ type CreateExpenseFormActionsProps = {
   onQuickTopUp: (amount: number) => void
   submitLabel: string
   onCancelEdit?: () => void
+  /** Без collapse-анимации превью (модалка). */
+  staticPreview?: boolean
 }
 
 export function CreateExpenseFormActions({
@@ -36,15 +38,18 @@ export function CreateExpenseFormActions({
   onQuickTopUp,
   submitLabel,
   onCancelEdit,
+  staticPreview = false,
 }: CreateExpenseFormActionsProps) {
   const previewPresence = useCollapsePresence(
     budgetPreview !== null,
     budgetPreview,
   )
 
-  return (
-    <div className="space-y-3">
-      {previewPresence.isMounted && previewPresence.displayValue ? (
+  const previewBlock =
+    budgetPreview != null ? (
+      staticPreview ? (
+        <ExpenseBudgetPreviewInline preview={budgetPreview} />
+      ) : previewPresence.isMounted && previewPresence.displayValue ? (
         <div
           className={cn(
             'nestly-collapse grid',
@@ -66,7 +71,12 @@ export function CreateExpenseFormActions({
             </div>
           </div>
         </div>
-      ) : null}
+      ) : null
+    ) : null
+
+  return (
+    <div className="space-y-3">
+      {previewBlock}
 
       {showOverBudgetActions ? (
         <ExpenseOverBudgetActions

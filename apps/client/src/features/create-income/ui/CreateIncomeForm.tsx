@@ -6,12 +6,12 @@ import {
   CardTitle,
   Input,
   MonthPicker,
-} from '@/shared/ui'
+} from '@/shared/ui';
 
-import { useCreateIncomeForm } from '../model/useCreateIncomeForm'
+import { useCreateIncomeForm } from '../model/useCreateIncomeForm';
 
 export function CreateIncomeForm() {
-  const form = useCreateIncomeForm()
+  const form = useCreateIncomeForm();
 
   return (
     <Card>
@@ -22,8 +22,8 @@ export function CreateIncomeForm() {
         <form
           className="space-y-4"
           onSubmit={(e) => {
-            e.preventDefault()
-            void form.submit()
+            e.preventDefault();
+            void form.submit();
           }}
         >
           <Input
@@ -40,7 +40,7 @@ export function CreateIncomeForm() {
 
           <Input
             id="income-source"
-            label="Источник (необязательно)"
+            label="Источник"
             name="source"
             type="text"
             autoComplete="off"
@@ -64,11 +64,16 @@ export function CreateIncomeForm() {
             <p className="text-sm text-red-600">{form.serverError}</p>
           ) : null}
 
-          <Button type="submit" isLoading={form.submitting} size="lg" className="min-w-40">
+          <Button
+            type="submit"
+            isLoading={form.submitting}
+            size="lg"
+            className="min-w-40"
+          >
             Добавить доход
           </Button>
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

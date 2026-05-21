@@ -45,10 +45,22 @@ export {
 export { PageSection } from './page-section/PageSection'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'
-export { Progress } from './progress'
+export { Progress } from './progress/Progress'
 export {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip'
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog/Dialog'

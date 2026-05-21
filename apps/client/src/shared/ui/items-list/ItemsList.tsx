@@ -1,38 +1,40 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
-import { cn } from '@/shared/lib/utils'
+import { cn } from '@/shared/lib/utils';
 
-import { Spinner } from '../spinner/Spinner'
+import { Spinner } from '../spinner/Spinner';
 
-import { ListEmpty } from './ListEmpty'
-import { ListError } from './ListError'
-import { ListLoader } from './ListLoader'
+import { ListEmpty } from './ListEmpty';
+import { ListError } from './ListError';
+import { ListLoader } from './ListLoader';
 
-export type ItemsListLayout = 'fill' | 'fit'
+export type ItemsListLayout = 'fill' | 'fit';
 
 export type ItemsListProps<T> = {
-  isPending: boolean
-  isError: boolean
-  error: unknown
-  data: T[] | undefined
-  isFetching: boolean
-  title: string
-  emptyMessage?: string
-  errorFallback?: string
-  headerAddon?: ReactNode
-  className?: string
+  isPending: boolean;
+  isError: boolean;
+  error: unknown;
+  data: T[] | undefined;
+  isFetching: boolean;
+  title: string;
+  emptyMessage?: string;
+  errorFallback?: string;
+  /** Элемент справа в строке заголовка (например, кнопка действия). */
+  headerEnd?: ReactNode;
+  headerAddon?: ReactNode;
+  className?: string;
   /** Доп. классы для `<ul>` (например, grid-колонки). */
-  listClassName?: string
+  listClassName?: string;
   /** `fill` — на всю высоту контейнера со скроллом; `fit` — по высоте элементов */
-  layout?: ItemsListLayout
+  layout?: ItemsListLayout;
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
-  children: (items: T[]) => ReactNode
-}
+  children: (items: T[]) => ReactNode;
+};
 
 const listUlFillClassName =
-  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-contain pr-1'
+  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-contain p-1.5';
 
-const listUlFitClassName = 'list-none space-y-3'
+const listUlFitClassName = 'list-none space-y-3';
 
 export function ItemsList<T>({
   isPending,
@@ -43,6 +45,7 @@ export function ItemsList<T>({
   title,
   emptyMessage,
   errorFallback,
+  headerEnd,
   headerAddon,
   className,
   listClassName,
@@ -53,30 +56,35 @@ export function ItemsList<T>({
     'flex flex-col',
     layout === 'fill' ? 'min-h-0 flex-1' : 'h-fit w-full max-h-full',
     className,
-  )
+  );
   const listUlClassName =
-    layout === 'fill' ? listUlFillClassName : listUlFitClassName
+    layout === 'fill' ? listUlFillClassName : listUlFitClassName;
 
-  const items = data ?? []
-  const showLoader = isPending
-  const showError = !isPending && isError && data === undefined
-  const showEmpty = !isPending && !showError && items.length === 0
-  const showList = !isPending && !showError && items.length > 0
+  const items = data ?? [];
+  const showLoader = isPending;
+  const showError = !isPending && isError && data === undefined;
+  const showEmpty = !isPending && !showError && items.length === 0;
+  const showList = !isPending && !showError && items.length > 0;
 
   const listHeader = (
     <div className="flex shrink-0 flex-col gap-1">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 px-2">
         <h2 className="text-lg font-semibold text-zinc-900">{title}</h2>
-        {isFetching && !isPending ? (
-          <Spinner
-            className="size-4 shrink-0 text-zinc-500"
-            aria-label="Обновление списка"
-          />
+        {headerEnd || (isFetching && !isPending) ? (
+          <div className="flex shrink-0 items-center gap-2">
+            {headerEnd}
+            {isFetching && !isPending ? (
+              <Spinner
+                className="size-4 shrink-0 text-zinc-500"
+                aria-label="Обновление списка"
+              />
+            ) : null}
+          </div>
         ) : null}
       </div>
       {headerAddon}
     </div>
-  )
+  );
 
   return (
     <div className={cn(rootClassName, 'gap-3')} aria-busy={isPending}>
@@ -98,8 +106,10 @@ export function ItemsList<T>({
 
         <div
           className={cn(
-            'nestly-list-fade flex min-h-0 flex-1 flex-col gap-3',
-            showLoader ? 'pointer-events-none opacity-0' : 'opacity-100',
+            'nestly-list-fade flex min-h-0 flex-col gap-3',
+            showLoader
+              ? 'pointer-events-none absolute inset-0 opacity-0'
+              : 'min-h-0 flex-1 opacity-100',
           )}
         >
           {showError ? (
@@ -120,5 +130,5 @@ export function ItemsList<T>({
         </div>
       </div>
     </div>
-  )
+  );
 }

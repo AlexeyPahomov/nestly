@@ -1,4 +1,5 @@
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
+import { highlightedListItemClassName } from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
@@ -43,19 +44,25 @@ export function ExpenseList({
       listClassName="space-y-2"
     >
       {(items) =>
-        items.map((item) => (
-          <li key={item.id}>
+        items.map((item) => {
+          const isEditing = editingExpenseId === item.id;
+
+          return (
+          <li
+            key={item.id}
+            className={cn(isEditing && highlightedListItemClassName)}
+          >
             <ExpenseCard
               expense={item}
               categoryName={item.categoryName}
               categoryType={item.categoryType}
-              isEditing={editingExpenseId === item.id}
               isDeleting={deletingExpenseId === item.id}
               onEdit={onEdit ? () => onEdit(item) : undefined}
               onDelete={onDelete ? () => onDelete(item.id) : undefined}
             />
           </li>
-        ))
+          );
+        })
       }
     </ItemsList>
   );
