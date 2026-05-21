@@ -1,20 +1,22 @@
-import { ItemsList } from '@/shared/ui'
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
+import { cn } from '@/shared/lib/utils';
+import { ItemsList } from '@/shared/ui';
 
-import type { CategoryBudgetListItem } from '../model/types'
+import type { CategoryBudgetListItem } from '../model/types';
 
-import { CategoryBudgetCard } from './CategoryBudgetCard'
+import { CategoryBudgetCard } from './CategoryBudgetCard';
 
 export type CategoryBudgetListProps = {
-  budgetItems?: CategoryBudgetListItem[]
-  isPending: boolean
-  isError: boolean
-  error: unknown
-  isFetching?: boolean
-  selectedCategoryId?: string | null
-  stressCategoryId?: string | null
-  onCategorySelect?: (categoryId: string) => void
-  className?: string
-}
+  budgetItems?: CategoryBudgetListItem[];
+  isPending: boolean;
+  isError: boolean;
+  error: unknown;
+  isFetching?: boolean;
+  selectedCategoryId?: string | null;
+  stressCategoryId?: string | null;
+  onCategorySelect?: (categoryId: string) => void;
+  className?: string;
+};
 
 export function CategoryBudgetList({
   budgetItems,
@@ -30,7 +32,7 @@ export function CategoryBudgetList({
   return (
     <ItemsList
       className={className}
-      listClassName="grid grid-cols-2 gap-3 space-y-0"
+      listClassName="p-1 grid grid-cols-2 gap-3 space-y-0"
       isPending={isPending}
       isError={isError}
       error={error}
@@ -42,7 +44,13 @@ export function CategoryBudgetList({
     >
       {(items) =>
         items.map((item) => (
-          <li key={item.category.id} className="min-w-0">
+          <li
+            key={item.category.id}
+            className={cn(
+              'min-w-0',
+              isSavingsCategory(item.category.type) && 'md:col-span-2',
+            )}
+          >
             <CategoryBudgetCard
               item={item}
               selected={selectedCategoryId === item.category.id}
@@ -53,5 +61,5 @@ export function CategoryBudgetList({
         ))
       }
     </ItemsList>
-  )
+  );
 }

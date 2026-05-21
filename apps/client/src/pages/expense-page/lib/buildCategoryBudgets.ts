@@ -1,5 +1,6 @@
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
+import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Expense } from '@/entities/expense/model/types'
 import { toMoneyNumber } from '@/shared/lib/money'
 
@@ -38,11 +39,24 @@ export function buildCategoryBudgets(
     })
 }
 
-/** Перерасход (remaining < 0) — в начале списка. */
+/** Перерасход (remaining < 0) — в начале списка расходных конвертов. */
 export function sortBudgetItemsByRemainingAsc(
   items: readonly CategoryBudgetItem[],
 ): CategoryBudgetItem[] {
   return [...items].sort((a, b) => a.remaining - b.remaining)
+}
+
+/** Накопления сверху, затем расходные категории по остатку в конверте. */
+export function sortBudgetItemsForDisplay(
+  items: readonly CategoryBudgetItem[],
+): CategoryBudgetItem[] {
+  const savings = items.filter((item) => isSavingsCategory(item.category.type))
+  const expenses = items.filter((item) => !isSavingsCategory(item.category.type))
+
+  const savingsSorted = [...savings].sort((a, b) => b.allocated - a.allocated)
+  const expensesSorted = sortBudgetItemsByRemainingAsc(expenses)
+
+  return [...savingsSorted, ...expensesSorted]
 }
 
 export function sumBudgetTotals(

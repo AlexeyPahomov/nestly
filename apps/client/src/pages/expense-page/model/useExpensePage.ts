@@ -8,9 +8,9 @@ import { useExpensesQuery } from '@/entities/expense/api/useExpensesQuery'
 
 import {
   buildCategoryBudgets,
-  sortBudgetItemsByRemainingAsc,
-  sumBudgetTotals,
+  sortBudgetItemsForDisplay,
 } from '../lib/buildCategoryBudgets'
+import { computeTreasurySummary } from '../lib/computeTreasurySummary'
 import {
   enrichExpensesWithCategory,
   sortExpensesNewestFirst,
@@ -41,10 +41,17 @@ export function useExpensePage() {
       allocationsQuery.data ?? [],
       expensesQuery.data ?? [],
     )
-    return sortBudgetItemsByRemainingAsc(items)
+    return sortBudgetItemsForDisplay(items)
   }, [categoriesQuery.data, allocationsQuery.data, expensesQuery.data])
 
-  const budgetTotals = useMemo(() => sumBudgetTotals(budgetItems), [budgetItems])
+  const treasurySummary = useMemo(
+    () =>
+      computeTreasurySummary(
+        incomesQuery.data ?? [],
+        allocationsQuery.data ?? [],
+      ),
+    [incomesQuery.data, allocationsQuery.data],
+  )
 
   const sortedExpenses = useMemo(() => {
     const enriched = enrichExpensesWithCategory(
@@ -88,7 +95,7 @@ export function useExpensePage() {
     incomes,
     allocations,
     budgetItems,
-    budgetTotals,
+    treasurySummary,
     sortedExpenses,
     isBudgetPending,
     isBudgetError,

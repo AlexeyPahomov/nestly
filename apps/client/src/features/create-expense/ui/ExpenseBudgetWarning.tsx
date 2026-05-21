@@ -1,25 +1,28 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import { appRouteHref } from '@/app/config/routes'
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui'
+import { appRouteHref } from '@/app/config/routes';
+import { formatAmount } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui';
 
-import { QUICK_TOP_UP_AMOUNTS } from '../model/constants'
-import type { ExpenseBudgetPreview } from '../model/budget'
+import { QUICK_TOP_UP_AMOUNTS } from '../model/constants';
+import type { SavingsTransferHint } from '../lib/savingsTransferHint';
+import type { ExpenseBudgetPreview } from '../model/budget';
 
 type ExpenseBudgetWarningProps = {
-  preview: ExpenseBudgetPreview
-  onRecordExpense: () => void
-  onQuickTopUp: (amount: number) => void
-  isRecording: boolean
-  isTopUpPending: boolean
-  topUpError: string | null
-  canTopUp: boolean
-}
+  preview: ExpenseBudgetPreview;
+  savingsTransfer?: SavingsTransferHint | null;
+  onRecordExpense: () => void;
+  onQuickTopUp: (amount: number) => void;
+  isRecording: boolean;
+  isTopUpPending: boolean;
+  topUpError: string | null;
+  canTopUp: boolean;
+};
 
 export function ExpenseBudgetWarning({
   preview,
+  savingsTransfer,
   onRecordExpense,
   onQuickTopUp,
   isRecording,
@@ -45,6 +48,16 @@ export function ExpenseBudgetWarning({
             −{formatAmount(preview.overAmount)}
           </span>
         </p>
+        {savingsTransfer ? (
+          <>
+            {/* <p className="text-sm text-emerald-900/90">
+            // TODO подумать над текстом
+            В «{savingsTransfer.savingsName}» зарезервировано{' '}
+            {formatAmount(savingsTransfer.available)} — можно перераспределить
+            на странице «Распределение».
+          </p> */}
+          </>
+        ) : null}
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -89,5 +102,5 @@ export function ExpenseBudgetWarning({
         </p>
       ) : null}
     </div>
-  )
+  );
 }

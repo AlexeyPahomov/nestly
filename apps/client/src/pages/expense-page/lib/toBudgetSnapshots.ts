@@ -8,6 +8,7 @@ export function toBudgetSnapshots(
   return items.map((item) => ({
     categoryId: item.category.id,
     categoryName: item.category.name,
+    categoryType: item.category.type,
     allocated: item.allocated,
     spent: item.spent,
     remaining: item.remaining,

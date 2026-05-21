@@ -14,6 +14,7 @@ import {
   Select,
 } from '@/shared/ui'
 
+import { buildSavingsTransferHint } from '../lib/savingsTransferHint'
 import type { CategoryBudgetSnapshot } from '../model/budget'
 import type { CreateExpenseFormValues } from '../model/types'
 import { useCreateExpenseForm } from '../model/useCreateExpenseForm'
@@ -71,6 +72,7 @@ export function CreateExpenseForm({
   const noCategories = categories.length === 0
   const onFieldChange = fieldChangeHandler(form.handleChange)
   const showOverBudgetWarning = form.budgetPreview?.isOverBudget === true
+  const savingsTransfer = buildSavingsTransferHint(budgets, form.budgetPreview)
 
   return (
     <Card className={cn('h-fit w-full max-h-full', className)}>
@@ -145,6 +147,7 @@ export function CreateExpenseForm({
           <CreateExpenseFormActions
             showOverBudgetWarning={showOverBudgetWarning}
             budgetPreview={form.budgetPreview}
+            savingsTransfer={savingsTransfer}
             noCategories={noCategories}
             isBusy={form.isBusy}
             isRecording={form.isRecording}

@@ -1,8 +1,10 @@
+import type { CategoryType } from '@nestly/shared'
 import { parseMoneyInput } from '@nestly/shared'
 
 export type CategoryBudgetSnapshot = {
   categoryId: string
   categoryName: string
+  categoryType: CategoryType
   allocated: number
   spent: number
   remaining: number
@@ -11,6 +13,7 @@ export type CategoryBudgetSnapshot = {
 export type ExpenseBudgetPreview = {
   categoryId: string
   categoryName: string
+  categoryType: CategoryType
   allocated: number
   spent: number
   remainingBefore: number
@@ -36,6 +39,7 @@ export function computeExpenseBudgetPreview(
   return {
     categoryId: budget.categoryId,
     categoryName: budget.categoryName,
+    categoryType: budget.categoryType,
     allocated: budget.allocated,
     spent: budget.spent,
     remainingBefore: budget.remaining,

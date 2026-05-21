@@ -12,3 +12,10 @@ export type BudgetTotals = {
   spent: number
   remaining: number
 }
+
+/** Сводка «казны»: доходы vs распределения (не путать с остатком в конвертах). */
+export type TreasurySummary = {
+  totalFunds: number
+  allocatedTotal: number
+  availableToAllocate: number
+}

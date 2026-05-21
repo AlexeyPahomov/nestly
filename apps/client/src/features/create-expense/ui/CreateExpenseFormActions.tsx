@@ -1,6 +1,7 @@
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'
 
+import type { SavingsTransferHint } from '../lib/savingsTransferHint'
 import type { ExpenseBudgetPreview } from '../model/budget'
 
 import { ExpenseBudgetWarning } from './ExpenseBudgetWarning'
@@ -8,6 +9,7 @@ import { ExpenseBudgetWarning } from './ExpenseBudgetWarning'
 type CreateExpenseFormActionsProps = {
   showOverBudgetWarning: boolean
   budgetPreview: ExpenseBudgetPreview | null
+  savingsTransfer: SavingsTransferHint | null
   noCategories: boolean
   isBusy: boolean
   isRecording: boolean
@@ -21,6 +23,7 @@ type CreateExpenseFormActionsProps = {
 export function CreateExpenseFormActions({
   showOverBudgetWarning,
   budgetPreview,
+  savingsTransfer,
   noCategories,
   isBusy,
   isRecording,
@@ -46,6 +49,7 @@ export function CreateExpenseFormActions({
             <div className="nestly-budget-warning-enter">
               <ExpenseBudgetWarning
                 preview={budgetPreview}
+                savingsTransfer={savingsTransfer}
                 onRecordExpense={onRecordExpense}
                 onQuickTopUp={onQuickTopUp}
                 isRecording={isRecording}

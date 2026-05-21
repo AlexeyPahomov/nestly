@@ -19,7 +19,7 @@ export function ExpensePage() {
     incomes,
     allocations,
     budgetItems,
-    budgetTotals,
+    treasurySummary,
     sortedExpenses,
     isBudgetPending,
     isBudgetError,
@@ -45,9 +45,9 @@ export function ExpensePage() {
       <div className="grid min-h-0 flex-1 grid-rows-[auto_auto_minmax(0,1fr)] gap-4">
         <div className="shrink-0">
           <BudgetSummary
-            allocatedTotal={budgetTotals.allocated}
-            spentTotal={budgetTotals.spent}
-            remainingTotal={budgetTotals.remaining}
+            totalFunds={treasurySummary.totalFunds}
+            availableToAllocate={treasurySummary.availableToAllocate}
+            allocatedTotal={treasurySummary.allocatedTotal}
           />
         </div>
 
