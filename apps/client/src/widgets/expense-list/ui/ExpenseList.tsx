@@ -30,6 +30,7 @@ export interface ExpenseListProps {
   onEdit?: (item: ExpenseListItem) => void;
   onDelete?: (id: string) => void;
   onListScroll?: UIEventHandler<HTMLUListElement>;
+  onTitleClick?: () => void;
 }
 
 export function ExpenseList({
@@ -45,6 +46,7 @@ export function ExpenseList({
   onEdit,
   onDelete,
   onListScroll,
+  onTitleClick,
 }: ExpenseListProps) {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [monthFilter, setMonthFilter] = useState(() =>
@@ -91,6 +93,7 @@ export function ExpenseList({
   return (
     <ItemsList
       className={cn('min-h-0', className)}
+      onTitleClick={onTitleClick}
       onListScroll={onListScroll}
       isPending={isPending}
       isError={isError}

@@ -12,14 +12,12 @@ export function ListError({
   fallbackMessage = 'Не удалось загрузить данные',
 }: ListErrorProps) {
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <Card className="flex min-h-0 flex-1 flex-col border-destructive/40 bg-destructive/5 ring-destructive/20">
-        <CardContent className="flex flex-1 flex-col items-center justify-center py-8 text-center">
-          <p className="text-sm font-medium text-destructive">
-            {getErrorMessage(error, fallbackMessage)}
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="flex min-h-0 flex-1 flex-col border-destructive/40 bg-destructive/5 ring-destructive/20">
+      <CardContent className="flex flex-1 flex-col items-center justify-center py-8 text-center">
+        <p className="text-sm font-medium text-destructive">
+          {getErrorMessage(error, fallbackMessage)}
+        </p>
+      </CardContent>
+    </Card>
   )
 }

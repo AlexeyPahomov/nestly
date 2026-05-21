@@ -1,43 +1,47 @@
-import type { ReactNode, UIEventHandler } from 'react';
+import type { ReactNode, UIEventHandler } from 'react'
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/utils'
 
-import { ListEmpty } from './ListEmpty';
-import { ListError } from './ListError';
-import { ListLoader } from './ListLoader';
-import { ItemsListHeader } from './ItemsListHeader';
+import { ItemsListInteractive, ItemsListInteractiveList } from './ItemsListInteractive'
+import { ItemsListHeader } from './ItemsListHeader'
+import { ListEmpty } from './ListEmpty'
+import { ListError } from './ListError'
+import { ListLoader } from './ListLoader'
+import { itemsListShellClassName } from './itemsListLayout'
 
-export type ItemsListLayout = 'fill' | 'fit';
+export type ItemsListLayout = 'fill' | 'fit'
 
 export type ItemsListProps<T> = {
-  isPending: boolean;
-  isError: boolean;
-  error: unknown;
-  data: T[] | undefined;
-  isFetching: boolean;
-  title?: string;
-  emptyMessage?: string;
-  errorFallback?: string;
+  isPending: boolean
+  isError: boolean
+  error: unknown
+  data: T[] | undefined
+  isFetching: boolean
+  title?: string
+  emptyMessage?: string
+  errorFallback?: string
   /** Элемент справа в строке заголовка (например, кнопка действия). */
-  headerEnd?: ReactNode;
-  headerAddon?: ReactNode;
-  className?: string;
+  headerEnd?: ReactNode
+  headerAddon?: ReactNode
+  className?: string
   /** Доп. классы для `<ul>` (например, grid-колонки). */
-  listClassName?: string;
+  listClassName?: string
   /** Скролл прокручиваемого `<ul>` (layout `fill`). */
-  onListScroll?: UIEventHandler<HTMLUListElement>;
+  onListScroll?: UIEventHandler<HTMLUListElement>
   /** `fill` — на всю высоту контейнера со скроллом; `fit` — по высоте элементов */
-  layout?: ItemsListLayout;
+  layout?: ItemsListLayout
   /** Содержимое `<ul>`: обычно набор `<li>…</li>` */
-  children: (items: T[]) => ReactNode;
+  children: (items: T[]) => ReactNode
   /** Блок под списком (например, «Показать ещё»). */
-  listFooter?: ReactNode;
-};
+  listFooter?: ReactNode
+  /** Клик по заголовку списка (`title`). */
+  onTitleClick?: () => void
+}
 
 const listUlFillClassName =
-  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-contain p-1.5';
+  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-y-contain [overflow-anchor:none] p-1.5'
 
-const listUlFitClassName = 'list-none space-y-3';
+const listUlFitClassName = 'list-none space-y-3'
 
 export function ItemsList<T>({
   isPending,
@@ -56,60 +60,83 @@ export function ItemsList<T>({
   layout = 'fill',
   children,
   listFooter,
+  onTitleClick,
 }: ItemsListProps<T>) {
   const rootClassName = cn(
     'flex flex-col',
     layout === 'fill' ? 'min-h-0 flex-1' : 'h-fit w-full max-h-full',
     className,
-  );
+  )
   const listUlClassName =
-    layout === 'fill' ? listUlFillClassName : listUlFitClassName;
+    layout === 'fill' ? listUlFillClassName : listUlFitClassName
 
-  const items = data ?? [];
-  const showLoader = isPending;
-  const showError = !isPending && isError && data === undefined;
-  const showEmpty = !isPending && !showError && items.length === 0;
-  const showList = !isPending && !showError && items.length > 0;
+  const items = data ?? []
+  const showLoader = isPending
+  const showError = !isPending && isError && data === undefined
+  const showEmpty = !isPending && !showError && items.length === 0
+  const showList = !isPending && !showError && items.length > 0
 
   return (
-    <div className={cn(rootClassName, 'gap-3')} aria-busy={isPending}>
+    <div
+      data-slot="items-list"
+      className={cn(rootClassName, 'gap-3', itemsListShellClassName)}
+      aria-busy={isPending}
+    >
       <ItemsListHeader
         title={title}
         headerEnd={headerEnd}
         headerAddon={headerAddon}
         isFetching={isFetching}
         isPending={isPending}
+        onTitleClick={onTitleClick}
       />
 
-      <div className="relative flex min-h-0 flex-1 flex-col">
+      <div
+        className={cn(
+          'relative flex min-h-0 flex-1 flex-col',
+          itemsListShellClassName,
+        )}
+      >
         <div
           aria-hidden={!showLoader}
           className={cn(
-            'flex min-h-0 flex-1 flex-col',
-            'nestly-list-fade',
+            'nestly-list-fade flex min-h-0 flex-1 flex-col',
             showLoader
               ? 'opacity-100'
               : 'pointer-events-none absolute inset-0 z-10 opacity-0',
           )}
         >
-          <ListLoader />
+          {showLoader ? (
+            <ItemsListInteractive className="flex min-h-0 flex-1 flex-col">
+              <ListLoader />
+            </ItemsListInteractive>
+          ) : null}
         </div>
 
         <div
           className={cn(
             'nestly-list-fade flex min-h-0 flex-col gap-3',
             showLoader
-              ? 'pointer-events-none absolute inset-0 opacity-0'
+              ? cn(
+                  itemsListShellClassName,
+                  'pointer-events-none absolute inset-0 opacity-0',
+                )
               : 'min-h-0 flex-1 opacity-100',
           )}
         >
           {showError ? (
-            <ListError error={error} fallbackMessage={errorFallback} />
+            <ItemsListInteractive className="flex min-h-0 flex-1 flex-col">
+              <ListError error={error} fallbackMessage={errorFallback} />
+            </ItemsListInteractive>
           ) : null}
-          {showEmpty ? <ListEmpty message={emptyMessage} /> : null}
+          {showEmpty ? (
+            <ItemsListInteractive className="flex min-h-0 flex-1 flex-col">
+              <ListEmpty message={emptyMessage} />
+            </ItemsListInteractive>
+          ) : null}
           {showList ? (
             <>
-              <ul
+              <ItemsListInteractiveList
                 className={cn(
                   listUlClassName,
                   'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
@@ -118,12 +145,14 @@ export function ItemsList<T>({
                 onScroll={onListScroll}
               >
                 {children(items)}
-              </ul>
-              {listFooter}
+              </ItemsListInteractiveList>
+              {listFooter ? (
+                <ItemsListInteractive>{listFooter}</ItemsListInteractive>
+              ) : null}
             </>
           ) : null}
         </div>
       </div>
     </div>
-  );
+  )
 }

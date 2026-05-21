@@ -24,6 +24,7 @@ export type CategoryBudgetListProps = {
   headerEnd?: ReactNode;
   className?: string;
   onListScroll?: UIEventHandler<HTMLUListElement>;
+  onTitleClick?: () => void;
 };
 
 export function CategoryBudgetList({
@@ -38,10 +39,12 @@ export function CategoryBudgetList({
   headerEnd,
   className,
   onListScroll,
+  onTitleClick,
 }: CategoryBudgetListProps) {
   return (
     <ItemsList
       className={className}
+      onTitleClick={onTitleClick}
       onListScroll={onListScroll}
       listClassName="grid w-full grid-cols-1 items-stretch gap-3 space-y-0 sm:grid-cols-2 lg:grid-cols-3"
       isPending={isPending}

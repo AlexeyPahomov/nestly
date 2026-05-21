@@ -4,12 +4,17 @@ import { cn } from '@/shared/lib/utils'
 
 import { Spinner } from '../spinner/Spinner'
 
+import { ItemsListInteractive } from './ItemsListInteractive'
+import { ItemsListTitle } from './ItemsListTitle'
+import { itemsListShellClassName } from './itemsListLayout'
+
 type ItemsListHeaderProps = {
   title?: string
   headerEnd?: ReactNode
   headerAddon?: ReactNode
   isFetching: boolean
   isPending: boolean
+  onTitleClick?: () => void
 }
 
 export function ItemsListHeader({
@@ -18,6 +23,7 @@ export function ItemsListHeader({
   headerAddon,
   isFetching,
   isPending,
+  onTitleClick,
 }: ItemsListHeaderProps) {
   const showHeaderRow =
     Boolean(title) || headerEnd != null || (isFetching && !isPending)
@@ -27,31 +33,43 @@ export function ItemsListHeader({
   }
 
   return (
-    <div className="flex shrink-0 flex-col gap-1">
+    <div
+      className={cn(
+        'flex shrink-0 flex-col gap-1',
+        itemsListShellClassName,
+      )}
+    >
       {showHeaderRow ? (
         <div
           className={cn(
             'flex items-center gap-2 px-2',
+            itemsListShellClassName,
             title ? 'justify-between' : 'justify-end',
           )}
         >
-          {title ? (
-            <h2 className="text-lg font-semibold text-zinc-900">{title}</h2>
-          ) : null}
-          {headerEnd || (isFetching && !isPending) ? (
-            <div className="flex shrink-0 items-center gap-2">
-              {headerEnd}
+          {title || (isFetching && !isPending) ? (
+            <ItemsListInteractive className="flex min-w-0 items-center gap-2">
+              {title ? (
+                <ItemsListTitle onClick={onTitleClick}>{title}</ItemsListTitle>
+              ) : null}
               {isFetching && !isPending ? (
                 <Spinner
                   className="size-4 shrink-0 text-zinc-500"
                   aria-label="Обновление списка"
                 />
               ) : null}
-            </div>
+            </ItemsListInteractive>
+          ) : null}
+          {headerEnd ? (
+            <ItemsListInteractive className="flex shrink-0 items-center gap-2">
+              {headerEnd}
+            </ItemsListInteractive>
           ) : null}
         </div>
       ) : null}
-      {headerAddon}
+      {headerAddon ? (
+        <ItemsListInteractive>{headerAddon}</ItemsListInteractive>
+      ) : null}
     </div>
   )
 }

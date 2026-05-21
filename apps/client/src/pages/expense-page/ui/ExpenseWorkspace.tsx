@@ -29,6 +29,7 @@ type ExpenseWorkspaceProps = {
   budgetError: unknown
   isBudgetFetching: boolean
   onBudgetListScroll?: UIEventHandler<HTMLUListElement>
+  onTitleClick?: () => void
 }
 
 export function ExpenseWorkspace({
@@ -48,6 +49,7 @@ export function ExpenseWorkspace({
   budgetError,
   isBudgetFetching,
   onBudgetListScroll,
+  onTitleClick,
 }: ExpenseWorkspaceProps) {
   const dialog = useExpenseFormDialog(editingExpense, onCancelEdit)
 
@@ -55,6 +57,7 @@ export function ExpenseWorkspace({
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <CategoryBudgetList
         className="min-h-0 flex-1 overflow-hidden"
+        onTitleClick={onTitleClick}
         onListScroll={onBudgetListScroll}
         budgetItems={budgetItems}
         isPending={isBudgetPending}

@@ -1,20 +1,53 @@
 import { cn } from '@/shared/lib/utils'
 
-const expensePageGridBaseClassName =
-  'grid min-h-0 flex-1 gap-4 px-0.5 transition-[grid-template-rows] duration-150 ease-out motion-reduce:transition-none'
-
 export type ExpensePagePaneBoost = 'none' | 'categories' | 'expenses'
 
-const expensePageGridRowsByBoost: Record<ExpensePagePaneBoost, string> = {
-  none: 'grid-rows-[auto_minmax(0,3fr)_minmax(0,2fr)]',
-  categories: 'grid-rows-[auto_minmax(0,3.6fr)_minmax(0,1.4fr)]',
-  expenses: 'grid-rows-[auto_minmax(0,2fr)_minmax(0,3fr)]',
+/** Оболочка страницы: казна + две прокручиваемые секции. */
+export const expensePageShellClassName =
+  'flex min-h-0 flex-1 flex-col gap-4 px-0.5'
+
+const paneTransitionClassName =
+  'transition-[flex-grow] duration-300 ease-in-out motion-reduce:transition-none'
+
+/** Доли высоты (3:2 · 3.6:1.4 · 2:3) через flex-grow — плавнее, чем grid-rows. */
+const categoriesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
+  none: 'flex-[3]',
+  categories: 'flex-[3.6]',
+  expenses: 'flex-[2]',
 }
 
-/** Сетка страницы расходов: казна · категории · история. */
-export function expensePageGridClassName(paneBoost: ExpensePagePaneBoost) {
-  return cn(expensePageGridBaseClassName, expensePageGridRowsByBoost[paneBoost])
+const expensesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
+  none: 'flex-[2]',
+  categories: 'flex-[1.4]',
+  expenses: 'flex-[3]',
 }
 
-export const expensePageScrollPaneClassName =
-  'flex min-h-0 flex-col overflow-hidden'
+export const expensePageScrollPaneClassName = cn(
+  'flex min-h-0 min-w-0 flex-col overflow-hidden',
+  paneTransitionClassName,
+)
+
+export function getExpensePageShellClassName(className?: string) {
+  return cn(expensePageShellClassName, className)
+}
+
+function getScrollPaneClassName(
+  flexClassName: string,
+  className?: string,
+) {
+  return cn(expensePageScrollPaneClassName, flexClassName, className)
+}
+
+export function getCategoriesPaneClassName(
+  paneBoost: ExpensePagePaneBoost = 'none',
+  className?: string,
+) {
+  return getScrollPaneClassName(categoriesPaneFlexByBoost[paneBoost], className)
+}
+
+export function getExpensesPaneClassName(
+  paneBoost: ExpensePagePaneBoost = 'none',
+  className?: string,
+) {
+  return getScrollPaneClassName(expensesPaneFlexByBoost[paneBoost], className)
+}
