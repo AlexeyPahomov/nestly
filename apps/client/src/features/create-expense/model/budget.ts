@@ -25,16 +25,25 @@ export type ExpenseBudgetPreview = {
   overAmount: number
 }
 
+export type ComputeExpenseBudgetPreviewOptions = {
+  /** Сумма расхода, уже учтённая в `budget.remaining` (редактирование той же категории). */
+  replacedExpenseAmount?: number
+}
+
 export function computeExpenseBudgetPreview(
   budget: CategoryBudgetSnapshot,
   amountRaw: string,
+  options?: ComputeExpenseBudgetPreviewOptions,
 ): ExpenseBudgetPreview | null {
   const amount = parseMoneyInput(amountRaw)
   if (amount === null || amount <= 0) {
     return null
   }
 
-  const remainingAfter = budget.remaining - amount
+  const replacedExpenseAmount = options?.replacedExpenseAmount ?? 0
+  const remainingBefore = budget.remaining
+  const remainingAfter =
+    remainingBefore + replacedExpenseAmount - amount
   const isOverBudget = remainingAfter < 0
 
   return {
@@ -43,7 +52,7 @@ export function computeExpenseBudgetPreview(
     categoryType: budget.categoryType,
     allocated: budget.allocated,
     spent: budget.spent,
-    remainingBefore: budget.remaining,
+    remainingBefore,
     amount,
     remainingAfter,
     isOverBudget,

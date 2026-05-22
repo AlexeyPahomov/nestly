@@ -71,8 +71,22 @@ export function useCreateExpenseForm({
     if (!budget) {
       return null
     }
-    return computeExpenseBudgetPreview(budget, values.amount)
-  }, [values.category_id, values.amount, budgetByCategoryId])
+
+    const replacedExpenseAmount =
+      editingExpense != null &&
+      values.category_id === editingExpense.category_id
+        ? editingExpense.amount
+        : undefined
+
+    return computeExpenseBudgetPreview(budget, values.amount, {
+      replacedExpenseAmount,
+    })
+  }, [
+    values.category_id,
+    values.amount,
+    budgetByCategoryId,
+    editingExpense,
+  ])
 
   const onStressCategoryChangeRef = useRef(onStressCategoryChange)
   onStressCategoryChangeRef.current = onStressCategoryChange
