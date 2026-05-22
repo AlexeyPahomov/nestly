@@ -3,81 +3,36 @@ import type { Category } from '@/entities/category/model/types'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
-import { computeRemaining } from '@nestly/shared'
-import { toMoneyNumber } from '@/shared/lib/money'
+import { mapCategoryBudgetRows } from '@/entities/budget/lib/mapCategoryBudgetItems'
+import { computeCategoryBudgetsForPeriod } from '@nestly/shared'
 
-import {
-  filterAllocationsBeforePeriod,
-  filterAllocationsByPeriod,
-  filterExpensesBeforePeriod,
-  filterExpensesByPeriod,
-} from './periodMonth'
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
 import type { BudgetTotals } from './types'
 
-type AmountRow = { category_id: string; amount: string | number }
-
-function sumByCategoryId(rows: readonly AmountRow[]): Map<string, number> {
-  const totals = new Map<string, number>()
-  for (const row of rows) {
-    const prev = totals.get(row.category_id) ?? 0
-    totals.set(row.category_id, prev + toMoneyNumber(row.amount))
-  }
-  return totals
-}
-
-/**
- * Конверты за месяц с carry-forward: opening = closing прошлого месяца.
- * remaining = carriedFromPrevious + allocated − spent
- */
 export function buildCategoryBudgets(
   categories: readonly Category[],
   allocations: readonly Allocation[],
   expenses: readonly Expense[],
-  incomes: readonly Income[],
+  _incomes: readonly Income[],
   periodMonth: string,
 ): CategoryBudgetItem[] {
-  const priorAllocations = filterAllocationsBeforePeriod(
-    allocations,
-    incomes,
+  const rebuilt = computeCategoryBudgetsForPeriod(
+    categories.map((c) => ({ id: c.id, type: c.type })),
+    allocations.map((a) => ({
+      category_id: a.category_id,
+      amount: a.amount,
+      period_month: a.period_month,
+    })),
+    expenses.map((e) => ({
+      category_id: e.category_id,
+      amount: e.amount,
+      date: e.date,
+    })),
     periodMonth,
   )
-  const priorExpenses = filterExpensesBeforePeriod(expenses, periodMonth)
-  const periodAllocations = filterAllocationsByPeriod(
-    allocations,
-    incomes,
-    periodMonth,
-  )
-  const periodExpenses = filterExpensesByPeriod(expenses, periodMonth)
 
-  const carriedFromAlloc = sumByCategoryId(priorAllocations)
-  const spentBefore = sumByCategoryId(priorExpenses)
-  const allocatedByCategory = sumByCategoryId(periodAllocations)
-  const spentByCategory = sumByCategoryId(periodExpenses)
-
-  return categories
-    .filter((category) => category.type !== 'income')
-    .map((category) => {
-      const carriedFromPrevious =
-        (carriedFromAlloc.get(category.id) ?? 0) -
-        (spentBefore.get(category.id) ?? 0)
-      const allocated = allocatedByCategory.get(category.id) ?? 0
-      const spent = spentByCategory.get(category.id) ?? 0
-      const remaining = computeRemaining(
-        carriedFromPrevious,
-        allocated,
-        spent,
-      )
-
-      return {
-        category,
-        carriedFromPrevious,
-        allocated,
-        spent,
-        remaining,
-      }
-    })
+  return mapCategoryBudgetRows(categories, rebuilt)
 }
 
 /** Перерасход (remaining < 0) — в начале списка расходных конвертов. */
@@ -120,4 +75,3 @@ export function sumBudgetTotals(
     { allocated: 0, spent: 0, remaining: 0 },
   )
 }
-

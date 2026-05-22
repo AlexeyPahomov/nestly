@@ -1,6 +1,6 @@
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
-import { formatPeriodMonthLabel, getPreviousPeriodMonth } from './periodMonth'
+import { formatPeriodMonthGenitive, getPreviousPeriodMonth } from './periodMonth'
 
 export type CarryForwardMeta = {
   total: number
@@ -24,7 +24,7 @@ export function getCarryForwardMeta(
     total,
     previousPeriodLabel:
       total !== 0 && previousPeriodMonth
-        ? formatPeriodMonthLabel(previousPeriodMonth, { lowercase: true })
+        ? formatPeriodMonthGenitive(previousPeriodMonth)
         : undefined,
   }
 }

@@ -1,25 +1,19 @@
 import { useMemo, useState } from 'react'
 
 import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
+import { useBudgetMonthQuery } from '@/entities/budget-month/api/useBudgetMonthQuery'
+import { filterExpenseCategories } from '@/entities/category/lib/filterExpenseCategories'
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
-import type { Category } from '@/entities/category/model/types'
 import { useExpensesQuery } from '@/entities/expense/api/useExpensesQuery'
 import { currentMonthInputValue } from '@/shared/lib/date'
 
-import {
-  buildCategoryBudgets,
-  sortBudgetItemsForDisplay,
-} from '../lib/buildCategoryBudgets'
 import { computeOperationalSummary } from '../lib/computeOperationalSummary'
 import {
   enrichExpensesWithCategory,
   sortExpensesNewestFirst,
 } from '../lib/enrichExpenses'
-
-function filterExpenseCategories(categories: Category[]): Category[] {
-  return categories.filter((category) => category.type !== 'income')
-}
+import { resolveExpensePageBudgetItems } from '../lib/resolveBudgetItems'
 
 export function useExpensePage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
@@ -32,55 +26,54 @@ export function useExpensePage() {
   const incomesQuery = useIncomesQuery()
   const allocationsQuery = useAllAllocationsQuery()
   const expensesQuery = useExpensesQuery()
+  const budgetMonthQuery = useBudgetMonthQuery(periodMonth)
+
+  const categories = categoriesQuery.data ?? []
+  const incomes = incomesQuery.data ?? []
+  const allocations = allocationsQuery.data ?? []
+  const expenses = expensesQuery.data ?? []
 
   const expenseCategories = useMemo(
-    () => filterExpenseCategories(categoriesQuery.data ?? []),
-    [categoriesQuery.data],
+    () => filterExpenseCategories(categories),
+    [categories],
   )
 
-  const budgetItems = useMemo(() => {
-    const items = buildCategoryBudgets(
-      categoriesQuery.data ?? [],
-      allocationsQuery.data ?? [],
-      expensesQuery.data ?? [],
-      incomesQuery.data ?? [],
+  const budgetItems = useMemo(
+    () =>
+      resolveExpensePageBudgetItems(
+        categories,
+        allocations,
+        expenses,
+        incomes,
+        periodMonth,
+        budgetMonthQuery.data,
+      ),
+    [
+      categories,
+      allocations,
+      expenses,
+      incomes,
       periodMonth,
-    )
-
-    return sortBudgetItemsForDisplay(items)
-  }, [
-    categoriesQuery.data,
-    incomesQuery.data,
-    allocationsQuery.data,
-    expensesQuery.data,
-    periodMonth,
-  ])
+      budgetMonthQuery.data,
+    ],
+  )
 
   const operationalSummary = useMemo(
     () =>
       computeOperationalSummary(
         budgetItems,
-        incomesQuery.data ?? [],
-        allocationsQuery.data ?? [],
-        expensesQuery.data ?? [],
+        incomes,
+        allocations,
+        expenses,
         periodMonth,
       ),
-    [
-      budgetItems,
-      incomesQuery.data,
-      allocationsQuery.data,
-      expensesQuery.data,
-      periodMonth,
-    ],
+    [budgetItems, incomes, allocations, expenses, periodMonth],
   )
 
   const sortedExpenses = useMemo(() => {
-    const enriched = enrichExpensesWithCategory(
-      expensesQuery.data ?? [],
-      categoriesQuery.data ?? [],
-    )
+    const enriched = enrichExpensesWithCategory(expenses, categories)
     return sortExpensesNewestFirst(enriched)
-  }, [expensesQuery.data, categoriesQuery.data])
+  }, [expenses, categories])
 
   const isBudgetPending =
     categoriesQuery.isPending ||
@@ -104,10 +97,8 @@ export function useExpensePage() {
     categoriesQuery.isFetching ||
     incomesQuery.isFetching ||
     allocationsQuery.isFetching ||
-    expensesQuery.isFetching
-
-  const incomes = incomesQuery.data ?? []
-  const allocations = allocationsQuery.data ?? []
+    expensesQuery.isFetching ||
+    (budgetMonthQuery.isFetching && budgetMonthQuery.data === undefined)
 
   return {
     selectedCategoryId,
@@ -124,9 +115,11 @@ export function useExpensePage() {
     isBudgetError,
     budgetError,
     isBudgetFetching,
+    budgetMonthStatus: budgetMonthQuery.data?.status,
     categoriesQuery,
     incomesQuery,
     allocationsQuery,
     expensesQuery,
+    budgetMonthQuery,
   }
 }

@@ -6,7 +6,11 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'src/generated/**'],
+    ignores: [
+      'eslint.config.mjs',
+      // internal — шум; client.ts оставляем в program, иначе импорты Prisma = error
+      'src/generated/prisma/internal/**',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

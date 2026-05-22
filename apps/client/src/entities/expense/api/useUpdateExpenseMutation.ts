@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { invalidateBudgetMonthCache } from '@/entities/budget-month/api/invalidateBudgetMonthCache'
+
 import type { UpdateExpensePayload } from '../model/types'
 import { updateExpense } from './expenseApi'
 import { expenseQueryKeys } from './expenseQueryKeys'
@@ -17,6 +19,7 @@ export function useUpdateExpenseMutation() {
       updateExpense(id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: expenseQueryKeys.all })
+      invalidateBudgetMonthCache(queryClient)
     },
   })
 }

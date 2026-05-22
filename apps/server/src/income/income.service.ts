@@ -33,9 +33,7 @@ export class IncomeService {
     if (!existing) {
       throw new NotFoundException();
     }
-    await this.prisma.$transaction(async (tx) => {
-      await tx.allocation.deleteMany({ where: { income_id: id } });
-      await tx.income.delete({ where: { id } });
-    });
+    await this.prisma.allocation.deleteMany({ where: { income_id: id } });
+    await this.prisma.income.delete({ where: { id } });
   }
 }

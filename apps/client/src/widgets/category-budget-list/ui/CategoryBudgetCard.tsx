@@ -3,7 +3,7 @@ import { formatAmount } from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, Progress } from '@/shared/ui';
 
-import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
+import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon';
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps';
 
 import { categoryIconWrapClassName } from '../lib/categoryVisual';
@@ -22,7 +22,6 @@ import { getEnvelopeUsage } from '../lib/envelopeUsage';
 import type { CategoryBudgetListItem } from '../model/types';
 
 import { CategoryBudgetCarryCaption } from './CategoryBudgetCarryCaption';
-import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight';
 import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard';
 
 type CategoryBudgetCardProps = {
@@ -107,8 +106,6 @@ export function CategoryBudgetCard({
           indicatorClassName={envelopeProgressIndicatorClassName(tone)}
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
-
-        <MonthlyBurnInsightBlock allocated={envelopeTotal} spent={spent} />
 
         <div className="mt-auto flex items-center justify-between gap-4 border-t border-zinc-100 pt-2">
           <span className="text-zinc-500">{balanceLabel}</span>

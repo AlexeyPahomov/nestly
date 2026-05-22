@@ -79,7 +79,15 @@ export function MonthPicker({
   );
 
   if (label == null || label === '') {
-    return control;
+    if (!containerClassName) {
+      return control;
+    }
+
+    return (
+      <div data-slot="month-picker" className={containerClassName}>
+        {control}
+      </div>
+    );
   }
 
   return (

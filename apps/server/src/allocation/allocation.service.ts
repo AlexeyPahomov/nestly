@@ -1,12 +1,22 @@
-import { DEFAULT_ALLOCATION_TYPE } from '@nestly/shared';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { DEFAULT_ALLOCATION_TYPE, monthValueFromDate } from '@nestly/shared';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BudgetMonthService } from '../budget/budget-month.service';
+import { BudgetProjectorService } from '../budget/budget-projector.service';
+import { runBudgetProjection } from '../lib/budget-projection';
+import { DEV_USER_ID } from '../lib/dev-user';
 import { sumPrismaMoneyAmounts, toMoneyNumber } from '../lib/money';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAllocationDto } from './dto/create-allocation.dto';
 
 @Injectable()
 export class AllocationService {
-  constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(AllocationService.name);
+
+  constructor(
+    private prisma: PrismaService,
+    private readonly budgetMonthService: BudgetMonthService,
+    private readonly budgetProjector: BudgetProjectorService,
+  ) {}
 
   async create(dto: CreateAllocationDto) {
     const income = await this.prisma.income.findUnique({
@@ -33,10 +43,15 @@ export class AllocationService {
       throw new BadRequestException('Allocation exceeds income amount');
     }
 
-    return this.prisma.allocation.create({
+    await this.budgetMonthService.ensurePeriodOpen(
+      DEV_USER_ID,
+      monthValueFromDate(income.period_month),
+    );
+
+    const allocation = await this.prisma.allocation.create({
       data: {
         // TODO убрать хардкод после добавления пользователей
-        user_id: '00000000-0000-0000-0000-000000000001',
+        user_id: DEV_USER_ID,
         income_id: dto.income_id,
         category_id: dto.category_id,
         amount: dto.amount,
@@ -44,6 +59,14 @@ export class AllocationService {
         period_month: income.period_month,
       },
     });
+
+    runBudgetProjection(
+      this.logger,
+      'allocation create',
+      this.budgetProjector.onAllocationCreated(this.prisma, allocation),
+    );
+
+    return allocation;
   }
 
   findAll(incomeId?: string) {

@@ -2,10 +2,11 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation';
 import type { Expense } from '@/entities/expense/model/types';
-import { PageSection } from '@/shared/ui';
+import { MonthPicker, PageSection } from '@/shared/ui';
 import { BudgetSummary } from '@/widgets/budget-summary';
 import { ExpenseList } from '@/widgets/expense-list';
 
+import { expensePageMonthPickerClassName } from '../lib/expensePageMonthPicker';
 import {
   getCategoriesPaneClassName,
   getExpensePageShellClassName,
@@ -21,8 +22,12 @@ export function ExpensePage() {
   const [stressCategoryId, setStressCategoryId] = useState<string | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const deleteExpenseMutation = useDeleteExpenseMutation();
-  const { paneBoost, boostPane, onCategoryBudgetListScroll, onExpenseListScroll } =
-    useExpensePagePaneBoost();
+  const {
+    paneBoost,
+    boostPane,
+    onCategoryBudgetListScroll,
+    onExpenseListScroll,
+  } = useExpensePagePaneBoost();
 
   const {
     selectedCategoryId,
@@ -63,12 +68,20 @@ export function ExpensePage() {
   );
 
   return (
-    <PageSection title="Расходы" className="min-h-0 gap-4">
+    <PageSection
+      title="Расходы"
+      className="min-h-0 gap-0"
+      headerAction={
+        <MonthPicker
+          value={periodMonth}
+          onChange={setPeriodMonth}
+          containerClassName={expensePageMonthPickerClassName}
+        />
+      }
+    >
       <div className={getExpensePageShellClassName()}>
         <div className="shrink-0">
           <BudgetSummary
-            periodMonth={periodMonth}
-            onPeriodMonthChange={setPeriodMonth}
             available={operationalSummary.available}
             inReserve={operationalSummary.inReserve}
             spentThisMonth={operationalSummary.spentThisMonth}

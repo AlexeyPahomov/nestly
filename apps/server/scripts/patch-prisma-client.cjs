@@ -29,5 +29,6 @@ s = s.replace(
   /import \{ fileURLToPath \} from 'node:url'\r?\n/,
   '',
 );
+s = s.replace(/\/\/ @ts-nocheck\s*\r?\n/, '');
 
 fs.writeFileSync(clientPath, s);
