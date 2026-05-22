@@ -13,14 +13,14 @@ export type BudgetTotals = {
   remaining: number
 }
 
-/** Сводка «казны» — три разных смысла, не смешивать в одну цифру. */
-export type TreasurySummary = {
-  /** Сумма всех доходов. */
-  totalFunds: number
-  /** Доходы минус распределения: ещё не разложено по конвертам. */
-  availableToAllocate: number
-  /** Сумма остатков по конвертам (allocated − spent по категориям). */
-  categoryRemainingTotal: number
-  /** Факт расходов по всем категориям. */
-  totalSpent: number
+/** Операционная сводка за выбранный месяц (dashboard truth). */
+export type OperationalSummary = {
+  periodMonth: string
+  periodLabel: string
+  /** Не распределено по конвертам (минус перерасход расходных категорий). */
+  available: number
+  /** Остаток по категориям накоплений (sinking / savings). */
+  inReserve: number
+  /** Сумма расходов с датой в этом месяце. */
+  spentThisMonth: number
 }

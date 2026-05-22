@@ -1,28 +1,31 @@
-import { InfoIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { InfoIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
 
-import { formatAmount } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
+import { formatAmount } from '@/shared/lib/format'
+import { cn } from '@/shared/lib/utils'
 import {
   Card,
+  MonthPicker,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/shared/ui';
+} from '@/shared/ui'
 
 type BudgetSummaryProps = {
-  totalFunds: number;
-  availableToAllocate: number;
-  totalSpent: number;
-};
+  periodMonth: string
+  onPeriodMonthChange: (value: string) => void
+  available: number
+  inReserve: number
+  spentThisMonth: number
+}
 
 type SummaryMetricCardProps = {
-  label: string;
-  value: number;
-  valueClassName?: string;
-  trailing?: ReactNode;
-};
+  label: string
+  value: number
+  valueClassName?: string
+  trailing?: ReactNode
+}
 
 function SummaryMetricCard({
   label,
@@ -47,45 +50,82 @@ function SummaryMetricCard({
         </div>
       </div>
     </Card>
-  );
+  )
 }
 
 export function BudgetSummary({
-  totalFunds,
-  availableToAllocate,
-  totalSpent,
+  periodMonth,
+  onPeriodMonthChange,
+  available,
+  inReserve,
+  spentThisMonth,
 }: BudgetSummaryProps) {
-  const hasUnallocated = availableToAllocate > 0;
+  const availableTone =
+    available > 0
+      ? 'text-emerald-700'
+      : available < 0
+        ? 'text-destructive'
+        : undefined
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <SummaryMetricCard label="Всего средств" value={totalFunds} />
-
-        <SummaryMetricCard
-          label="Свободно к распределению"
-          value={availableToAllocate}
-          valueClassName={hasUnallocated ? 'text-emerald-700' : undefined}
-          trailing={
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
-                  aria-label="Что такое свободные средства"
-                >
-                  <InfoIcon className="size-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs text-sm">
-                Доходы за вычетом сумм, уже распределённых по категориям.
-              </TooltipContent>
-            </Tooltip>
-          }
+      <div className="space-y-3">
+        <MonthPicker
+          value={periodMonth}
+          onChange={onPeriodMonthChange}
+          containerClassName="w-auto px-0.5 [&_button]:h-9 [&_button]:border-0 [&_button]:bg-transparent [&_button]:px-0 [&_button]:text-base [&_button]:font-semibold [&_button]:shadow-none hover:[&_button]:bg-zinc-100"
         />
 
-        <SummaryMetricCard label="Потрачено" value={totalSpent} />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <SummaryMetricCard
+            label="Доступно"
+            value={available}
+            valueClassName={availableTone}
+            trailing={
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
+                    aria-label="Что значит «Доступно»"
+                  >
+                    <InfoIcon className="size-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-xs text-sm">
+                  Доходы за месяц за вычетом уже распределённых по категориям
+                  сумм. При перерасходе конверта свободный остаток уменьшается.
+                </TooltipContent>
+              </Tooltip>
+            }
+          />
+
+          <SummaryMetricCard
+            label="В резерве"
+            value={inReserve}
+            valueClassName={inReserve > 0 ? 'text-emerald-700' : undefined}
+            trailing={
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
+                    aria-label="Что значит «В резерве»"
+                  >
+                    <InfoIcon className="size-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-xs text-sm">
+                  Остаток по категориям накоплений за этот месяц (не для
+                  повседневных трат).
+                </TooltipContent>
+              </Tooltip>
+            }
+          />
+
+          <SummaryMetricCard label="Потрачено в месяце" value={spentThisMonth} />
+        </div>
       </div>
     </TooltipProvider>
-  );
+  )
 }

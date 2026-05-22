@@ -1,4 +1,4 @@
-import { useMemo, useState, type UIEventHandler } from 'react';
+import { useEffect, useMemo, useState, type UIEventHandler } from 'react';
 
 import type { Category } from '@/entities/category/model/types';
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
@@ -6,7 +6,6 @@ import {
   listItemHighlightActiveClassName,
   listItemHighlightBaseClassName,
 } from '@/shared/config/listHighlight';
-import { monthValueFromDate } from '@/shared/lib/date';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
@@ -28,6 +27,7 @@ export interface ExpenseListProps {
   error: unknown;
   isFetching?: boolean;
   className?: string;
+  monthFilter: string;
   editingExpenseId?: string | null;
   deletingExpenseId?: string | null;
   onEdit?: (item: ExpenseListItem) => void;
@@ -44,6 +44,7 @@ export function ExpenseList({
   error,
   isFetching = false,
   className,
+  monthFilter,
   editingExpenseId = null,
   deletingExpenseId = null,
   onEdit,
@@ -52,11 +53,12 @@ export function ExpenseList({
   onTitleClick,
 }: ExpenseListProps) {
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [monthFilter, setMonthFilter] = useState(() =>
-    monthValueFromDate(new Date()),
-  );
   const [viewMode, setViewMode] = useState<ExpenseListViewMode>('list');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [monthFilter]);
 
   const filteredExpenses = useMemo(
     () =>
@@ -79,11 +81,6 @@ export function ExpenseList({
       categoryFilter={categoryFilter}
       onCategoryFilterChange={(value) => {
         setCategoryFilter(value);
-        setVisibleCount(PAGE_SIZE);
-      }}
-      monthFilter={monthFilter}
-      onMonthFilterChange={(value) => {
-        setMonthFilter(value);
         setVisibleCount(PAGE_SIZE);
       }}
       viewMode={viewMode}

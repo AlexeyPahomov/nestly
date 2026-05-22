@@ -5,12 +5,17 @@ import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
 import type { Category } from '@/entities/category/model/types'
 import { useExpensesQuery } from '@/entities/expense/api/useExpensesQuery'
+import { currentMonthInputValue } from '@/shared/lib/date'
 
 import {
   buildCategoryBudgets,
   sortBudgetItemsForDisplay,
 } from '../lib/buildCategoryBudgets'
-import { computeTreasurySummary } from '../lib/computeTreasurySummary'
+import { computeOperationalSummary } from '../lib/computeOperationalSummary'
+import {
+  filterAllocationsByPeriod,
+  filterExpensesByPeriod,
+} from '../lib/periodMonth'
 import {
   enrichExpensesWithCategory,
   sortExpensesNewestFirst,
@@ -25,6 +30,8 @@ export function useExpensePage() {
     null,
   )
 
+  const [periodMonth, setPeriodMonth] = useState(currentMonthInputValue)
+
   const categoriesQuery = useCategoriesQuery()
   const incomesQuery = useIncomesQuery()
   const allocationsQuery = useAllAllocationsQuery()
@@ -36,22 +43,44 @@ export function useExpensePage() {
   )
 
   const budgetItems = useMemo(() => {
-    const items = buildCategoryBudgets(
-      categoriesQuery.data ?? [],
+    const categories = categoriesQuery.data ?? []
+    const incomes = incomesQuery.data ?? []
+    const allocations = filterAllocationsByPeriod(
       allocationsQuery.data ?? [],
-      expensesQuery.data ?? [],
+      incomes,
+      periodMonth,
     )
-    return sortBudgetItemsForDisplay(items)
-  }, [categoriesQuery.data, allocationsQuery.data, expensesQuery.data])
+    const expenses = filterExpensesByPeriod(
+      expensesQuery.data ?? [],
+      periodMonth,
+    )
+    const items = buildCategoryBudgets(categories, allocations, expenses)
 
-  const treasurySummary = useMemo(
+    return sortBudgetItemsForDisplay(items)
+  }, [
+    categoriesQuery.data,
+    incomesQuery.data,
+    allocationsQuery.data,
+    expensesQuery.data,
+    periodMonth,
+  ])
+
+  const operationalSummary = useMemo(
     () =>
-      computeTreasurySummary(
+      computeOperationalSummary(
         incomesQuery.data ?? [],
         allocationsQuery.data ?? [],
-        budgetItems,
+        expensesQuery.data ?? [],
+        categoriesQuery.data ?? [],
+        periodMonth,
       ),
-    [incomesQuery.data, allocationsQuery.data, budgetItems],
+    [
+      incomesQuery.data,
+      allocationsQuery.data,
+      expensesQuery.data,
+      categoriesQuery.data,
+      periodMonth,
+    ],
   )
 
   const sortedExpenses = useMemo(() => {
@@ -92,11 +121,13 @@ export function useExpensePage() {
   return {
     selectedCategoryId,
     setSelectedCategoryId,
+    periodMonth,
+    setPeriodMonth,
     expenseCategories,
     incomes,
     allocations,
     budgetItems,
-    treasurySummary,
+    operationalSummary,
     sortedExpenses,
     isBudgetPending,
     isBudgetError,

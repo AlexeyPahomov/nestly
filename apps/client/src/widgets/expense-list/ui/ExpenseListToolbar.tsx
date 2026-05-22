@@ -1,9 +1,7 @@
 import { BarChart3, LayoutList } from 'lucide-react'
 
 import type { Category } from '@/entities/category/model/types'
-import { monthValueFromDate } from '@/shared/lib/date'
 import { cn } from '@/shared/lib/utils'
-import { MonthPicker } from '@/shared/ui'
 import {
   SelectContent,
   SelectItem,
@@ -19,8 +17,6 @@ type ExpenseListToolbarProps = {
   categories: Category[]
   categoryFilter: string
   onCategoryFilterChange: (value: string) => void
-  monthFilter: string
-  onMonthFilterChange: (value: string) => void
   viewMode: ExpenseListViewMode
   onViewModeChange: (mode: ExpenseListViewMode) => void
 }
@@ -29,8 +25,6 @@ export function ExpenseListToolbar({
   categories,
   categoryFilter,
   onCategoryFilterChange,
-  monthFilter,
-  onMonthFilterChange,
   viewMode,
   onViewModeChange,
 }: ExpenseListToolbarProps) {
@@ -50,12 +44,6 @@ export function ExpenseListToolbar({
             ))}
           </SelectContent>
         </SelectRoot>
-
-        <MonthPicker
-          value={monthFilter || monthValueFromDate(new Date())}
-          onChange={onMonthFilterChange}
-          containerClassName="w-auto [&_button]:bg-white"
-        />
       </div>
 
       <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white p-0.5">

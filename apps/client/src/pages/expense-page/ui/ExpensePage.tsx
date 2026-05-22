@@ -31,7 +31,9 @@ export function ExpensePage() {
     incomes,
     allocations,
     budgetItems,
-    treasurySummary,
+    periodMonth,
+    setPeriodMonth,
+    operationalSummary,
     sortedExpenses,
     isBudgetPending,
     isBudgetError,
@@ -65,9 +67,11 @@ export function ExpensePage() {
       <div className={getExpensePageShellClassName()}>
         <div className="shrink-0">
           <BudgetSummary
-            totalFunds={treasurySummary.totalFunds}
-            availableToAllocate={treasurySummary.availableToAllocate}
-            totalSpent={treasurySummary.totalSpent}
+            periodMonth={periodMonth}
+            onPeriodMonthChange={setPeriodMonth}
+            available={operationalSummary.available}
+            inReserve={operationalSummary.inReserve}
+            spentThisMonth={operationalSummary.spentThisMonth}
           />
         </div>
 
@@ -96,6 +100,7 @@ export function ExpensePage() {
         <div className={getExpensesPaneClassName(paneBoost)}>
           <ExpenseList
             className="min-h-0 flex-1"
+            monthFilter={periodMonth}
             onTitleClick={() => boostPane('expenses')}
             onListScroll={onExpenseListScroll}
             expenses={sortedExpenses}
