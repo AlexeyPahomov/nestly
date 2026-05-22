@@ -8,12 +8,15 @@ import {
 } from '@/shared/config/listHighlight';
 import { monthValueFromDate } from '@/shared/lib/date';
 import { cn } from '@/shared/lib/utils';
-import { Button, ItemsList } from '@/shared/ui';
+import { ItemsList } from '@/shared/ui';
 
 import { filterExpensesByCategoryAndMonth } from '../lib/filterExpenses';
 import type { ExpenseListItem } from '../model/types';
 
-import { ExpenseListToolbar, type ExpenseListViewMode } from './ExpenseListToolbar';
+import {
+  ExpenseListToolbar,
+  type ExpenseListViewMode,
+} from './ExpenseListToolbar';
 
 const PAGE_SIZE = 8;
 
@@ -70,8 +73,6 @@ export function ExpenseList({
     [filteredExpenses, visibleCount],
   );
 
-  const hasMore = visibleCount < filteredExpenses.length;
-
   const headerAddon = (
     <ExpenseListToolbar
       categories={categories}
@@ -109,20 +110,6 @@ export function ExpenseList({
       }
       errorFallback="Не удалось загрузить расходы"
       listClassName="!space-y-2"
-      listFooter={
-        hasMore && viewMode === 'list' ? (
-          <div className="flex justify-center px-2 pt-1">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full max-w-md bg-white"
-              onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-            >
-              Показать ещё
-            </Button>
-          </div>
-        ) : null
-      }
     >
       {(items) =>
         items.map((item) => {
