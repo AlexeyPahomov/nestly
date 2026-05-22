@@ -5,6 +5,7 @@ export type CategoryBudgetSnapshot = {
   categoryId: string
   categoryName: string
   categoryType: CategoryType
+  carriedFromPrevious: number
   allocated: number
   spent: number
   remaining: number

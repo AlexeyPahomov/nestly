@@ -7,7 +7,7 @@ import type { Income } from '@/entities/income/model/types'
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog'
 import { Button } from '@/shared/ui'
-import type { CategoryBudgetListItem } from '@/widgets/category-budget-list/model/types'
+import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 import { CategoryBudgetList } from '@/widgets/category-budget-list'
 
 import { useExpenseFormDialog } from '../model/useExpenseFormDialog'
@@ -17,7 +17,7 @@ type ExpenseWorkspaceProps = {
   budgets: CategoryBudgetSnapshot[]
   incomes: Income[]
   allocations: Allocation[]
-  budgetItems: CategoryBudgetListItem[]
+  budgetItems: CategoryBudgetItem[]
   selectedCategoryId: string | null
   editingExpense?: Expense | null
   onCancelEdit?: () => void

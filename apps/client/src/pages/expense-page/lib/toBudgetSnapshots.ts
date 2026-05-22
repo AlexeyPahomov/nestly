@@ -1,6 +1,6 @@
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 
-import type { CategoryBudgetItem } from './types'
+import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
 export function toBudgetSnapshots(
   items: readonly CategoryBudgetItem[],
@@ -9,6 +9,7 @@ export function toBudgetSnapshots(
     categoryId: item.category.id,
     categoryName: item.category.name,
     categoryType: item.category.type,
+    carriedFromPrevious: item.carriedFromPrevious,
     allocated: item.allocated,
     spent: item.spent,
     remaining: item.remaining,

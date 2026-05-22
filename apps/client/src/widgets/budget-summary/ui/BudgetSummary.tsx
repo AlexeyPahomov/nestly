@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 
 import { formatAmount } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
+
+import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
 import {
   Card,
   MonthPicker,
@@ -18,6 +20,8 @@ type BudgetSummaryProps = {
   available: number
   inReserve: number
   spentThisMonth: number
+  carryForwardTotal?: number
+  previousPeriodLabel?: string
 }
 
 type SummaryMetricCardProps = {
@@ -59,6 +63,8 @@ export function BudgetSummary({
   available,
   inReserve,
   spentThisMonth,
+  carryForwardTotal = 0,
+  previousPeriodLabel,
 }: BudgetSummaryProps) {
   const availableTone =
     available > 0
@@ -70,11 +76,19 @@ export function BudgetSummary({
   return (
     <TooltipProvider delayDuration={300}>
       <div className="space-y-3">
-        <MonthPicker
-          value={periodMonth}
-          onChange={onPeriodMonthChange}
-          containerClassName="w-auto px-0.5 [&_button]:h-9 [&_button]:border-0 [&_button]:bg-transparent [&_button]:px-0 [&_button]:text-base [&_button]:font-semibold [&_button]:shadow-none hover:[&_button]:bg-zinc-100"
-        />
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <MonthPicker
+            value={periodMonth}
+            onChange={onPeriodMonthChange}
+            containerClassName="w-auto px-0.5 [&_button]:h-9 [&_button]:border-0 [&_button]:bg-transparent [&_button]:px-0 [&_button]:text-base [&_button]:font-semibold [&_button]:shadow-none hover:[&_button]:bg-zinc-100"
+          />
+          {carryForwardTotal !== 0 && previousPeriodLabel ? (
+            <BudgetSummaryCarryForward
+              total={carryForwardTotal}
+              previousPeriodLabel={previousPeriodLabel}
+            />
+          ) : null}
+        </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <SummaryMetricCard

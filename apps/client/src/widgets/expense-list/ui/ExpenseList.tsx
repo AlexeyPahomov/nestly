@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type UIEventHandler } from 'react';
+import { useMemo, useState, type UIEventHandler } from 'react';
 
 import type { Category } from '@/entities/category/model/types';
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
@@ -54,11 +54,17 @@ export function ExpenseList({
 }: ExpenseListProps) {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [viewMode, setViewMode] = useState<ExpenseListViewMode>('list');
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [listPagination, setListPagination] = useState({
+    monthFilter,
+    categoryFilter: 'all',
+    visibleCount: PAGE_SIZE,
+  });
 
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [monthFilter]);
+  const visibleCount =
+    listPagination.monthFilter === monthFilter &&
+    listPagination.categoryFilter === categoryFilter
+      ? listPagination.visibleCount
+      : PAGE_SIZE;
 
   const filteredExpenses = useMemo(
     () =>
@@ -81,7 +87,11 @@ export function ExpenseList({
       categoryFilter={categoryFilter}
       onCategoryFilterChange={(value) => {
         setCategoryFilter(value);
-        setVisibleCount(PAGE_SIZE);
+        setListPagination({
+          monthFilter,
+          categoryFilter: value,
+          visibleCount: PAGE_SIZE,
+        });
       }}
       viewMode={viewMode}
       onViewModeChange={setViewMode}

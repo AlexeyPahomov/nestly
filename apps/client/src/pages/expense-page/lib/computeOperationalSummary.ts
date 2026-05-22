@@ -1,12 +1,12 @@
 import { sumAllocationAmounts } from '@/entities/allocation/model/calculations'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
+import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 import type { Allocation } from '@/entities/allocation/model/types'
-import type { Category } from '@/entities/category/model/types'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import { sumMoneyAmounts } from '@nestly/shared'
 
-import { buildCategoryBudgets } from './buildCategoryBudgets'
+import { getCarryForwardMeta } from './carryForward'
 import {
   filterAllocationsByPeriod,
   filterExpensesByPeriod,
@@ -16,7 +16,7 @@ import {
 import type { OperationalSummary } from './types'
 
 function sumSavingsInReserve(
-  budgetItems: ReturnType<typeof buildCategoryBudgets>,
+  budgetItems: readonly CategoryBudgetItem[],
 ): number {
   return budgetItems
     .filter((item) => isSavingsCategory(item.category.type))
@@ -25,7 +25,7 @@ function sumSavingsInReserve(
 
 /** Сумма отрицательных остатков расходных конвертов (перерасход «съел» свободный пул). */
 function sumExpenseOverspendCharge(
-  budgetItems: ReturnType<typeof buildCategoryBudgets>,
+  budgetItems: readonly CategoryBudgetItem[],
 ): number {
   return budgetItems
     .filter((item) => !isSavingsCategory(item.category.type))
@@ -33,16 +33,13 @@ function sumExpenseOverspendCharge(
 }
 
 /**
- * Операционная сводка за месяц (не lifetime-агрегаты).
- *
- * Доступно = доходы месяца − распределения месяца + перерасход по конвертам.
- * (Деньги, ещё не разложенные по конвертам; при трате сверх лимита — минус.)
+ * Операционная сводка за месяц по уже посчитанным конвертам (без повторного build).
  */
 export function computeOperationalSummary(
+  budgetItems: readonly CategoryBudgetItem[],
   incomes: readonly Income[],
   allocations: readonly Allocation[],
   expenses: readonly Expense[],
-  categories: readonly Category[],
   periodMonth: string,
 ): OperationalSummary {
   const periodIncomes = filterIncomesByPeriod(incomes, periodMonth)
@@ -52,12 +49,6 @@ export function computeOperationalSummary(
     periodMonth,
   )
   const periodExpenses = filterExpensesByPeriod(expenses, periodMonth)
-
-  const budgetItems = buildCategoryBudgets(
-    categories,
-    periodAllocations,
-    periodExpenses,
-  )
 
   const incomeTotal = sumMoneyAmounts(
     periodIncomes.map((income) => income.amount),
@@ -69,6 +60,8 @@ export function computeOperationalSummary(
   const inReserve = sumSavingsInReserve(budgetItems)
   const overspendCharge = sumExpenseOverspendCharge(budgetItems)
   const available = incomeTotal - allocatedTotal + overspendCharge
+  const { total: carryForwardTotal, previousPeriodLabel } =
+    getCarryForwardMeta(periodMonth, budgetItems)
 
   return {
     periodMonth,
@@ -76,5 +69,7 @@ export function computeOperationalSummary(
     available,
     inReserve,
     spentThisMonth,
+    carryForwardTotal,
+    previousPeriodLabel,
   }
 }

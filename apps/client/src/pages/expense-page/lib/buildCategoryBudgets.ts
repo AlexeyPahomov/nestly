@@ -2,9 +2,18 @@ import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Expense } from '@/entities/expense/model/types'
+import type { Income } from '@/entities/income/model/types'
 import { toMoneyNumber } from '@/shared/lib/money'
 
-import type { BudgetTotals, CategoryBudgetItem } from './types'
+import {
+  filterAllocationsBeforePeriod,
+  filterAllocationsByPeriod,
+  filterExpensesBeforePeriod,
+  filterExpensesByPeriod,
+} from './periodMonth'
+import type { CategoryBudgetItem } from '@/entities/budget/model/types'
+
+import type { BudgetTotals } from './types'
 
 type AmountRow = { category_id: string; amount: string | number }
 
@@ -17,24 +26,51 @@ function sumByCategoryId(rows: readonly AmountRow[]): Map<string, number> {
   return totals
 }
 
+/**
+ * Конверты за месяц с carry-forward: opening = closing прошлого месяца.
+ * remaining = carriedFromPrevious + allocated − spent
+ */
 export function buildCategoryBudgets(
   categories: readonly Category[],
   allocations: readonly Allocation[],
   expenses: readonly Expense[],
+  incomes: readonly Income[],
+  periodMonth: string,
 ): CategoryBudgetItem[] {
-  const allocatedByCategory = sumByCategoryId(allocations)
-  const spentByCategory = sumByCategoryId(expenses)
+  const priorAllocations = filterAllocationsBeforePeriod(
+    allocations,
+    incomes,
+    periodMonth,
+  )
+  const priorExpenses = filterExpensesBeforePeriod(expenses, periodMonth)
+  const periodAllocations = filterAllocationsByPeriod(
+    allocations,
+    incomes,
+    periodMonth,
+  )
+  const periodExpenses = filterExpensesByPeriod(expenses, periodMonth)
+
+  const carriedFromAlloc = sumByCategoryId(priorAllocations)
+  const spentBefore = sumByCategoryId(priorExpenses)
+  const allocatedByCategory = sumByCategoryId(periodAllocations)
+  const spentByCategory = sumByCategoryId(periodExpenses)
 
   return categories
     .filter((category) => category.type !== 'income')
     .map((category) => {
+      const carriedFromPrevious =
+        (carriedFromAlloc.get(category.id) ?? 0) -
+        (spentBefore.get(category.id) ?? 0)
       const allocated = allocatedByCategory.get(category.id) ?? 0
       const spent = spentByCategory.get(category.id) ?? 0
+      const remaining = carriedFromPrevious + allocated - spent
+
       return {
         category,
+        carriedFromPrevious,
         allocated,
         spent,
-        remaining: allocated - spent,
+        remaining,
       }
     })
 }
@@ -60,7 +96,9 @@ export function sortBudgetItemsForDisplay(
     .filter((item) => item.remaining >= 0)
     .sort((a, b) => a.remaining - b.remaining)
 
-  const savingsSorted = [...savings].sort((a, b) => b.allocated - a.allocated)
+  const savingsSorted = [...savings].sort(
+    (a, b) => b.remaining - a.remaining,
+  )
 
   return [...savingsSorted, ...overdrawn, ...inBudget]
 }
@@ -77,3 +115,4 @@ export function sumBudgetTotals(
     { allocated: 0, spent: 0, remaining: 0 },
   )
 }
+

@@ -22,7 +22,36 @@ export function isSamePeriodMonth(
   return getMonthKeyFromIso(isoOrMonth) === periodMonth
 }
 
-export function formatPeriodMonthLabel(periodMonth: string): string {
+export function isBeforePeriodMonth(
+  isoOrMonth: string,
+  periodMonth: string,
+): boolean {
+  const monthKey = getMonthKeyFromIso(isoOrMonth)
+
+  return monthKey != null && monthKey < periodMonth
+}
+
+export function getPreviousPeriodMonth(
+  periodMonth: string,
+): string | undefined {
+  const date = parseMonthStringToDate(periodMonth)
+
+  if (!date) {
+    return undefined
+  }
+
+  return monthValueFromDate(new Date(date.getFullYear(), date.getMonth() - 1, 1))
+}
+
+type FormatPeriodMonthLabelOptions = {
+  /** Для вставки в предложение: «перенесено с апреля 2026». */
+  lowercase?: boolean
+}
+
+export function formatPeriodMonthLabel(
+  periodMonth: string,
+  options?: FormatPeriodMonthLabelOptions,
+): string {
   const date = parseMonthStringToDate(periodMonth)
 
   if (!date) {
@@ -35,6 +64,10 @@ export function formatPeriodMonthLabel(periodMonth: string): string {
   }).format(date)
 
   const withoutYearSuffix = label.replace(/\s*г\.?$/, '')
+
+  if (options?.lowercase) {
+    return withoutYearSuffix.toLowerCase()
+  }
 
   return withoutYearSuffix.charAt(0).toUpperCase() + withoutYearSuffix.slice(1)
 }
@@ -65,4 +98,31 @@ export function filterAllocationsByPeriod(
   )
 
   return allocations.filter((allocation) => incomeIds.has(allocation.income_id))
+}
+
+/** Распределения из доходов месяцев строго до `periodMonth`. */
+export function filterAllocationsBeforePeriod(
+  allocations: readonly Allocation[],
+  incomes: readonly Income[],
+  periodMonth: string,
+): Allocation[] {
+  const priorIncomeIds = new Set(
+    incomes
+      .filter((income) => isBeforePeriodMonth(income.period_month, periodMonth))
+      .map((income) => income.id),
+  )
+
+  return allocations.filter((allocation) =>
+    priorIncomeIds.has(allocation.income_id),
+  )
+}
+
+/** Расходы с датой в месяцах строго до `periodMonth`. */
+export function filterExpensesBeforePeriod(
+  expenses: readonly Expense[],
+  periodMonth: string,
+): Expense[] {
+  return expenses.filter((expense) =>
+    isBeforePeriodMonth(expense.date, periodMonth),
+  )
 }

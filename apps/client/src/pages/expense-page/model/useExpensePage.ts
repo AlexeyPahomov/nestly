@@ -13,10 +13,6 @@ import {
 } from '../lib/buildCategoryBudgets'
 import { computeOperationalSummary } from '../lib/computeOperationalSummary'
 import {
-  filterAllocationsByPeriod,
-  filterExpensesByPeriod,
-} from '../lib/periodMonth'
-import {
   enrichExpensesWithCategory,
   sortExpensesNewestFirst,
 } from '../lib/enrichExpenses'
@@ -43,18 +39,13 @@ export function useExpensePage() {
   )
 
   const budgetItems = useMemo(() => {
-    const categories = categoriesQuery.data ?? []
-    const incomes = incomesQuery.data ?? []
-    const allocations = filterAllocationsByPeriod(
+    const items = buildCategoryBudgets(
+      categoriesQuery.data ?? [],
       allocationsQuery.data ?? [],
-      incomes,
-      periodMonth,
-    )
-    const expenses = filterExpensesByPeriod(
       expensesQuery.data ?? [],
+      incomesQuery.data ?? [],
       periodMonth,
     )
-    const items = buildCategoryBudgets(categories, allocations, expenses)
 
     return sortBudgetItemsForDisplay(items)
   }, [
@@ -68,17 +59,17 @@ export function useExpensePage() {
   const operationalSummary = useMemo(
     () =>
       computeOperationalSummary(
+        budgetItems,
         incomesQuery.data ?? [],
         allocationsQuery.data ?? [],
         expensesQuery.data ?? [],
-        categoriesQuery.data ?? [],
         periodMonth,
       ),
     [
+      budgetItems,
       incomesQuery.data,
       allocationsQuery.data,
       expensesQuery.data,
-      categoriesQuery.data,
       periodMonth,
     ],
   )

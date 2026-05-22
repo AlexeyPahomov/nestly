@@ -72,6 +72,8 @@ export function ExpensePage() {
             available={operationalSummary.available}
             inReserve={operationalSummary.inReserve}
             spentThisMonth={operationalSummary.spentThisMonth}
+            carryForwardTotal={operationalSummary.carryForwardTotal}
+            previousPeriodLabel={operationalSummary.previousPeriodLabel}
           />
         </div>
 

@@ -16,9 +16,12 @@ import {
   getEnvelopeBalanceLabel,
   getEnvelopeBalanceTone,
 } from '../lib/envelopeBalanceTone';
+import { getEnvelopeBudgetTotal } from '@/entities/budget/lib/envelope';
+
 import { getEnvelopeUsage } from '../lib/envelopeUsage';
 import type { CategoryBudgetListItem } from '../model/types';
 
+import { CategoryBudgetCarryCaption } from './CategoryBudgetCarryCaption';
 import { MonthlyBurnInsightBlock } from './MonthlyBurnInsight';
 import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard';
 
@@ -33,15 +36,20 @@ export function CategoryBudgetCard({
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item;
+  const { category, carriedFromPrevious, spent, remaining } = item;
   const isSavings = isSavingsCategory(category.type);
 
   if (isSavings) {
     return <SavingsCategoryBudgetCard item={item} onSelect={onSelect} />;
   }
 
-  const tone = getEnvelopeBalanceTone(allocated, remaining, stressOverBudget);
-  const usage = getEnvelopeUsage(allocated, spent);
+  const envelopeTotal = getEnvelopeBudgetTotal(item);
+  const tone = getEnvelopeBalanceTone(
+    envelopeTotal,
+    remaining,
+    stressOverBudget,
+  );
+  const usage = getEnvelopeUsage(envelopeTotal, spent);
   const balanceLabel = getEnvelopeBalanceLabel(isSavings);
   const usageCaption = 'использовано бюджета';
 
@@ -74,12 +82,13 @@ export function CategoryBudgetCard({
             <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
               {category.name}
             </h3>
+            <CategoryBudgetCarryCaption amount={carriedFromPrevious} />
           </div>
           <div className="shrink-0 text-right tabular-nums">
             <p className="font-medium text-zinc-900">
               {formatAmount(spent)}
               <span className="mx-1 font-normal text-zinc-400">/</span>
-              {formatAmount(allocated)}
+              {formatAmount(envelopeTotal)}
             </p>
             <p
               className={cn(
@@ -99,7 +108,7 @@ export function CategoryBudgetCard({
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
 
-        <MonthlyBurnInsightBlock allocated={allocated} spent={spent} />
+        <MonthlyBurnInsightBlock allocated={envelopeTotal} spent={spent} />
 
         <div className="mt-auto flex items-center justify-between gap-4 border-t border-zinc-100 pt-2">
           <span className="text-zinc-500">{balanceLabel}</span>

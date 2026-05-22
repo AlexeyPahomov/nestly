@@ -4,8 +4,12 @@ import { formatAmount } from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, Progress } from '@/shared/ui';
 
+import { getEnvelopeBudgetTotal } from '@/entities/budget/lib/envelope';
+
 import { getEnvelopeUsage } from '../lib/envelopeUsage';
 import type { CategoryBudgetListItem } from '../model/types';
+
+import { CategoryBudgetCarryCaption } from './CategoryBudgetCarryCaption';
 
 type SavingsCategoryBudgetCardProps = {
   item: CategoryBudgetListItem;
@@ -16,8 +20,9 @@ export function SavingsCategoryBudgetCard({
   item,
   onSelect,
 }: SavingsCategoryBudgetCardProps) {
-  const { category, allocated, spent, remaining } = item;
-  const usage = getEnvelopeUsage(allocated, spent);
+  const { category, carriedFromPrevious, spent, remaining } = item;
+  const envelopeTotal = getEnvelopeBudgetTotal(item);
+  const usage = getEnvelopeUsage(envelopeTotal, spent);
   const setAside = remaining > 0 ? remaining : spent;
 
   return (
@@ -38,6 +43,7 @@ export function SavingsCategoryBudgetCard({
             <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
               {category.name}
             </h3>
+            <CategoryBudgetCarryCaption amount={carriedFromPrevious} />
           </div>
           <div className="shrink-0 text-right">
             <p className="text-sm text-zinc-500">Отложено</p>

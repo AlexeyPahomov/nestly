@@ -62,22 +62,22 @@ export function CategoryBudgetList({
           const isSelected = selectedCategoryId === item.category.id;
 
           return (
-          <li
-            key={item.category.id}
-            className={cn(
-              'flex h-full w-full min-w-0 flex-col',
-              listItemHighlightBaseClassName,
-              isSavingsCategory(item.category.type) &&
-                'sm:col-span-2 lg:col-span-3',
-              isSelected && listItemHighlightActiveClassName,
-            )}
-          >
-            <CategoryBudgetCard
-              item={item}
-              stressOverBudget={stressCategoryId === item.category.id}
-              onSelect={onCategorySelect}
-            />
-          </li>
+            <li
+              key={item.category.id}
+              className={cn(
+                'flex h-full w-full min-w-0 flex-col',
+                listItemHighlightBaseClassName,
+                isSavingsCategory(item.category.type) &&
+                  'sm:col-span-2 lg:col-span-3',
+                isSelected && listItemHighlightActiveClassName,
+              )}
+            >
+              <CategoryBudgetCard
+                item={item}
+                stressOverBudget={stressCategoryId === item.category.id}
+                onSelect={onCategorySelect}
+              />
+            </li>
           );
         })
       }

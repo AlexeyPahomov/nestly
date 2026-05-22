@@ -1,11 +1,4 @@
-import type { Category } from '@/entities/category/model/types'
-
-export type CategoryBudgetItem = {
-  category: Category
-  allocated: number
-  spent: number
-  remaining: number
-}
+export type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
 export type BudgetTotals = {
   allocated: number
@@ -23,4 +16,8 @@ export type OperationalSummary = {
   inReserve: number
   /** Сумма расходов с датой в этом месяце. */
   spentThisMonth: number
+  /** Сумма opening balance по всем конвертам. */
+  carryForwardTotal: number
+  /** Подпись предыдущего месяца для UX переноса. */
+  previousPeriodLabel?: string
 }
