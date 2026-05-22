@@ -1,4 +1,7 @@
-export type { CategoryBudgetItem } from '@/entities/budget/model/types'
+export type {
+  CategoryBudgetItem,
+  ReserveCategorySummary,
+} from '@/entities/budget/model/types'
 
 export type BudgetTotals = {
   allocated: number
@@ -14,6 +17,8 @@ export type OperationalSummary = {
   available: number
   /** Остаток по категориям накоплений (sinking / savings). */
   inReserve: number
+  /** Категория накоплений для блока «В резерве». */
+  reserveCategory?: ReserveCategorySummary
   /** Сумма расходов с датой в этом месяце. */
   spentThisMonth: number
   /** Сумма opening balance по всем конвертам. */

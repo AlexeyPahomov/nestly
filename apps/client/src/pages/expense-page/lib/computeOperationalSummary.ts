@@ -63,6 +63,10 @@ export function computeOperationalSummary(
   const { total: carryForwardTotal, previousPeriodLabel } =
     getCarryForwardMeta(periodMonth, budgetItems)
 
+  const savingsItem = budgetItems.find((item) =>
+    isSavingsCategory(item.category.type),
+  )
+
   return {
     periodMonth,
     periodLabel: formatPeriodMonthLabel(periodMonth),
@@ -71,5 +75,12 @@ export function computeOperationalSummary(
     spentThisMonth,
     carryForwardTotal,
     previousPeriodLabel,
+    reserveCategory: savingsItem
+      ? {
+          name: savingsItem.category.name,
+          icon: savingsItem.category.icon,
+          type: savingsItem.category.type,
+        }
+      : undefined,
   }
 }

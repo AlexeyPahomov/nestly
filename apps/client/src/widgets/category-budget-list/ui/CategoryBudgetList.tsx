@@ -1,6 +1,5 @@
 import type { ReactNode, UIEventHandler } from 'react';
 
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind';
 import {
   listItemHighlightActiveClassName,
   listItemHighlightBaseClassName,
@@ -54,7 +53,7 @@ export function CategoryBudgetList({
       isFetching={isFetching}
       title="По категориям"
       headerEnd={headerEnd}
-      emptyMessage="Нет категорий расходов или накоплений."
+      emptyMessage="Нет категорий расходов."
       errorFallback="Не удалось загрузить бюджет"
     >
       {(items) =>
@@ -67,8 +66,6 @@ export function CategoryBudgetList({
               className={cn(
                 'flex h-full w-full min-w-0 flex-col',
                 listItemHighlightBaseClassName,
-                isSavingsCategory(item.category.type) &&
-                  'sm:col-span-2 lg:col-span-3',
                 isSelected && listItemHighlightActiveClassName,
               )}
             >

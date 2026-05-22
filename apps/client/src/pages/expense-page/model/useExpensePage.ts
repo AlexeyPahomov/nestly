@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
 import { useBudgetMonthQuery } from '@/entities/budget-month/api/useBudgetMonthQuery'
+import { filterExpenseEnvelopeBudgetItems } from '@/entities/budget/lib/filterExpenseEnvelopeBudgetItems'
 import { filterExpenseCategories } from '@/entities/category/lib/filterExpenseCategories'
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
@@ -38,7 +39,7 @@ export function useExpensePage() {
     [categories],
   )
 
-  const budgetItems = useMemo(
+  const allBudgetItems = useMemo(
     () =>
       resolveExpensePageBudgetItems(
         categories,
@@ -58,16 +59,30 @@ export function useExpensePage() {
     ],
   )
 
+  const budgetItems = useMemo(
+    () => filterExpenseEnvelopeBudgetItems(allBudgetItems),
+    [allBudgetItems],
+  )
+
+  useEffect(() => {
+    if (
+      selectedCategoryId != null &&
+      !budgetItems.some((item) => item.category.id === selectedCategoryId)
+    ) {
+      setSelectedCategoryId(null)
+    }
+  }, [budgetItems, selectedCategoryId])
+
   const operationalSummary = useMemo(
     () =>
       computeOperationalSummary(
-        budgetItems,
+        allBudgetItems,
         incomes,
         allocations,
         expenses,
         periodMonth,
       ),
-    [budgetItems, incomes, allocations, expenses, periodMonth],
+    [allBudgetItems, incomes, allocations, expenses, periodMonth],
   )
 
   const sortedExpenses = useMemo(() => {
@@ -108,6 +123,7 @@ export function useExpensePage() {
     expenseCategories,
     incomes,
     allocations,
+    allBudgetItems,
     budgetItems,
     operationalSummary,
     sortedExpenses,

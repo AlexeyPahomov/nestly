@@ -1,10 +1,13 @@
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
-import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import { mapCategoryBudgetRows } from '@/entities/budget/lib/mapCategoryBudgetItems'
-import { computeCategoryBudgetsForPeriod } from '@nestly/shared'
+import {
+  CATEGORY_TYPES,
+  computeCategoryBudgetsForPeriod,
+  type CategoryType,
+} from '@nestly/shared'
 
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
@@ -35,32 +38,24 @@ export function buildCategoryBudgets(
   return mapCategoryBudgetRows(categories, rebuilt)
 }
 
-/** Перерасход (remaining < 0) — в начале списка расходных конвертов. */
-export function sortBudgetItemsByRemainingAsc(
-  items: readonly CategoryBudgetItem[],
-): CategoryBudgetItem[] {
-  return [...items].sort((a, b) => a.remaining - b.remaining)
+function categoryTypeSortIndex(type: CategoryType): number {
+  const index = CATEGORY_TYPES.indexOf(type)
+  return index === -1 ? CATEGORY_TYPES.length : index
 }
 
-/** Накопления сверху, затем расходные: перерасходные, потом остальные. */
+/** Сначала по типу категории, внутри типа — по убыванию остатка. */
 export function sortBudgetItemsForDisplay(
   items: readonly CategoryBudgetItem[],
 ): CategoryBudgetItem[] {
-  const savings = items.filter((item) => isSavingsCategory(item.category.type))
-  const expenses = items.filter((item) => !isSavingsCategory(item.category.type))
-
-  const overdrawn = expenses
-    .filter((item) => item.remaining < 0)
-    .sort((a, b) => a.remaining - b.remaining)
-  const inBudget = expenses
-    .filter((item) => item.remaining >= 0)
-    .sort((a, b) => a.remaining - b.remaining)
-
-  const savingsSorted = [...savings].sort(
-    (a, b) => b.remaining - a.remaining,
-  )
-
-  return [...savingsSorted, ...overdrawn, ...inBudget]
+  return [...items].sort((a, b) => {
+    const byType =
+      categoryTypeSortIndex(a.category.type) -
+      categoryTypeSortIndex(b.category.type)
+    if (byType !== 0) {
+      return byType
+    }
+    return b.remaining - a.remaining
+  })
 }
 
 export function sumBudgetTotals(

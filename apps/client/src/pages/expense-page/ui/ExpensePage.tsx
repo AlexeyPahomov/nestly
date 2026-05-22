@@ -35,6 +35,7 @@ export function ExpensePage() {
     expenseCategories,
     incomes,
     allocations,
+    allBudgetItems,
     budgetItems,
     periodMonth,
     setPeriodMonth,
@@ -48,8 +49,8 @@ export function ExpensePage() {
   } = useExpensePage();
 
   const budgetSnapshots = useMemo(
-    () => toBudgetSnapshots(budgetItems),
-    [budgetItems],
+    () => toBudgetSnapshots(allBudgetItems),
+    [allBudgetItems],
   );
 
   const handleStressCategoryChange = useCallback(
@@ -87,6 +88,7 @@ export function ExpensePage() {
             spentThisMonth={operationalSummary.spentThisMonth}
             carryForwardTotal={operationalSummary.carryForwardTotal}
             previousPeriodLabel={operationalSummary.previousPeriodLabel}
+            reserveCategory={operationalSummary.reserveCategory}
           />
         </div>
 

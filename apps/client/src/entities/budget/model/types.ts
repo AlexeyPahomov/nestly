@@ -1,4 +1,13 @@
+import type { CategoryType } from '@nestly/shared'
+
 import type { Category } from '@/entities/category/model/types'
+
+/** Категория накоплений для сводки «В резерве». */
+export type ReserveCategorySummary = {
+  name: string
+  icon: string | null
+  type: CategoryType
+}
 
 /** Конверт категории за месяц (с opening balance). */
 export type CategoryBudgetItem = {
