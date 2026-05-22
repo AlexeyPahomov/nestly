@@ -88,33 +88,35 @@ export function filterExpensesByPeriod(
   return expenses.filter((expense) => isSamePeriodMonth(expense.date, periodMonth))
 }
 
-export function filterAllocationsByPeriod(
-  allocations: readonly Allocation[],
-  incomes: readonly Income[],
-  periodMonth: string,
-): Allocation[] {
-  const incomeIds = new Set(
-    filterIncomesByPeriod(incomes, periodMonth).map((income) => income.id),
-  )
+function getAllocationPeriodMonthKey(allocation: Allocation): string | undefined {
+  if (allocation.period_month) {
+    return getMonthKeyFromIso(allocation.period_month)
+  }
 
-  return allocations.filter((allocation) => incomeIds.has(allocation.income_id))
+  return getMonthKeyFromIso(allocation.income.period_month)
 }
 
-/** Распределения из доходов месяцев строго до `periodMonth`. */
-export function filterAllocationsBeforePeriod(
+export function filterAllocationsByPeriod(
   allocations: readonly Allocation[],
-  incomes: readonly Income[],
+  _incomes: readonly Income[],
   periodMonth: string,
 ): Allocation[] {
-  const priorIncomeIds = new Set(
-    incomes
-      .filter((income) => isBeforePeriodMonth(income.period_month, periodMonth))
-      .map((income) => income.id),
+  return allocations.filter(
+    (allocation) => getAllocationPeriodMonthKey(allocation) === periodMonth,
   )
+}
 
-  return allocations.filter((allocation) =>
-    priorIncomeIds.has(allocation.income_id),
-  )
+/** Распределения из месяцев строго до `periodMonth`. */
+export function filterAllocationsBeforePeriod(
+  allocations: readonly Allocation[],
+  _incomes: readonly Income[],
+  periodMonth: string,
+): Allocation[] {
+  return allocations.filter((allocation) => {
+    const monthKey = getAllocationPeriodMonthKey(allocation)
+
+    return monthKey != null && monthKey < periodMonth
+  })
 }
 
 /** Расходы с датой в месяцах строго до `periodMonth`. */

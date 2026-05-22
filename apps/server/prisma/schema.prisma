@@ -7,6 +7,17 @@ datasource db {
   provider = "postgresql"
 }
 
+enum BudgetMonthStatus {
+  OPEN
+  CLOSED
+}
+
+enum AllocationType {
+  INCOME_ASSIGNMENT
+  CATEGORY_TRANSFER
+  MANUAL_ADJUSTMENT
+}
+
 model Income {
   id            String   @id @default(uuid())
   user_id       String
@@ -15,7 +26,7 @@ model Income {
   period_month  DateTime
   created_at    DateTime @default(now())
 
-  allocations   Allocation[]
+  allocations Allocation[]
 }
 
 model Category {
@@ -26,19 +37,24 @@ model Category {
   icon       String   @default("shopping-cart")
   created_at DateTime @default(now())
 
-  allocations Allocation[]
-  expenses    Expense[]
+  allocations            Allocation[]
+  expenses               Expense[]
+  categoryMonthSnapshots CategoryMonthSnapshot[]
 }
 
 model Allocation {
-  id          String   @id @default(uuid())
-  user_id     String
-  income_id   String
-  income      Income @relation(fields: [income_id], references: [id])
-  category_id String
-  category    Category @relation(fields: [category_id], references: [id])
-  amount      Decimal
-  created_at  DateTime @default(now())
+  id            String         @id @default(uuid())
+  user_id       String
+  income_id     String
+  income        Income         @relation(fields: [income_id], references: [id])
+  category_id   String
+  category      Category       @relation(fields: [category_id], references: [id])
+  amount        Decimal
+  type          AllocationType @default(INCOME_ASSIGNMENT)
+  period_month  DateTime
+  created_at    DateTime       @default(now())
+
+  @@index([user_id, period_month])
 }
 
 model Expense {
@@ -50,4 +66,57 @@ model Expense {
   description String?
   date        DateTime
   created_at  DateTime @default(now())
+}
+
+model BudgetMonth {
+  id         String            @id @default(uuid())
+  user_id    String
+  year       Int
+  month      Int
+  status     BudgetMonthStatus @default(OPEN)
+  opened_at  DateTime          @default(now())
+  closed_at  DateTime?
+  created_at DateTime          @default(now())
+
+  snapshots   CategoryMonthSnapshot[]
+  closeReport MonthCloseReport?
+
+  @@unique([user_id, year, month])
+  @@index([user_id, status])
+}
+
+model CategoryMonthSnapshot {
+  id              String   @id @default(uuid())
+  budget_month_id String
+  budgetMonth     BudgetMonth @relation(fields: [budget_month_id], references: [id], onDelete: Cascade)
+  category_id     String
+  category        Category @relation(fields: [category_id], references: [id])
+  user_id         String
+  year            Int
+  month           Int
+  opening_balance Decimal  @default(0)
+  allocated       Decimal  @default(0)
+  spent           Decimal  @default(0)
+  closing_balance Decimal  @default(0)
+  version         Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@unique([budget_month_id, category_id])
+  @@index([user_id, year, month])
+  @@index([category_id])
+}
+
+model MonthCloseReport {
+  id                  String    @id @default(uuid())
+  budget_month_id     String    @unique
+  budgetMonth         BudgetMonth @relation(fields: [budget_month_id], references: [id], onDelete: Cascade)
+  income_total        Decimal
+  spent_total         Decimal
+  reserved_total      Decimal
+  overspent_total     Decimal
+  carry_forward_total Decimal
+  warnings_json       Json?
+  closed_at           DateTime  @default(now())
+  created_at          DateTime  @default(now())
 }

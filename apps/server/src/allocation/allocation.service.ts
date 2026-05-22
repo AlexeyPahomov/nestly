@@ -1,3 +1,4 @@
+import { DEFAULT_ALLOCATION_TYPE } from '@nestly/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { sumPrismaMoneyAmounts, toMoneyNumber } from '../lib/money';
 import { PrismaService } from '../prisma/prisma.service';
@@ -39,6 +40,8 @@ export class AllocationService {
         income_id: dto.income_id,
         category_id: dto.category_id,
         amount: dto.amount,
+        type: DEFAULT_ALLOCATION_TYPE,
+        period_month: income.period_month,
       },
     });
   }

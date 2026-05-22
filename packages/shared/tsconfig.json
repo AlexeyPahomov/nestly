@@ -9,5 +9,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["index.ts", "domain/**/*.ts", "lib/**/*.ts"]
+  "include": ["index.ts", "domain/**/*.ts", "lib/**/*.ts"],
+  "exclude": ["**/*.test.ts"]
 }

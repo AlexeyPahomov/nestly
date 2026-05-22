@@ -3,6 +3,7 @@ import type { Category } from '@/entities/category/model/types'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
+import { computeRemaining } from '@nestly/shared'
 import { toMoneyNumber } from '@/shared/lib/money'
 
 import {
@@ -63,7 +64,11 @@ export function buildCategoryBudgets(
         (spentBefore.get(category.id) ?? 0)
       const allocated = allocatedByCategory.get(category.id) ?? 0
       const spent = spentByCategory.get(category.id) ?? 0
-      const remaining = carriedFromPrevious + allocated - spent
+      const remaining = computeRemaining(
+        carriedFromPrevious,
+        allocated,
+        spent,
+      )
 
       return {
         category,

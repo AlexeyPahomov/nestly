@@ -1,3 +1,5 @@
+import type { AllocationType } from '@nestly/shared'
+
 import type { Category } from '@/entities/category/model/types'
 import type { Income } from '@/entities/income/model/types'
 
@@ -8,6 +10,8 @@ export type Allocation = {
   income_id: string
   category_id: string
   amount: string
+  type: AllocationType
+  period_month: string
   created_at: string
   category: Category
   income: Income
