@@ -7,6 +7,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
+import { categoryBudgetListGridClassName } from '../lib/categoryBudgetListLayout';
 import type { CategoryBudgetListItem } from '../model/types';
 
 import { CategoryBudgetCard } from './CategoryBudgetCard';
@@ -45,7 +46,7 @@ export function CategoryBudgetList({
       className={className}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}
-      listClassName="grid w-full grid-cols-1 items-stretch gap-3 space-y-0 sm:grid-cols-2 lg:grid-cols-3"
+      listClassName={categoryBudgetListGridClassName}
       isPending={isPending}
       isError={isError}
       error={error}
@@ -64,7 +65,7 @@ export function CategoryBudgetList({
             <li
               key={item.category.id}
               className={cn(
-                'flex h-full w-full min-w-0 flex-col',
+                'flex w-full min-w-0 flex-col',
                 listItemHighlightBaseClassName,
                 isSelected && listItemHighlightActiveClassName,
               )}

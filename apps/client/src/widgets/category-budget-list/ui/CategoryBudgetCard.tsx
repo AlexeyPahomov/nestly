@@ -21,7 +21,12 @@ import { getEnvelopeBudgetTotal } from '@/entities/budget/lib/envelope';
 import { getEnvelopeUsage } from '../lib/envelopeUsage';
 import type { CategoryBudgetListItem } from '../model/types';
 
-import { CategoryBudgetCarryCaption } from './CategoryBudgetCarryCaption';
+import {
+  categoryBudgetCardContentClassName,
+  categoryBudgetCardShellClassName,
+} from '../lib/categoryBudgetCardLayout';
+import { getCategoryBudgetCardDomProps } from '../lib/categoryBudgetCardTarget';
+
 import { SavingsCategoryBudgetCard } from './SavingsCategoryBudgetCard';
 
 type CategoryBudgetCardProps = {
@@ -35,7 +40,7 @@ export function CategoryBudgetCard({
   stressOverBudget = false,
   onSelect,
 }: CategoryBudgetCardProps) {
-  const { category, carriedFromPrevious, spent, remaining } = item;
+  const { category, spent, remaining } = item;
   const isSavings = isSavingsCategory(category.type);
 
   if (isSavings) {
@@ -55,35 +60,36 @@ export function CategoryBudgetCard({
   return (
     <Card
       size="sm"
+      {...getCategoryBudgetCardDomProps()}
       className={cn(
-        'h-full w-full min-w-0 gap-0 overflow-hidden py-0 transition-colors',
+        categoryBudgetCardShellClassName,
+        'transition-colors',
         envelopeCardToneClassName(tone),
         onSelect && 'cursor-pointer',
         onSelect && envelopeHoverToneClassName(tone),
       )}
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
-      <CardContent className="flex flex-1 flex-col gap-3 px-4 py-1 text-sm">
-        <div className="flex items-start gap-3">
+      <CardContent className={categoryBudgetCardContentClassName}>
+        <div className="flex min-h-0 items-start gap-2.5">
           <span
             className={cn(
-              'flex size-10 shrink-0 items-center justify-center rounded-full',
+              'flex size-9 shrink-0 items-center justify-center rounded-full',
               categoryIconWrapClassName(tone),
             )}
           >
             <CategoryLucideIcon
               {...toCategoryLucideIconProps(category)}
-              className="size-5"
+              className="size-4"
               aria-hidden
             />
           </span>
-          <div className="min-w-0 flex-1 self-start">
+          <div className="min-w-0 flex-1">
             <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
               {category.name}
             </h3>
-            <CategoryBudgetCarryCaption amount={carriedFromPrevious} />
           </div>
-          <div className="shrink-0 text-right tabular-nums">
+          <div className="shrink-0 text-right text-sm tabular-nums leading-snug">
             <p className="font-medium text-zinc-900">
               {formatAmount(spent)}
               <span className="mx-1 font-normal text-zinc-400">/</span>
@@ -102,13 +108,13 @@ export function CategoryBudgetCard({
 
         <Progress
           value={usage.barPercent}
-          className="h-2.5 bg-zinc-100"
+          className="h-2 bg-zinc-100"
           indicatorClassName={envelopeProgressIndicatorClassName(tone)}
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
 
-        <div className="mt-auto flex items-center justify-between gap-4 border-t border-zinc-100 pt-2">
-          <span className="text-zinc-500">{balanceLabel}</span>
+        <div className="flex items-center justify-between gap-2 border-t border-zinc-100 pt-1.5">
+          <span className="text-sm text-zinc-500">{balanceLabel}</span>
           <span
             className={cn(
               'text-base font-bold tabular-nums',

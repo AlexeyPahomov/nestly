@@ -1,13 +1,10 @@
 import {
   useCallback,
-  useEffect,
   useRef,
   useState,
   type MutableRefObject,
   type UIEventHandler,
 } from 'react'
-
-import { isItemsListPointerTarget } from '@/shared/ui/items-list/itemsListLayout'
 
 import type { ExpensePagePaneBoost } from '../lib/expensePageLayout'
 
@@ -25,50 +22,43 @@ function readListScrollDelta(
   return previousTop !== undefined && previousTop !== nextTop
 }
 
-function usePaneBoostOutsideReset(
-  paneBoost: ExpensePagePaneBoost,
-  resetPaneBoost: () => void,
-) {
-  useEffect(() => {
-    if (paneBoost === 'none') {
-      return
-    }
-
-    const handlePointerDown = (event: PointerEvent) => {
-      if (isItemsListPointerTarget(event.target)) {
-        return
-      }
-
-      resetPaneBoost()
-    }
-
-    document.addEventListener('pointerdown', handlePointerDown, true)
-
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown, true)
-    }
-  }, [paneBoost, resetPaneBoost])
-}
-
-/** Скролл и клики расширяют секцию; клик вне ItemsList — сброс к 3:2. */
+/** Скролл и клики по заголовкам меняют доли панелей; сброс — в `useExpensePageOutsideInteraction`. */
 export function useExpensePagePaneBoost() {
   const [paneBoost, setPaneBoost] = useState<ExpensePagePaneBoost>('none')
+  const [expensesCollapsed, setExpensesCollapsed] = useState(false)
   const scrollTopByListRef = useRef(new WeakMap<HTMLUListElement, number>())
 
-  const applyPaneBoost = useCallback((boost: ExpensePagePaneBoost) => {
+  const resetPaneLayout = useCallback(() => {
+    setPaneBoost('none')
+    setExpensesCollapsed(false)
+  }, [])
+
+  const boostPane = useCallback((boost: ExpensePagePaneBoostActive) => {
     setPaneBoost((current) => (current === boost ? current : boost))
   }, [])
 
-  const resetPaneBoost = useCallback(() => {
-    applyPaneBoost('none')
-  }, [applyPaneBoost])
+  const onExpenseHistoryTitleClick = useCallback(() => {
+    if (paneBoost === 'categories' && !expensesCollapsed) {
+      boostPane('expenses')
+      return
+    }
 
-  const boostPane = useCallback(
-    (boost: ExpensePagePaneBoostActive) => {
-      applyPaneBoost(boost)
-    },
-    [applyPaneBoost],
-  )
+    if (expensesCollapsed) {
+      resetPaneLayout()
+      return
+    }
+
+    setExpensesCollapsed(true)
+    setPaneBoost('none')
+  }, [paneBoost, expensesCollapsed, boostPane, resetPaneLayout])
+
+  const onCategoriesTitleClick = useCallback(() => {
+    if (expensesCollapsed) {
+      setExpensesCollapsed(false)
+    }
+
+    boostPane('categories')
+  }, [expensesCollapsed, boostPane])
 
   const handleListScroll = useCallback(
     (boost: ExpensePagePaneBoostActive): UIEventHandler<HTMLUListElement> =>
@@ -77,16 +67,21 @@ export function useExpensePagePaneBoost() {
           return
         }
 
+        if (boost === 'expenses' && expensesCollapsed) {
+          setExpensesCollapsed(false)
+        }
+
         boostPane(boost)
       },
-    [boostPane],
+    [boostPane, expensesCollapsed],
   )
 
-  usePaneBoostOutsideReset(paneBoost, resetPaneBoost)
-
   return {
-    paneBoost,
+    paneLayout: { paneBoost, expensesCollapsed },
     boostPane,
+    resetPaneLayout,
+    onExpenseHistoryTitleClick,
+    onCategoriesTitleClick,
     onCategoryBudgetListScroll: handleListScroll('categories'),
     onExpenseListScroll: handleListScroll('expenses'),
   }

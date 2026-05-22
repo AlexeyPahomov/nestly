@@ -12,7 +12,7 @@ export function CategoryBudgetCarryCaption({
   }
 
   return (
-    <p className="mt-0.5 text-xs text-zinc-500">
+    <p className="mt-0.5 truncate text-xs text-zinc-500">
       Перенесено {formatAmount(amount)}
     </p>
   )

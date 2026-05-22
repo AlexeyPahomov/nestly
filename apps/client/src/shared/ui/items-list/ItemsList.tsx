@@ -36,6 +36,8 @@ export type ItemsListProps<T> = {
   listFooter?: ReactNode
   /** Клик по заголовку списка (`title`). */
   onTitleClick?: () => void
+  /** Только шапка: тело списка (скролл, пустое, ошибка) скрыто. */
+  bodyCollapsed?: boolean
 }
 
 const listUlFillClassName =
@@ -61,10 +63,15 @@ export function ItemsList<T>({
   children,
   listFooter,
   onTitleClick,
+  bodyCollapsed = false,
 }: ItemsListProps<T>) {
   const rootClassName = cn(
     'flex flex-col',
-    layout === 'fill' ? 'min-h-0 flex-1' : 'h-fit w-full max-h-full',
+    bodyCollapsed
+      ? 'h-fit w-full shrink-0'
+      : layout === 'fill'
+        ? 'min-h-0 flex-1'
+        : 'h-fit w-full max-h-full',
     className,
   )
   const listUlClassName =
@@ -79,18 +86,23 @@ export function ItemsList<T>({
   return (
     <div
       data-slot="items-list"
-      className={cn(rootClassName, 'gap-3', itemsListShellClassName)}
+      className={cn(
+        rootClassName,
+        bodyCollapsed ? 'gap-0' : 'gap-3',
+        itemsListShellClassName,
+      )}
       aria-busy={isPending}
     >
       <ItemsListHeader
         title={title}
-        headerEnd={headerEnd}
-        headerAddon={headerAddon}
-        isFetching={isFetching}
+        headerEnd={bodyCollapsed ? undefined : headerEnd}
+        headerAddon={bodyCollapsed ? undefined : headerAddon}
+        isFetching={bodyCollapsed ? false : isFetching}
         isPending={isPending}
         onTitleClick={onTitleClick}
       />
 
+      {bodyCollapsed ? null : (
       <div
         className={cn(
           'relative flex min-h-0 flex-1 flex-col',
@@ -153,6 +165,7 @@ export function ItemsList<T>({
           ) : null}
         </div>
       </div>
+      )}
     </div>
   )
 }

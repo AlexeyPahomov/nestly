@@ -1,6 +1,5 @@
 import { useMemo, useState, type UIEventHandler } from 'react';
 
-import type { Category } from '@/entities/category/model/types';
 import { ExpenseCard } from '@/entities/expense/ui/ExpenseCard';
 import {
   listItemHighlightActiveClassName,
@@ -10,6 +9,7 @@ import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
 import { filterExpensesByCategoryAndMonth } from '../lib/filterExpenses';
+import { EXPENSE_LIST_PAGE_SIZE } from '../lib/expenseListPageSize';
 import type { ExpenseListItem } from '../model/types';
 
 import {
@@ -17,11 +17,8 @@ import {
   type ExpenseListViewMode,
 } from './ExpenseListToolbar';
 
-const PAGE_SIZE = 8;
-
 export interface ExpenseListProps {
   expenses?: ExpenseListItem[];
-  categories?: Category[];
   isPending: boolean;
   isError: boolean;
   error: unknown;
@@ -34,11 +31,13 @@ export interface ExpenseListProps {
   onDelete?: (id: string) => void;
   onListScroll?: UIEventHandler<HTMLUListElement>;
   onTitleClick?: () => void;
+  bodyCollapsed?: boolean;
+  /** `all` или id категории (задаётся снаружи, например кликом по карточке). */
+  categoryFilter?: string;
 }
 
 export function ExpenseList({
   expenses,
-  categories = [],
   isPending,
   isError,
   error,
@@ -51,20 +50,10 @@ export function ExpenseList({
   onDelete,
   onListScroll,
   onTitleClick,
+  bodyCollapsed = false,
+  categoryFilter = 'all',
 }: ExpenseListProps) {
-  const [categoryFilter, setCategoryFilter] = useState('all');
   const [viewMode, setViewMode] = useState<ExpenseListViewMode>('list');
-  const [listPagination, setListPagination] = useState({
-    monthFilter,
-    categoryFilter: 'all',
-    visibleCount: PAGE_SIZE,
-  });
-
-  const visibleCount =
-    listPagination.monthFilter === monthFilter &&
-    listPagination.categoryFilter === categoryFilter
-      ? listPagination.visibleCount
-      : PAGE_SIZE;
 
   const filteredExpenses = useMemo(
     () =>
@@ -77,30 +66,18 @@ export function ExpenseList({
   );
 
   const visibleExpenses = useMemo(
-    () => filteredExpenses.slice(0, visibleCount),
-    [filteredExpenses, visibleCount],
-  );
-
-  const headerAddon = (
-    <ExpenseListToolbar
-      categories={categories}
-      categoryFilter={categoryFilter}
-      onCategoryFilterChange={(value) => {
-        setCategoryFilter(value);
-        setListPagination({
-          monthFilter,
-          categoryFilter: value,
-          visibleCount: PAGE_SIZE,
-        });
-      }}
-      viewMode={viewMode}
-      onViewModeChange={setViewMode}
-    />
+    () => filteredExpenses.slice(0, EXPENSE_LIST_PAGE_SIZE),
+    [filteredExpenses],
   );
 
   return (
     <ItemsList
-      className={cn('min-h-0', className)}
+      className={cn(
+        'overflow-hidden',
+        bodyCollapsed ? 'shrink-0' : 'min-h-0 flex-1',
+        className,
+      )}
+      bodyCollapsed={bodyCollapsed}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}
       isPending={isPending}
@@ -109,7 +86,9 @@ export function ExpenseList({
       data={viewMode === 'list' ? visibleExpenses : []}
       isFetching={isFetching}
       title="История расходов"
-      headerAddon={headerAddon}
+      headerEnd={
+        <ExpenseListToolbar viewMode={viewMode} onViewModeChange={setViewMode} />
+      }
       emptyMessage={
         viewMode === 'chart'
           ? 'График расходов появится в следующих версиях.'

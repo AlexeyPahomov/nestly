@@ -2,17 +2,19 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation';
 import type { Expense } from '@/entities/expense/model/types';
+import { cn } from '@/shared/lib/utils';
 import { MonthPicker, PageSection } from '@/shared/ui';
 import { BudgetSummary } from '@/widgets/budget-summary';
 import { ExpenseList } from '@/widgets/expense-list';
 
 import { expensePageMonthPickerClassName } from '../lib/expensePageMonthPicker';
 import {
-  getCategoriesPaneClassName,
+  getExpensePagePaneClassNames,
   getExpensePageShellClassName,
-  getExpensesPaneClassName,
 } from '../lib/expensePageLayout';
 import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
+import { useExpensePageCategorySelection } from '../model/useExpensePageCategorySelection';
+import { useExpensePageOutsideInteraction } from '../model/useExpensePageOutsideInteraction';
 import { useExpensePagePaneBoost } from '../model/useExpensePagePaneBoost';
 import { useExpensePage } from '../model/useExpensePage';
 
@@ -22,9 +24,13 @@ export function ExpensePage() {
   const [stressCategoryId, setStressCategoryId] = useState<string | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const deleteExpenseMutation = useDeleteExpenseMutation();
+
   const {
-    paneBoost,
+    paneLayout,
     boostPane,
+    resetPaneLayout,
+    onExpenseHistoryTitleClick,
+    onCategoriesTitleClick,
     onCategoryBudgetListScroll,
     onExpenseListScroll,
   } = useExpensePagePaneBoost();
@@ -48,6 +54,26 @@ export function ExpensePage() {
     expensesQuery,
   } = useExpensePage();
 
+  const {
+    expenseCategoryFilter,
+    clearSelectedCategory,
+    handleCategorySelect,
+  } = useExpensePageCategorySelection({
+    selectedCategoryId,
+    setSelectedCategoryId,
+    boostPane,
+  });
+
+  useExpensePageOutsideInteraction({
+    layout: paneLayout,
+    selectedCategoryId,
+    onResetPaneLayout: resetPaneLayout,
+    onClearSelectedCategory: clearSelectedCategory,
+  });
+
+  const paneClassNames = getExpensePagePaneClassNames(paneLayout);
+  const { expensesCollapsed } = paneLayout;
+
   const budgetSnapshots = useMemo(
     () => toBudgetSnapshots(allBudgetItems),
     [allBudgetItems],
@@ -58,14 +84,6 @@ export function ExpensePage() {
       setStressCategoryId((prev) => (prev === categoryId ? prev : categoryId));
     },
     [],
-  );
-
-  const handleCategorySelect = useCallback(
-    (categoryId: string) => {
-      setSelectedCategoryId(categoryId);
-      boostPane('categories');
-    },
-    [setSelectedCategoryId, boostPane],
   );
 
   return (
@@ -92,9 +110,9 @@ export function ExpensePage() {
           />
         </div>
 
-        <div className={getCategoriesPaneClassName(paneBoost)}>
+        <div className={paneClassNames.categories}>
           <ExpenseWorkspace
-            onTitleClick={() => boostPane('categories')}
+            onTitleClick={onCategoriesTitleClick}
             categories={expenseCategories}
             budgets={budgetSnapshots}
             incomes={incomes}
@@ -114,14 +132,17 @@ export function ExpensePage() {
           />
         </div>
 
-        <div className={getExpensesPaneClassName(paneBoost)}>
+        <div className={paneClassNames.expenses}>
           <ExpenseList
-            className="min-h-0 flex-1"
+            className={cn(
+              expensesCollapsed ? 'shrink-0' : 'min-h-0 flex-1',
+            )}
+            bodyCollapsed={expensesCollapsed}
             monthFilter={periodMonth}
-            onTitleClick={() => boostPane('expenses')}
+            onTitleClick={onExpenseHistoryTitleClick}
             onListScroll={onExpenseListScroll}
             expenses={sortedExpenses}
-            categories={expenseCategories}
+            categoryFilter={expenseCategoryFilter}
             isPending={expensesQuery.isPending}
             isError={expensesQuery.isError}
             error={expensesQuery.error}

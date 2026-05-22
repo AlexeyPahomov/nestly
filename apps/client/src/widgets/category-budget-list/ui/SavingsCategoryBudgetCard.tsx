@@ -9,6 +9,8 @@ import { getEnvelopeBudgetTotal } from '@/entities/budget/lib/envelope';
 import { getEnvelopeUsage } from '../lib/envelopeUsage';
 import type { CategoryBudgetListItem } from '../model/types';
 
+import { getCategoryBudgetCardDomProps } from '../lib/categoryBudgetCardTarget';
+
 import { CategoryBudgetCarryCaption } from './CategoryBudgetCarryCaption';
 
 type SavingsCategoryBudgetCardProps = {
@@ -28,6 +30,7 @@ export function SavingsCategoryBudgetCard({
   return (
     <Card
       size="sm"
+      {...getCategoryBudgetCardDomProps()}
       className={cn(
         'h-full w-full min-w-0 gap-0 overflow-hidden bg-white py-0 ring-zinc-200/80',
         onSelect && 'cursor-pointer transition-colors hover:bg-zinc-50/60',
