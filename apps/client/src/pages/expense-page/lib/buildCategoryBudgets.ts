@@ -1,13 +1,10 @@
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
+import { getEnvelopeDisplayToneSortIndex } from '@/entities/budget/lib/envelopeBalanceTone'
+import { mapCategoryBudgetRows } from '@/entities/budget/lib/mapCategoryBudgetItems'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
-import { mapCategoryBudgetRows } from '@/entities/budget/lib/mapCategoryBudgetItems'
-import {
-  CATEGORY_TYPES,
-  computeCategoryBudgetsForPeriod,
-  type CategoryType,
-} from '@nestly/shared'
+import { computeCategoryBudgetsForPeriod } from '@nestly/shared'
 
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 
@@ -38,21 +35,15 @@ export function buildCategoryBudgets(
   return mapCategoryBudgetRows(categories, rebuilt)
 }
 
-function categoryTypeSortIndex(type: CategoryType): number {
-  const index = CATEGORY_TYPES.indexOf(type)
-  return index === -1 ? CATEGORY_TYPES.length : index
-}
-
-/** Сначала по типу категории, внутри типа — по убыванию остатка. */
+/** Красные → жёлтые → синие, внутри группы — по убыванию остатка. */
 export function sortBudgetItemsForDisplay(
   items: readonly CategoryBudgetItem[],
 ): CategoryBudgetItem[] {
   return [...items].sort((a, b) => {
-    const byType =
-      categoryTypeSortIndex(a.category.type) -
-      categoryTypeSortIndex(b.category.type)
-    if (byType !== 0) {
-      return byType
+    const byTone =
+      getEnvelopeDisplayToneSortIndex(a) - getEnvelopeDisplayToneSortIndex(b)
+    if (byTone !== 0) {
+      return byTone
     }
     return b.remaining - a.remaining
   })

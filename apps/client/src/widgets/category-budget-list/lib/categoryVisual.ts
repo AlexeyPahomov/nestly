@@ -1,4 +1,4 @@
-import type { EnvelopeBalanceTone } from './envelopeBalanceTone'
+import type { EnvelopeBalanceTone } from '@/entities/budget/lib/envelopeBalanceTone'
 
 const toneAccentClassName: Record<EnvelopeBalanceTone, string> = {
   healthy: 'bg-blue-50 text-blue-600',

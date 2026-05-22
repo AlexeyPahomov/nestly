@@ -127,6 +127,7 @@ body {
 }
 
 .nestly-scroll-list {
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgb(212 212 216) transparent;
 }
