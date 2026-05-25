@@ -47,4 +47,5 @@ Close / reopen / validate belong in `planning/month-lifecycle/` (next milestone)
 
 - Client and server must depend on `@nestly/planning-core`; build workspace packages before app build/dev (as with `@nestly/shared`).
 - Migrations required for `reserved_amount` and `carry_over_policy`.
-- Next: `buildForecastChain`, liquidity policy in planning-core, `ProjectionSnapshot` on month close.
+- `buildForecastChain()` in planning-core: sequential liquidity propagation (not independent `map(projectMonthBudget)`).
+- Next: wire planning UI to chain; liquidity policy helper; `ProjectionSnapshot` on month close.
