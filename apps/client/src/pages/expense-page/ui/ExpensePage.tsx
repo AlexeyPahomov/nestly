@@ -72,7 +72,7 @@ export function ExpensePage() {
   });
 
   const paneClassNames = getExpensePagePaneClassNames(paneLayout);
-  const { expensesCollapsed } = paneLayout;
+  const { expensesCollapsed, paneBoost } = paneLayout;
 
   const budgetSnapshots = useMemo(
     () => toBudgetSnapshots(allBudgetItems),
@@ -112,6 +112,8 @@ export function ExpensePage() {
 
         <div className={paneClassNames.categories}>
           <ExpenseWorkspace
+            expensesHistoryCollapsed={expensesCollapsed}
+            paneBoost={paneBoost}
             onTitleClick={onCategoriesTitleClick}
             categories={expenseCategories}
             budgets={budgetSnapshots}
@@ -132,12 +134,8 @@ export function ExpensePage() {
           />
         </div>
 
-        <div className={paneClassNames.expenses}>
-          <ExpenseList
-            className={cn(
-              expensesCollapsed ? 'shrink-0' : 'min-h-0 flex-1',
-            )}
-            bodyCollapsed={expensesCollapsed}
+        <div className={cn(paneClassNames.expenses, 'min-h-0 overflow-hidden')}>
+          <ExpenseList className="min-h-0 flex-1" bodyCollapsed={expensesCollapsed}
             monthFilter={periodMonth}
             onTitleClick={onExpenseHistoryTitleClick}
             onListScroll={onExpenseListScroll}

@@ -10,14 +10,14 @@ import type { ExpensePagePaneBoost } from '../lib/expensePageLayout'
 
 export type ExpensePagePaneBoostActive = Exclude<ExpensePagePaneBoost, 'none'>
 
-function readListScrollDelta(
-  list: HTMLUListElement,
-  scrollTopByListRef: MutableRefObject<WeakMap<HTMLUListElement, number>>,
+function readScrollContainerDelta(
+  element: HTMLElement,
+  scrollTopByElementRef: MutableRefObject<WeakMap<HTMLElement, number>>,
 ): boolean {
-  const previousTop = scrollTopByListRef.current.get(list)
-  const nextTop = list.scrollTop
+  const previousTop = scrollTopByElementRef.current.get(element)
+  const nextTop = element.scrollTop
 
-  scrollTopByListRef.current.set(list, nextTop)
+  scrollTopByElementRef.current.set(element, nextTop)
 
   return previousTop !== undefined && previousTop !== nextTop
 }
@@ -26,7 +26,7 @@ function readListScrollDelta(
 export function useExpensePagePaneBoost() {
   const [paneBoost, setPaneBoost] = useState<ExpensePagePaneBoost>('none')
   const [expensesCollapsed, setExpensesCollapsed] = useState(false)
-  const scrollTopByListRef = useRef(new WeakMap<HTMLUListElement, number>())
+  const scrollTopByElementRef = useRef(new WeakMap<HTMLElement, number>())
 
   const resetPaneLayout = useCallback(() => {
     setPaneBoost('none')
@@ -60,10 +60,10 @@ export function useExpensePagePaneBoost() {
     boostPane('categories')
   }, [expensesCollapsed, boostPane])
 
-  const handleListScroll = useCallback(
-    (boost: ExpensePagePaneBoostActive): UIEventHandler<HTMLUListElement> =>
+  const handleScrollBoost = useCallback(
+    (boost: ExpensePagePaneBoostActive): UIEventHandler<HTMLElement> =>
       (event) => {
-        if (!readListScrollDelta(event.currentTarget, scrollTopByListRef)) {
+        if (!readScrollContainerDelta(event.currentTarget, scrollTopByElementRef)) {
           return
         }
 
@@ -82,7 +82,7 @@ export function useExpensePagePaneBoost() {
     resetPaneLayout,
     onExpenseHistoryTitleClick,
     onCategoriesTitleClick,
-    onCategoryBudgetListScroll: handleListScroll('categories'),
-    onExpenseListScroll: handleListScroll('expenses'),
+    onCategoryBudgetListScroll: handleScrollBoost('categories'),
+    onExpenseListScroll: handleScrollBoost('expenses'),
   }
 }

@@ -7,7 +7,8 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 
-import { categoryBudgetListGridClassName } from '../lib/categoryBudgetListLayout';
+import { getCategoryBudgetListGridClassName } from '../lib/categoryBudgetListLayout';
+
 import type { CategoryBudgetListItem } from '../model/types';
 
 import { CategoryBudgetCard } from './CategoryBudgetCard';
@@ -25,6 +26,8 @@ export type CategoryBudgetListProps = {
   className?: string;
   onListScroll?: UIEventHandler<HTMLUListElement>;
   onTitleClick?: () => void;
+  /** Ограничить сетку двумя рядами со скроллом (история развёрнута). */
+  limitToTwoRows?: boolean;
 };
 
 export function CategoryBudgetList({
@@ -40,13 +43,18 @@ export function CategoryBudgetList({
   className,
   onListScroll,
   onTitleClick,
+  limitToTwoRows = false,
 }: CategoryBudgetListProps) {
+  const listClassName = getCategoryBudgetListGridClassName(limitToTwoRows);
+
   return (
     <ItemsList
       className={className}
+      layout="fill"
+      listAnimateEnter={false}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}
-      listClassName={categoryBudgetListGridClassName}
+      listClassName={listClassName}
       isPending={isPending}
       isError={isError}
       error={error}

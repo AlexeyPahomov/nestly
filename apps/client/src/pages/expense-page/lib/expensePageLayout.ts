@@ -7,33 +7,43 @@ export type ExpensePagePaneLayoutState = {
   expensesCollapsed: boolean
 }
 
-/** Оболочка страницы: казна + две прокручиваемые секции. */
+/** Оболочка страницы: казна + категории по контенту + история на остаток высоты. */
 export const expensePageShellClassName =
   'flex min-h-0 flex-1 flex-col gap-4 px-0.5'
 
 const paneTransitionClassName =
   'transition-[flex-grow] duration-300 ease-in-out motion-reduce:transition-none'
 
-/** Доли высоты (3:2 · 3.6:1.4 · 2:3) через flex-grow — плавнее, чем grid-rows. */
+/** Категории: высота по сетке карточек, при переполнении — скролл внутри панели. */
+const categoriesPaneContentSizedClassName =
+  'max-h-full shrink-0 grow-0 basis-auto overflow-hidden'
+
+/** Категории на всю высоту, когда история свёрнута. */
+const categoriesPaneExpandedClassName = 'min-h-0 flex-1'
+
+/** Доли высоты (3:2 · 3.6:1.4 · 2:3) при скролле или клике по заголовку. */
 const categoriesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
-  none: 'flex-[3]',
-  categories: 'flex-[3.6]',
-  expenses: 'flex-[2]',
+  none: categoriesPaneContentSizedClassName,
+  categories: 'min-h-0 flex-[3.6] overflow-hidden',
+  expenses: 'min-h-0 flex-[2] overflow-hidden',
 }
+
+const expensesPaneDefaultClassName = 'min-h-0 flex-1'
 
 const expensesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
-  none: 'flex-[2]',
-  categories: 'flex-[1.4]',
-  expenses: 'flex-[3]',
+  none: expensesPaneDefaultClassName,
+  categories: 'min-h-0 flex-[1.4] overflow-hidden',
+  expenses: 'min-h-0 flex-[3] overflow-hidden',
 }
 
-const expensesPaneCollapsedFlexClassName =
-  'shrink-0 flex-grow-0 flex-basis-auto'
+const expensesPaneCollapsedClassName =
+  'shrink-0 grow-0 basis-auto'
 
-const categoriesPaneWhenExpensesCollapsedFlexClassName = 'min-h-0 flex-[1]'
+export const expensePagePaneClassName =
+  'flex min-h-0 min-w-0 flex-col'
 
 export const expensePageScrollPaneClassName = cn(
-  'flex min-h-0 min-w-0 flex-col overflow-hidden',
+  expensePagePaneClassName,
   paneTransitionClassName,
 )
 
@@ -41,24 +51,19 @@ export function getExpensePageShellClassName(className?: string) {
   return cn(expensePageShellClassName, className)
 }
 
-function getScrollPaneClassName(
-  flexClassName: string,
-  className?: string,
-) {
-  return cn(expensePageScrollPaneClassName, flexClassName, className)
+function getPaneClassName(flexClassName: string, className?: string) {
+  return cn(expensePagePaneClassName, flexClassName, className)
 }
 
 function resolveCategoriesPaneFlex({
   paneBoost,
   expensesCollapsed,
 }: ExpensePagePaneLayoutState): string {
-  if (!expensesCollapsed) {
-    return categoriesPaneFlexByBoost[paneBoost]
+  if (expensesCollapsed) {
+    return categoriesPaneExpandedClassName
   }
 
-  return paneBoost === 'categories'
-    ? categoriesPaneFlexByBoost.categories
-    : categoriesPaneWhenExpensesCollapsedFlexClassName
+  return categoriesPaneFlexByBoost[paneBoost]
 }
 
 function resolveExpensesPaneFlex({
@@ -66,24 +71,33 @@ function resolveExpensesPaneFlex({
   expensesCollapsed,
 }: ExpensePagePaneLayoutState): string {
   if (expensesCollapsed) {
-    return expensesPaneCollapsedFlexClassName
+    return expensesPaneCollapsedClassName
   }
 
   return expensesPaneFlexByBoost[paneBoost]
+}
+
+function shouldAnimatePaneFlex(): boolean {
+  return true
 }
 
 export function getExpensePagePaneClassNames(
   layout: ExpensePagePaneLayoutState,
   classNames?: { categories?: string; expenses?: string },
 ) {
+  const animatePaneFlex = shouldAnimatePaneFlex()
+
   return {
-    categories: getScrollPaneClassName(
-      resolveCategoriesPaneFlex(layout),
-      classNames?.categories,
+    categories: cn(
+      getPaneClassName(
+        resolveCategoriesPaneFlex(layout),
+        classNames?.categories,
+      ),
+      animatePaneFlex && paneTransitionClassName,
     ),
-    expenses: getScrollPaneClassName(
-      resolveExpensesPaneFlex(layout),
-      classNames?.expenses,
+    expenses: cn(
+      getPaneClassName(resolveExpensesPaneFlex(layout), classNames?.expenses),
+      animatePaneFlex && paneTransitionClassName,
     ),
   }
 }

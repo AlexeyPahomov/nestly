@@ -23,7 +23,10 @@ body {
 }
 
 .nestly-collapse {
-  transition: grid-template-rows 300ms ease-in-out, opacity 300ms ease-in-out;
+  transition:
+    grid-template-rows 300ms ease-in-out,
+    flex-grow 300ms ease-in-out,
+    opacity 300ms ease-in-out;
 }
 
 .nestly-budget-warning-enter,

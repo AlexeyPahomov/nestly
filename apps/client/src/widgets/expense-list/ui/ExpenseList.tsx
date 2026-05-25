@@ -72,11 +72,7 @@ export function ExpenseList({
 
   return (
     <ItemsList
-      className={cn(
-        'overflow-hidden',
-        bodyCollapsed ? 'shrink-0' : 'min-h-0 flex-1',
-        className,
-      )}
+      className={cn('min-h-0 overflow-hidden', className)}
       bodyCollapsed={bodyCollapsed}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}

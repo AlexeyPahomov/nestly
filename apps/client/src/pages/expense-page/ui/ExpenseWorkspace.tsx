@@ -6,10 +6,13 @@ import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog'
+import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
+import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout'
 import { CategoryBudgetList } from '@/widgets/category-budget-list'
 
+import type { ExpensePagePaneBoost } from '../lib/expensePageLayout'
 import { useExpenseFormDialog } from '../model/useExpenseFormDialog'
 
 type ExpenseWorkspaceProps = {
@@ -30,6 +33,8 @@ type ExpenseWorkspaceProps = {
   isBudgetFetching: boolean
   onBudgetListScroll?: UIEventHandler<HTMLUListElement>
   onTitleClick?: () => void
+  expensesHistoryCollapsed?: boolean
+  paneBoost?: ExpensePagePaneBoost
 }
 
 export function ExpenseWorkspace({
@@ -50,13 +55,25 @@ export function ExpenseWorkspace({
   isBudgetFetching,
   onBudgetListScroll,
   onTitleClick,
+  expensesHistoryCollapsed = false,
+  paneBoost = 'none',
 }: ExpenseWorkspaceProps) {
   const dialog = useExpenseFormDialog(editingExpense, onCancelEdit)
+  const categoriesCompact =
+    !expensesHistoryCollapsed && paneBoost === 'none'
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+    <div
+      className={cn(
+        'flex min-h-0 w-full flex-col overflow-hidden',
+        categoriesCompact
+          ? categoryBudgetListCompactShellClassName
+          : 'min-h-0 flex-1',
+      )}
+    >
       <CategoryBudgetList
-        className="min-h-0 flex-1 overflow-hidden"
+        className="min-h-0 w-full flex-1 overflow-hidden"
+        limitToTwoRows={categoriesCompact || paneBoost === 'expenses'}
         onTitleClick={onTitleClick}
         onListScroll={onBudgetListScroll}
         budgetItems={budgetItems}
