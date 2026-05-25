@@ -11,6 +11,10 @@ export type ExpensePagePaneLayoutState = {
 export const expensePageShellClassName =
   'flex min-h-0 flex-1 flex-col gap-4 px-0.5'
 
+/** Категории + история — на оставшуюся высоту экрана. */
+export const expensePageWorkAreaClassName =
+  'flex min-h-0 flex-1 flex-col gap-4'
+
 const paneTransitionClassName =
   'transition-[flex-grow] duration-300 ease-in-out motion-reduce:transition-none'
 

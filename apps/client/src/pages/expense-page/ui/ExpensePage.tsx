@@ -5,11 +5,11 @@ import type { Expense } from '@/entities/expense/model/types';
 import { cn } from '@/shared/lib/utils';
 import { MonthPicker, PageSection } from '@/shared/ui';
 import { CurrentBudgetSummary } from '@/widgets/current-budget-summary';
-import { ProjectedBudgetSummary } from '@/widgets/projected-budget-summary';
 import { ExpenseList } from '@/widgets/expense-list';
 
 import { expensePageMonthPickerClassName } from '../lib/expensePageMonthPicker';
 import {
+  expensePageWorkAreaClassName,
   getExpensePagePaneClassNames,
   getExpensePageShellClassName,
 } from '../lib/expensePageLayout';
@@ -46,8 +46,6 @@ export function ExpensePage() {
     budgetItems,
     periodMonth,
     setPeriodMonth,
-    operationalSummary,
-    monthProjection,
     currentBudgetView,
     sortedExpenses,
     isBudgetPending,
@@ -102,14 +100,11 @@ export function ExpensePage() {
       }
     >
       <div className={getExpensePageShellClassName()}>
-        <div className="shrink-0 space-y-3">
+        <div className="shrink-0">
           <CurrentBudgetSummary {...currentBudgetView} />
-          <ProjectedBudgetSummary
-            projection={monthProjection}
-            periodLabel={operationalSummary.periodLabel}
-          />
         </div>
 
+        <div className={expensePageWorkAreaClassName}>
         <div className={paneClassNames.categories}>
           <ExpenseWorkspace
             expensesHistoryCollapsed={expensesCollapsed}
@@ -162,6 +157,7 @@ export function ExpensePage() {
               deleteExpenseMutation.mutate(id);
             }}
           />
+        </div>
         </div>
       </div>
     </PageSection>

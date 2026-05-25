@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import { computeOperationalSummary } from '@/entities/budget/lib/computeOperationalSummary'
-import { monthProjectionFromSummary } from '@/entities/budget/lib/monthProjectionFromSummary'
 import { toCurrentBudgetSummaryView } from '@/entities/budget/lib/toCurrentBudgetSummaryView'
 import { usePeriodBudgetCore } from '@/entities/budget/model/usePeriodBudgetCore'
 import { filterExpenseEnvelopeBudgetItems } from '@/entities/budget/lib/filterExpenseEnvelopeBudgetItems'
@@ -63,11 +62,6 @@ export function useExpensePage() {
     ],
   )
 
-  const monthProjection = useMemo(
-    () => monthProjectionFromSummary(operationalSummary),
-    [operationalSummary],
-  )
-
   const currentBudgetView = useMemo(
     () => toCurrentBudgetSummaryView(operationalSummary),
     [operationalSummary],
@@ -114,8 +108,6 @@ export function useExpensePage() {
     allocations: core.allocations,
     allBudgetItems: core.budgetItems,
     budgetItems,
-    operationalSummary,
-    monthProjection,
     currentBudgetView,
     sortedExpenses,
     isBudgetPending,
