@@ -104,6 +104,7 @@ export function ExpensePage() {
             available={operationalSummary.available}
             inReserve={operationalSummary.inReserve}
             spentThisMonth={operationalSummary.spentThisMonth}
+            projectedFree={operationalSummary.projectedFree}
             carryForwardTotal={operationalSummary.carryForwardTotal}
             previousPeriodLabel={operationalSummary.previousPeriodLabel}
             reserveCategory={operationalSummary.reserveCategory}

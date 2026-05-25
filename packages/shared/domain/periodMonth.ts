@@ -57,6 +57,20 @@ export function getPreviousPeriodMonth(
   return `${y}-${m}`
 }
 
+export function getNextPeriodMonth(
+  periodMonth: string,
+): string | undefined {
+  const parsed = parsePeriodMonthKey(periodMonth)
+  if (!parsed) {
+    return undefined
+  }
+
+  const date = new Date(parsed.year, parsed.month, 1)
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  return `${y}-${m}`
+}
+
 /** `YYYY-MM` из даты (локальный календарь). */
 export function monthValueFromDate(d: Date): string {
   const y = d.getFullYear()

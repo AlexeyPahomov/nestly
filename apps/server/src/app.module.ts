@@ -5,6 +5,7 @@ import { IncomeModule } from './income/income.module';
 import { AllocationModule } from './allocation/allocation.module';
 import { CategoryModule } from './category/category.module';
 import { ExpenseModule } from './expense/expense.module';
+import { PlannedExpenseModule } from './planned-expense/planned-expense.module';
 import { BudgetModule } from './budget/budget.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { BudgetModule } from './budget/budget.module';
     AllocationModule,
     CategoryModule,
     ExpenseModule,
+    PlannedExpenseModule,
     BudgetModule,
   ],
   controllers: [AppController],

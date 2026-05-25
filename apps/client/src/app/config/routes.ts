@@ -3,6 +3,7 @@ export const APP_ROUTES = [
   { id: 'income', label: 'Income', segment: 'income' },
   { id: 'allocation', label: 'Allocation', segment: 'allocation' },
   { id: 'expenses', label: 'Expenses', segment: 'expenses' },
+  { id: 'planning', label: 'Planning', segment: 'planning' },
   { id: 'categories', label: 'Categories', segment: 'categories' },
 ] as const
 

@@ -23,6 +23,8 @@ type BudgetSummaryProps = {
   available: number
   inReserve: number
   spentThisMonth: number
+  /** Прогноз свободного пула после планов и резерва. */
+  projectedFree?: number
   carryForwardTotal?: number
   previousPeriodLabel?: string
   reserveCategory?: ReserveCategorySummary
@@ -88,6 +90,7 @@ export function BudgetSummary({
   available,
   inReserve,
   spentThisMonth,
+  projectedFree,
   carryForwardTotal = 0,
   previousPeriodLabel,
   reserveCategory,
@@ -111,7 +114,12 @@ export function BudgetSummary({
           </div>
         ) : null}
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-3',
+            projectedFree !== undefined ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3',
+          )}
+        >
           <SummaryMetricCard
             label="Доступно"
             value={available}
@@ -163,6 +171,20 @@ export function BudgetSummary({
           />
 
           <SummaryMetricCard label="Потрачено в месяце" value={spentThisMonth} />
+
+          {projectedFree !== undefined ? (
+            <SummaryMetricCard
+              label="Прогноз свободного"
+              value={projectedFree}
+              valueClassName={
+                projectedFree > 0
+                  ? 'text-emerald-700'
+                  : projectedFree < 0
+                    ? 'text-destructive'
+                    : undefined
+              }
+            />
+          ) : null}
         </div>
       </div>
     </TooltipProvider>

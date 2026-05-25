@@ -14,12 +14,14 @@ import {
   LazyCategoryPage,
   LazyExpensePage,
   LazyIncomePage,
+  LazyPlanningPage,
 } from './lazyPages'
 
 const lazyPageByRouteId: Record<AppRouteId, LazyExoticComponent<ComponentType>> = {
   income: LazyIncomePage,
   allocation: LazyAllocationPage,
   expenses: LazyExpensePage,
+  planning: LazyPlanningPage,
   categories: LazyCategoryPage,
 }
 

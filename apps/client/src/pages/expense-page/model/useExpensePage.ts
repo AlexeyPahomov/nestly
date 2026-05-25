@@ -1,20 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
-import { useBudgetMonthQuery } from '@/entities/budget-month/api/useBudgetMonthQuery'
+import { computeOperationalSummary } from '@/entities/budget/lib/computeOperationalSummary'
+import { usePeriodBudgetCore } from '@/entities/budget/model/usePeriodBudgetCore'
 import { filterExpenseEnvelopeBudgetItems } from '@/entities/budget/lib/filterExpenseEnvelopeBudgetItems'
 import { filterExpenseCategories } from '@/entities/category/lib/filterExpenseCategories'
-import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
-import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
-import { useExpensesQuery } from '@/entities/expense/api/useExpensesQuery'
+import { usePlannedExpensesQuery } from '@/entities/planned-expense/api/usePlannedExpensesQuery'
 import { currentMonthInputValue } from '@/shared/lib/date'
 
-import { computeOperationalSummary } from '../lib/computeOperationalSummary'
 import {
   enrichExpensesWithCategory,
   sortExpensesNewestFirst,
 } from '../lib/enrichExpenses'
-import { resolveExpensePageBudgetItems } from '../lib/resolveBudgetItems'
 
 export function useExpensePage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
@@ -23,45 +19,17 @@ export function useExpensePage() {
 
   const [periodMonth, setPeriodMonth] = useState(currentMonthInputValue)
 
-  const categoriesQuery = useCategoriesQuery()
-  const incomesQuery = useIncomesQuery()
-  const allocationsQuery = useAllAllocationsQuery()
-  const expensesQuery = useExpensesQuery()
-  const budgetMonthQuery = useBudgetMonthQuery(periodMonth)
-
-  const categories = categoriesQuery.data ?? []
-  const incomes = incomesQuery.data ?? []
-  const allocations = allocationsQuery.data ?? []
-  const expenses = expensesQuery.data ?? []
+  const core = usePeriodBudgetCore(periodMonth)
+  const plannedExpensesQuery = usePlannedExpensesQuery(periodMonth)
 
   const expenseCategories = useMemo(
-    () => filterExpenseCategories(categories),
-    [categories],
-  )
-
-  const allBudgetItems = useMemo(
-    () =>
-      resolveExpensePageBudgetItems(
-        categories,
-        allocations,
-        expenses,
-        incomes,
-        periodMonth,
-        budgetMonthQuery.data,
-      ),
-    [
-      categories,
-      allocations,
-      expenses,
-      incomes,
-      periodMonth,
-      budgetMonthQuery.data,
-    ],
+    () => filterExpenseCategories(core.categories),
+    [core.categories],
   )
 
   const budgetItems = useMemo(
-    () => filterExpenseEnvelopeBudgetItems(allBudgetItems),
-    [allBudgetItems],
+    () => filterExpenseEnvelopeBudgetItems(core.budgetItems),
+    [core.budgetItems],
   )
 
   useEffect(() => {
@@ -76,44 +44,53 @@ export function useExpensePage() {
   const operationalSummary = useMemo(
     () =>
       computeOperationalSummary(
-        allBudgetItems,
-        incomes,
-        allocations,
-        expenses,
+        core.budgetItems,
+        core.incomes,
+        core.allocations,
+        core.expenses,
         periodMonth,
+        plannedExpensesQuery.data ?? [],
       ),
-    [allBudgetItems, incomes, allocations, expenses, periodMonth],
+    [
+      core.budgetItems,
+      core.incomes,
+      core.allocations,
+      core.expenses,
+      periodMonth,
+      plannedExpensesQuery.data,
+    ],
   )
 
   const sortedExpenses = useMemo(() => {
-    const enriched = enrichExpensesWithCategory(expenses, categories)
+    const enriched = enrichExpensesWithCategory(core.expenses, core.categories)
     return sortExpensesNewestFirst(enriched)
-  }, [expenses, categories])
+  }, [core.expenses, core.categories])
 
   const isBudgetPending =
-    categoriesQuery.isPending ||
-    incomesQuery.isPending ||
-    allocationsQuery.isPending ||
-    expensesQuery.isPending
+    core.categoriesQuery.isPending ||
+    core.incomesQuery.isPending ||
+    core.allocationsQuery.isPending ||
+    core.expensesQuery.isPending
 
   const isBudgetError =
-    categoriesQuery.isError ||
-    incomesQuery.isError ||
-    allocationsQuery.isError ||
-    expensesQuery.isError
+    core.categoriesQuery.isError ||
+    core.incomesQuery.isError ||
+    core.allocationsQuery.isError ||
+    core.expensesQuery.isError
 
   const budgetError =
-    categoriesQuery.error ??
-    incomesQuery.error ??
-    allocationsQuery.error ??
-    expensesQuery.error
+    core.categoriesQuery.error ??
+    core.incomesQuery.error ??
+    core.allocationsQuery.error ??
+    core.expensesQuery.error
 
   const isBudgetFetching =
-    categoriesQuery.isFetching ||
-    incomesQuery.isFetching ||
-    allocationsQuery.isFetching ||
-    expensesQuery.isFetching ||
-    (budgetMonthQuery.isFetching && budgetMonthQuery.data === undefined)
+    core.categoriesQuery.isFetching ||
+    core.incomesQuery.isFetching ||
+    core.allocationsQuery.isFetching ||
+    core.expensesQuery.isFetching ||
+    (core.budgetMonthQuery.isFetching &&
+      core.budgetMonthQuery.data === undefined)
 
   return {
     selectedCategoryId,
@@ -121,9 +98,9 @@ export function useExpensePage() {
     periodMonth,
     setPeriodMonth,
     expenseCategories,
-    incomes,
-    allocations,
-    allBudgetItems,
+    incomes: core.incomes,
+    allocations: core.allocations,
+    allBudgetItems: core.budgetItems,
     budgetItems,
     operationalSummary,
     sortedExpenses,
@@ -131,11 +108,11 @@ export function useExpensePage() {
     isBudgetError,
     budgetError,
     isBudgetFetching,
-    budgetMonthStatus: budgetMonthQuery.data?.status,
-    categoriesQuery,
-    incomesQuery,
-    allocationsQuery,
-    expensesQuery,
-    budgetMonthQuery,
+    budgetMonthStatus: core.budgetMonthQuery.data?.status,
+    categoriesQuery: core.categoriesQuery,
+    incomesQuery: core.incomesQuery,
+    allocationsQuery: core.allocationsQuery,
+    expensesQuery: core.expensesQuery,
+    budgetMonthQuery: core.budgetMonthQuery,
   }
 }
