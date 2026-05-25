@@ -4,7 +4,7 @@ import type { Allocation } from '@/entities/allocation/model/types'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
-import { buildMonthProjection } from '@/processes/forecasting'
+import { buildMonthProjection } from '@nestly/planning-core'
 import { sumMoneyAmounts } from '@nestly/shared'
 
 import type { CategoryBudgetItem } from '../model/types'
@@ -74,7 +74,11 @@ export function computeOperationalSummary(
   const projection = buildMonthProjection({
     available,
     spentTotal: spentThisMonth,
-    plannedExpenses,
+    commitmentRows: plannedExpenses.map((row) => ({
+      amount: row.amount,
+      reserved_amount: row.reserved_amount,
+      status: row.status,
+    })),
   })
 
   return {

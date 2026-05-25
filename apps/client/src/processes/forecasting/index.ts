@@ -1,10 +1,12 @@
-export { buildMonthProjection } from './lib/buildMonthProjection'
-export type { BuildMonthProjectionInput } from './lib/buildMonthProjection'
-export { projectMonthBudget } from './lib/projectMonthBudget'
-export { sumPlannedExpenseCommitments } from './lib/sumPlannedExpenseCommitments'
+export {
+  buildMonthProjection,
+  projectMonthBudget,
+  sumPlannedExpenseCommitments,
+} from '@nestly/planning-core'
 export type {
+  BuildMonthProjectionInput,
   MonthBudgetProjection,
   MonthBudgetProjectionInput,
   PlannedExpenseCommitmentRow,
   PlannedExpenseCommitments,
-} from './lib/types'
+} from '@nestly/planning-core'

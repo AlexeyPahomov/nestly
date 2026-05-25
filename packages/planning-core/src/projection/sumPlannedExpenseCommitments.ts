@@ -1,7 +1,7 @@
 import type {
   PlannedExpenseCommitmentRow,
   PlannedExpenseCommitments,
-} from './types'
+} from './types.js'
 
 function isActiveCommitment(status: string): boolean {
   return status !== 'COMPLETED' && status !== 'CANCELLED'

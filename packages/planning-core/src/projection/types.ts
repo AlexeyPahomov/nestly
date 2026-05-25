@@ -1,4 +1,5 @@
-/** Статусы planned expense, влияющие на проекцию месяца. */
+/** Planning / forecasting domain (не @nestly/shared). */
+
 export type ActivePlannedExpenseStatus = 'PLANNED' | 'RESERVED'
 
 export type PlannedExpenseCommitmentRow = {

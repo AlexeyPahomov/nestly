@@ -1,14 +1,18 @@
 import type {
   MonthBudgetProjection,
   MonthBudgetProjectionInput,
-} from './types';
+} from './types.js'
 
+/**
+ * Прогноз свободного остатка (planning policy).
+ * Правила будут расти (recurring, carry-over, goals, close).
+ */
 export function projectMonthBudget(
   input: MonthBudgetProjectionInput,
 ): MonthBudgetProjection {
-  const { planned, reserved } = input.commitments;
-  const commitmentTotal = planned + reserved;
-  const projectedFree = input.available - commitmentTotal;
+  const { planned, reserved } = input.commitments
+  const commitmentTotal = planned + reserved
+  const projectedFree = input.available - commitmentTotal
 
   return {
     available: input.available,
@@ -17,5 +21,5 @@ export function projectMonthBudget(
     reservedTotal: reserved,
     commitmentTotal,
     projectedFree,
-  };
+  }
 }

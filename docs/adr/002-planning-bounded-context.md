@@ -15,12 +15,13 @@ Forecasting rules evolve (recurring, carry-over, goals, month close). `@nestly/s
 | Layer | Question | Location |
 |-------|----------|----------|
 | Reporting | What happened? | `entities/budget`, `CurrentBudgetSummary` |
-| Forecasting | What will happen? | `processes/forecasting`, `ProjectedBudgetSummary` |
+| Forecasting | What will happen? | `@nestly/planning-core`, UI via `processes/forecasting` |
 
-`projectMonthBudget()` lives in:
+`projectMonthBudget()`, `sumPlannedExpenseCommitments()`, `buildMonthProjection()` live in:
 
-- Client: `apps/client/src/processes/forecasting/lib/`
-- Server: `apps/server/src/planning/` (`ProjectionService`)
+- **Source of truth:** `packages/planning-core` (`@nestly/planning-core`)
+- **Client facade:** `apps/client/src/processes/forecasting` (re-export for FSD)
+- **Server:** `ProjectionService` delegates to `@nestly/planning-core`
 
 Not in `@nestly/shared`.
 
@@ -44,5 +45,6 @@ Close / reopen / validate belong in `planning/month-lifecycle/` (next milestone)
 
 ## Consequences
 
-- Duplicate projection code client/server until a dedicated `@nestly/planning` package exists.
+- Client and server must depend on `@nestly/planning-core`; build workspace packages before app build/dev (as with `@nestly/shared`).
 - Migrations required for `reserved_amount` and `carry_over_policy`.
+- Next: `buildForecastChain`, liquidity policy in planning-core, `ProjectionSnapshot` on month close.
