@@ -45,6 +45,10 @@ export {
 export { PageSection } from './page-section/PageSection'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'
+export {
+  SummaryMetricCard,
+} from './summary-metric-card'
+export type { SummaryMetricCardProps } from './summary-metric-card'
 export { Progress } from './progress/Progress'
 export {
   Tooltip,

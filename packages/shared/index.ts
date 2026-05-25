@@ -1,6 +1,5 @@
 export * from './domain/allocationType.js'
 export * from './domain/budget.js'
-export * from './domain/monthProjection.js'
 export * from './domain/budgetRebuild.js'
 export * from './domain/periodMonth.js'
 export * from './domain/category.js'

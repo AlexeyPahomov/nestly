@@ -1,4 +1,4 @@
-import type { MonthBudgetProjection } from '@nestly/shared'
+import type { MonthBudgetProjection } from '@/processes/forecasting'
 
 import type { OperationalSummary } from '../model/operationalSummary'
 

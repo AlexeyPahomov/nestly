@@ -131,12 +131,39 @@ export class PlannedExpenseService {
     });
   }
 
+  private resolveReservedAmount(
+    amount: number,
+    reservedAmount: number | undefined,
+    status: string | undefined,
+    beforeReserved: number,
+  ): number {
+    let next =
+      reservedAmount !== undefined ? reservedAmount : beforeReserved;
+
+    if (status === 'RESERVED' && reservedAmount === undefined) {
+      next = amount;
+    }
+
+    if (next < 0 || next > amount) {
+      throw new BadRequestException(
+        'reserved_amount must be between 0 and amount',
+      );
+    }
+
+    return next;
+  }
+
   async update(id: string, userId: string, dto: UpdatePlannedExpenseDto) {
     const before = await this.findOwned(id, userId);
 
     if (dto.category_id !== undefined) {
       await this.assertCategoryExists(dto.category_id ?? undefined);
     }
+
+    const amount =
+      dto.amount !== undefined
+        ? dto.amount
+        : Number(before.amount.toString());
 
     const plannedDate = dto.planned_date
       ? new Date(dto.planned_date)
@@ -162,6 +189,13 @@ export class PlannedExpenseService {
         )
       : before.budget_month_id;
 
+    const reservedAmount = this.resolveReservedAmount(
+      amount,
+      dto.reserved_amount,
+      dto.status,
+      Number(before.reserved_amount.toString()),
+    );
+
     return this.prisma.plannedExpense.update({
       where: { id },
       data: {
@@ -171,6 +205,7 @@ export class PlannedExpenseService {
             ? undefined
             : dto.description?.trim() || null,
         amount: dto.amount,
+        reserved_amount: reservedAmount,
         planned_date: dto.planned_date ? plannedDate : undefined,
         status: dto.status,
         category_id:

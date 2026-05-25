@@ -10,6 +10,7 @@ export type PlannedExpense = {
   title: string
   description: string | null
   amount: number
+  reserved_amount: number
   planned_date: string
   status: PlannedExpenseStatus
   category_id: string | null
@@ -34,5 +35,6 @@ export type UpdatePlannedExpensePayload = {
   amount?: number
   planned_date?: string
   status?: PlannedExpenseStatus
+  reserved_amount?: number
   category_id?: string | null
 }

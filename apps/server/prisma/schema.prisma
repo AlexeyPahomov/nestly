@@ -25,6 +25,12 @@ enum PlannedExpenseStatus {
   CANCELLED
 }
 
+enum CarryOverPolicy {
+  RESET
+  CARRY
+  TRANSFER_TO_FREE
+}
+
 model Income {
   id            String   @id @default(uuid())
   user_id       String
@@ -40,9 +46,10 @@ model Category {
   id         String   @id @default(uuid())
   user_id    String
   name       String
-  type       String
-  icon       String   @default("shopping-cart")
-  created_at DateTime @default(now())
+  type              String
+  icon              String          @default("shopping-cart")
+  carry_over_policy CarryOverPolicy @default(RESET)
+  created_at        DateTime        @default(now())
 
   allocations            Allocation[]
   expenses               Expense[]
@@ -100,6 +107,7 @@ model PlannedExpense {
   title           String
   description     String?
   amount          Decimal
+  reserved_amount Decimal              @default(0)
   planned_date    DateTime
   status          PlannedExpenseStatus @default(PLANNED)
   category_id     String?

@@ -1,74 +1,24 @@
 import { InfoIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
 
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
+import type { CurrentBudgetSummaryView } from '@/entities/budget/model/currentBudgetSummaryView'
 import type { ReserveCategorySummary } from '@/entities/budget/model/types'
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-
-import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
 import {
-  Card,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/ui'
 
+import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
+import { SummaryMetricCard } from '@/shared/ui/summary-metric-card'
+
 const RESERVE_TOOLTIP =
   'Резервные средства. Используйте только для целей накопления.'
 
-type BudgetSummaryProps = {
-  available: number
-  inReserve: number
-  spentThisMonth: number
-  /** Прогноз свободного пула после планов и резерва. */
-  projectedFree?: number
-  carryForwardTotal?: number
-  previousPeriodLabel?: string
-  reserveCategory?: ReserveCategorySummary
-}
-
-type SummaryMetricCardProps = {
-  label: ReactNode
-  value: number
-  valueClassName?: string
-  trailing?: ReactNode
-  headerEnd?: ReactNode
-}
-
-function SummaryMetricCard({
-  label,
-  value,
-  valueClassName,
-  trailing,
-  headerEnd,
-}: SummaryMetricCardProps) {
-  return (
-    <Card className="relative gap-0 bg-white py-4 ring-zinc-200/80">
-      {headerEnd ? (
-        <div className="absolute right-4 top-4">{headerEnd}</div>
-      ) : null}
-      <div className="space-y-1 px-4">
-        <p className={cn('text-sm text-zinc-500', headerEnd && 'pr-11')}>
-          {label}
-        </p>
-        <div className="flex items-center gap-1.5">
-          <p
-            className={cn(
-              'text-2xl font-bold tracking-tight tabular-nums text-zinc-900',
-              valueClassName,
-            )}
-          >
-            {formatAmount(value)}
-          </p>
-          {trailing}
-        </div>
-      </div>
-    </Card>
-  )
-}
+/** Reporting: что произошло / текущее состояние пула (факт). */
+export type CurrentBudgetSummaryProps = CurrentBudgetSummaryView
 
 function ReserveCategoryIcon({
   reserveCategory,
@@ -86,15 +36,14 @@ function ReserveCategoryIcon({
   )
 }
 
-export function BudgetSummary({
+export function CurrentBudgetSummary({
   available,
   inReserve,
   spentThisMonth,
-  projectedFree,
   carryForwardTotal = 0,
   previousPeriodLabel,
   reserveCategory,
-}: BudgetSummaryProps) {
+}: CurrentBudgetSummaryProps) {
   const availableTone =
     available > 0
       ? 'text-emerald-700'
@@ -114,12 +63,7 @@ export function BudgetSummary({
           </div>
         ) : null}
 
-        <div
-          className={cn(
-            'grid grid-cols-1 gap-3',
-            projectedFree !== undefined ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3',
-          )}
-        >
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <SummaryMetricCard
             label="Доступно"
             value={available}
@@ -171,20 +115,6 @@ export function BudgetSummary({
           />
 
           <SummaryMetricCard label="Потрачено в месяце" value={spentThisMonth} />
-
-          {projectedFree !== undefined ? (
-            <SummaryMetricCard
-              label="Прогноз свободного"
-              value={projectedFree}
-              valueClassName={
-                projectedFree > 0
-                  ? 'text-emerald-700'
-                  : projectedFree < 0
-                    ? 'text-destructive'
-                    : undefined
-              }
-            />
-          ) : null}
         </div>
       </div>
     </TooltipProvider>

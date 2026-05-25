@@ -10,6 +10,8 @@ export type OperationalSummary = {
   inReserve: number
   /** Категория накоплений для блока «В резерве». */
   reserveCategory?: ReserveCategorySummary
+  /** Сумма доходов с датой в этом месяце. */
+  incomeTotal: number
   /** Сумма расходов с датой в этом месяце. */
   spentThisMonth: number
   /** Сумма opening balance по всем конвертам. */

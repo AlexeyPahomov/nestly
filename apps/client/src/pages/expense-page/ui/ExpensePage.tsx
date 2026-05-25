@@ -4,7 +4,8 @@ import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpens
 import type { Expense } from '@/entities/expense/model/types';
 import { cn } from '@/shared/lib/utils';
 import { MonthPicker, PageSection } from '@/shared/ui';
-import { BudgetSummary } from '@/widgets/budget-summary';
+import { CurrentBudgetSummary } from '@/widgets/current-budget-summary';
+import { ProjectedBudgetSummary } from '@/widgets/projected-budget-summary';
 import { ExpenseList } from '@/widgets/expense-list';
 
 import { expensePageMonthPickerClassName } from '../lib/expensePageMonthPicker';
@@ -46,6 +47,8 @@ export function ExpensePage() {
     periodMonth,
     setPeriodMonth,
     operationalSummary,
+    monthProjection,
+    currentBudgetView,
     sortedExpenses,
     isBudgetPending,
     isBudgetError,
@@ -99,15 +102,11 @@ export function ExpensePage() {
       }
     >
       <div className={getExpensePageShellClassName()}>
-        <div className="shrink-0">
-          <BudgetSummary
-            available={operationalSummary.available}
-            inReserve={operationalSummary.inReserve}
-            spentThisMonth={operationalSummary.spentThisMonth}
-            projectedFree={operationalSummary.projectedFree}
-            carryForwardTotal={operationalSummary.carryForwardTotal}
-            previousPeriodLabel={operationalSummary.previousPeriodLabel}
-            reserveCategory={operationalSummary.reserveCategory}
+        <div className="shrink-0 space-y-3">
+          <CurrentBudgetSummary {...currentBudgetView} />
+          <ProjectedBudgetSummary
+            projection={monthProjection}
+            periodLabel={operationalSummary.periodLabel}
           />
         </div>
 

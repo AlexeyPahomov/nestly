@@ -4,7 +4,7 @@ import type { Allocation } from '@/entities/allocation/model/types'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
-import { buildMonthProjection } from '@/processes/budget-projection/buildMonthProjection'
+import { buildMonthProjection } from '@/processes/forecasting'
 import { sumMoneyAmounts } from '@nestly/shared'
 
 import type { CategoryBudgetItem } from '../model/types'
@@ -80,6 +80,7 @@ export function computeOperationalSummary(
   return {
     periodMonth,
     periodLabel: formatPeriodMonthLabel(periodMonth),
+    incomeTotal,
     available,
     inReserve,
     spentThisMonth,

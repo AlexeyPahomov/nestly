@@ -1,10 +1,8 @@
-import {
-  projectMonthBudget,
-  sumPlannedExpenseCommitments,
-  type MonthBudgetProjection,
-} from '@nestly/shared'
-
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
+
+import { projectMonthBudget } from './projectMonthBudget'
+import { sumPlannedExpenseCommitments } from './sumPlannedExpenseCommitments'
+import type { MonthBudgetProjection } from './types'
 
 export type BuildMonthProjectionInput = {
   available: number
@@ -18,6 +16,7 @@ export function buildMonthProjection(
   const commitments = sumPlannedExpenseCommitments(
     input.plannedExpenses.map((row) => ({
       amount: row.amount,
+      reserved_amount: row.reserved_amount,
       status: row.status,
     })),
   )

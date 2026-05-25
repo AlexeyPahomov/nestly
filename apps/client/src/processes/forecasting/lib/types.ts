@@ -1,0 +1,32 @@
+/** Статусы planned expense, влияющие на проекцию месяца. */
+export type ActivePlannedExpenseStatus = 'PLANNED' | 'RESERVED'
+
+export type PlannedExpenseCommitmentRow = {
+  amount: number
+  reserved_amount: number
+  status: string
+}
+
+export type PlannedExpenseCommitments = {
+  /** Сумма ещё не зарезервированных обязательств (amount − reserved). */
+  planned: number
+  /** Замороженная ликвидность. */
+  reserved: number
+}
+
+export type MonthBudgetProjectionInput = {
+  /** Не распределено по конвертам (факт / reporting pool). */
+  available: number
+  /** Уже потрачено за месяц (факт). */
+  spentTotal: number
+  commitments: PlannedExpenseCommitments
+}
+
+export type MonthBudgetProjection = {
+  available: number
+  spentTotal: number
+  plannedTotal: number
+  reservedTotal: number
+  commitmentTotal: number
+  projectedFree: number
+}
