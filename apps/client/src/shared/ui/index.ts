@@ -68,3 +68,12 @@ export {
   DialogTitle,
   DialogTrigger,
 } from './dialog/Dialog'
+export {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  useCarousel,
+} from './carousel'
+export type { CarouselApi } from './carousel'

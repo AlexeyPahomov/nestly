@@ -12,7 +12,14 @@ const initialValues = (): CreatePlannedExpenseFormValues => ({
   planned_date: todayDateInputValue(),
 })
 
-export function useCreatePlannedExpenseForm(anchorPeriodMonth?: string) {
+type UseCreatePlannedExpenseFormOptions = {
+  onSuccess?: () => void
+}
+
+export function useCreatePlannedExpenseForm(
+  anchorPeriodMonth?: string,
+  options?: UseCreatePlannedExpenseFormOptions,
+) {
   const mutation = useCreatePlannedExpenseMutation()
   const [values, setValues] = useState(initialValues)
 
@@ -41,6 +48,7 @@ export function useCreatePlannedExpenseForm(anchorPeriodMonth?: string) {
     })
 
     reset()
+    options?.onSuccess?.()
   }
 
   return {
