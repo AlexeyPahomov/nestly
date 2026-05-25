@@ -1,85 +1,80 @@
+import { Fragment } from 'react'
+import { ChevronDown } from 'lucide-react'
+
 import type { MonthBudgetProjection } from '@/processes/forecasting'
-import { formatAmount } from '@/shared/lib/format'
-import { cn } from '@/shared/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui'
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/ui'
+
+import { buildLiquidityFlowNodes } from '../lib/buildLiquidityFlowNodes'
+import {
+  liquidityFlowCardClassName,
+  liquidityFlowDetailsButtonClassName,
+  liquidityFlowDetailsChevronClassName,
+  liquidityFlowTrackClassName,
+} from '../lib/liquidityFlowLayout'
+
+import { LiquidityFlowArrow } from './LiquidityFlowArrow'
+import { LiquidityFlowDetails } from './LiquidityFlowDetails'
+import { LiquidityFlowNode } from './LiquidityFlowNode'
 
 export type MonthLiquidityFlowProps = {
   periodLabel: string
   projection: MonthBudgetProjection
-  /** Доход за месяц (для строки «+»). */
+  /** Доход за месяц (первая ступень потока). */
   incomeTotal?: number
-}
-
-type FlowLine = {
-  label: string
-  amount: number
-  sign: '+' | '−' | '='
-  emphasis?: boolean
 }
 
 export function MonthLiquidityFlow({
   periodLabel,
   projection,
-  incomeTotal,
+  incomeTotal = 0,
 }: MonthLiquidityFlowProps) {
-  const lines: FlowLine[] = []
-
-  if (incomeTotal != null && incomeTotal > 0) {
-    lines.push({ label: 'доход', amount: incomeTotal, sign: '+' })
-  }
-
-  lines.push({
-    label: 'свободный пул',
-    amount: projection.available,
-    sign: '+',
-  })
-
-  if (projection.reservedTotal > 0) {
-    lines.push({
-      label: 'резерв',
-      amount: projection.reservedTotal,
-      sign: '−',
-    })
-  }
-
-  if (projection.plannedTotal > 0) {
-    lines.push({
-      label: 'планы',
-      amount: projection.plannedTotal,
-      sign: '−',
-    })
-  }
-
-  lines.push({
-    label: 'прогноз',
-    amount: projection.projectedFree,
-    sign: '=',
-    emphasis: true,
-  })
+  const nodes = buildLiquidityFlowNodes(projection, incomeTotal)
 
   return (
-    <Card className="border-zinc-200/80 shadow-none">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">
+    <section className={liquidityFlowCardClassName}>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-base font-medium text-zinc-900">
           Поток ликвидности — {periodLabel}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-1.5 font-mono text-sm">
-        {lines.map((line) => (
-          <div
-            key={`${line.sign}-${line.label}`}
-            className={cn(
-              'flex items-baseline justify-between gap-4 tabular-nums',
-              line.emphasis && 'font-semibold text-zinc-900',
-            )}
-          >
-            <span className="text-zinc-500">
-              {line.sign} {line.label}
-            </span>
-            <span>{formatAmount(line.amount)}</span>
-          </div>
+        </h2>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={liquidityFlowDetailsButtonClassName}
+            >
+              Подробнее
+              <ChevronDown
+                className={liquidityFlowDetailsChevronClassName}
+                strokeWidth={1.75}
+                aria-hidden
+              />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-80">
+            <LiquidityFlowDetails
+              projection={projection}
+              incomeTotal={incomeTotal}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className={liquidityFlowTrackClassName}>
+        {nodes.map((node, index) => (
+          <Fragment key={node.kind}>
+            <LiquidityFlowNode node={node} />
+            {index < nodes.length - 1 ? <LiquidityFlowArrow /> : null}
+          </Fragment>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   )
 }
