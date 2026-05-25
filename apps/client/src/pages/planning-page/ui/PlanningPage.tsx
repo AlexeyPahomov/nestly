@@ -1,8 +1,8 @@
 import { PlannedExpenseCard } from '@/entities/planned-expense/ui/PlannedExpenseCard'
 import { PageSection, Spinner } from '@/shared/ui'
 import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
+import { PlanningMonthMetrics } from '@/widgets/planning-month-metrics'
 import { PlanningPageToolbar } from '@/widgets/planning-page-toolbar/ui/PlanningPageToolbar'
-import { ProjectedBudgetSummary } from '@/widgets/projected-budget-summary'
 
 import { usePlanningPage } from '../model/usePlanningPage'
 
@@ -28,17 +28,16 @@ export function PlanningPage() {
           </div>
         ) : (
           <>
-            <div className="grid gap-4 lg:grid-cols-2">
-              <ProjectedBudgetSummary
-                projection={page.projection}
-                periodLabel={page.periodLabel}
-              />
-              <MonthLiquidityFlow
-                periodLabel={page.periodLabel}
-                projection={page.projection}
-                incomeTotal={page.incomeTotal}
-              />
-            </div>
+            <PlanningMonthMetrics
+              projection={page.projection}
+              periodLabel={page.periodLabel}
+            />
+
+            <MonthLiquidityFlow
+              periodLabel={page.periodLabel}
+              projection={page.projection}
+              incomeTotal={page.incomeTotal}
+            />
 
             <div className="flex min-h-0 flex-1 flex-col gap-3">
               <h2 className="text-sm font-semibold text-zinc-700">
