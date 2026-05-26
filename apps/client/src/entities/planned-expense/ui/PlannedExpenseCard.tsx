@@ -27,6 +27,7 @@ import {
   plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
 import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
+import type { PlannedExpenseStatusMutationArgs } from '../lib/fullReserveMutationArgs'
 import type { PlannedExpense } from '../model/types'
 
 const statusBadgeInteractiveClassName =
@@ -41,7 +42,7 @@ export type PlannedExpenseCardProps = {
   onCancelPlan?: (id: string) => void
   onUnreserve?: (id: string) => void
   onEdit?: (item: PlannedExpense) => void
-  reservePending?: boolean
+  pendingStatusMutation?: PlannedExpenseStatusMutationArgs
 }
 
 export function PlannedExpenseCard({
@@ -50,9 +51,19 @@ export function PlannedExpenseCard({
   onCancelPlan,
   onUnreserve,
   onEdit,
-  reservePending,
+  pendingStatusMutation,
 }: PlannedExpenseCardProps) {
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
+  const statusMutationPending = pendingStatusMutation != null
+  const isPendingForItem = pendingStatusMutation?.id === item.id
+  const isReserveLoading =
+    isPendingForItem && pendingStatusMutation?.status === 'RESERVED'
+  const isUnreserveLoading =
+    isPendingForItem &&
+    pendingStatusMutation?.status === 'PLANNED' &&
+    pendingStatusMutation.reserveAmount === 0
+  const isCancelPlanLoading =
+    isPendingForItem && pendingStatusMutation?.status === 'CANCELLED'
   const showReserve = item.status === 'PLANNED' && onReserve != null
   const showCancelPlan = item.status === 'PLANNED' && onCancelPlan != null
   const showPlannedMenu =
@@ -76,7 +87,7 @@ export function PlannedExpenseCard({
         <PopoverTrigger asChild>
           <button
             type="button"
-            disabled={reservePending}
+            disabled={statusMutationPending}
             className={statusBadgeClassName}
             aria-label={`Статус: ${statusLabel}. Действия`}
           >
@@ -90,7 +101,8 @@ export function PlannedExpenseCard({
               variant="ghost"
               size="sm"
               className={plannedExpenseReserveMenuItemClassName}
-              disabled={reservePending}
+              disabled={statusMutationPending}
+              isLoading={isReserveLoading}
               onClick={() => {
                 closeStatusMenu()
                 onReserve(item.id)
@@ -106,7 +118,7 @@ export function PlannedExpenseCard({
               variant="ghost"
               size="sm"
               className="w-full justify-start gap-2"
-              disabled={reservePending}
+              disabled={statusMutationPending}
               onClick={() => {
                 closeStatusMenu()
                 onEdit(item)
@@ -122,7 +134,8 @@ export function PlannedExpenseCard({
               variant="ghost"
               size="sm"
               className={cancelMenuItemClassName}
-              disabled={reservePending}
+              disabled={statusMutationPending}
+              isLoading={isCancelPlanLoading}
               onClick={() => {
                 closeStatusMenu()
                 onCancelPlan(item.id)
@@ -138,7 +151,8 @@ export function PlannedExpenseCard({
               variant="ghost"
               size="sm"
               className={plannedExpenseUnreserveMenuItemClassName}
-              disabled={reservePending}
+              disabled={statusMutationPending}
+              isLoading={isUnreserveLoading}
               onClick={() => {
                 closeStatusMenu()
                 onUnreserve(item.id)

@@ -70,7 +70,7 @@ export function PlanningPage() {
                           ? setEditingPlanned
                           : undefined
                       }
-                      reservePending={page.reservePending}
+                      pendingStatusMutation={page.pendingStatusMutation}
                     />
                   ))}
                 </div>

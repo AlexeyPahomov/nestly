@@ -81,7 +81,9 @@ export function usePlanningPage() {
       statusMutation.mutate({ id, status: 'CANCELLED' }),
     unreserve: (id: string) =>
       statusMutation.mutate(unreservePlannedExpenseMutationArgs(id)),
-    reservePending: statusMutation.isPending,
+    pendingStatusMutation: statusMutation.isPending
+      ? statusMutation.variables
+      : undefined,
     incomeTotal: operationalSummary.incomeTotal,
     isLoading: plannedQuery.isLoading || core.isCoreLoading,
   }
