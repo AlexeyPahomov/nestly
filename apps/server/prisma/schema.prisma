@@ -48,6 +48,7 @@ model Category {
   name       String
   type              String
   icon              String          @default("shopping-cart")
+  icon_color        String          @default("purple")
   carry_over_policy CarryOverPolicy @default(RESET)
   created_at        DateTime        @default(now())
 

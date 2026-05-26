@@ -33,7 +33,7 @@ import {
   plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
 import type { PlannedExpenseStatusMutationArgs } from '../lib/fullReserveMutationArgs'
-import { resolvePlannedExpenseIconTone } from '../lib/plannedExpenseIconStyles'
+import { resolveIconColorTone } from '@/shared/lib/iconColorStyles'
 import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
 import type { PlannedExpense } from '../model/types'
 import { PlannedExpenseIconAvatar } from './PlannedExpenseIconAvatar'
@@ -93,7 +93,7 @@ export function PlannedExpenseCard({
     (showReserve || onEdit != null || showCancelPlan)
   const showUnreserveMenu = item.reserved_amount > 0 && onUnreserve != null
   const statusLabel = PLANNED_EXPENSE_STATUS_LABELS[item.status]
-  const tone = resolvePlannedExpenseIconTone(item.icon_color)
+  const tone = resolveIconColorTone(item.icon_color)
   const currentAmount = item.reserved_amount
   const targetAmount = item.amount
   const showProgress =

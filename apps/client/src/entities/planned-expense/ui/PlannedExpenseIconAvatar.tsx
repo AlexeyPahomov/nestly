@@ -1,8 +1,8 @@
 import { createElement } from 'react'
 
+import { IconColorAvatar } from '@/shared/ui/icon-color-avatar'
 import { cn } from '@/shared/lib/utils'
 
-import { resolvePlannedExpenseIconTone } from '../lib/plannedExpenseIconStyles'
 import {
   getPlannedExpenseLucideIcon,
   resolvePlannedExpenseIconKey,
@@ -20,19 +20,13 @@ export function PlannedExpenseIconAvatar({
   className,
 }: PlannedExpenseIconAvatarProps) {
   const iconKey = resolvePlannedExpenseIconKey(iconName)
-  const tone = resolvePlannedExpenseIconTone(iconColor)
   const Icon = getPlannedExpenseLucideIcon(iconKey)
 
   return (
-    <span
-      className={cn(
-        'flex size-10 shrink-0 items-center justify-center rounded-full',
-        tone.avatarClassName,
-        className,
-      )}
-      aria-hidden
-    >
-      {createElement(Icon, { className: cn('size-5', tone.iconClassName) })}
-    </span>
+    <IconColorAvatar iconColor={iconColor} className={className}>
+      {(iconClassName) =>
+        createElement(Icon, { className: cn('size-5', iconClassName) })
+      }
+    </IconColorAvatar>
   )
 }

@@ -1,6 +1,6 @@
-import type { CategoryIconKey, CategoryType } from '@nestly/shared'
+import type { CategoryIconKey, CategoryType, IconColorKey } from '@nestly/shared'
 
-export type { CategoryType, CategoryIconKey }
+export type { CategoryType, CategoryIconKey, IconColorKey }
 
 export type Category = {
   id: string
@@ -8,6 +8,7 @@ export type Category = {
   name: string
   type: CategoryType
   icon: CategoryIconKey
+  icon_color: IconColorKey
   created_at: string
 }
 
@@ -15,6 +16,7 @@ export type CategoryPayload = {
   name: string
   type: CategoryType
   icon: CategoryIconKey
+  icon_color: IconColorKey
 }
 
 /** @deprecated Используйте CategoryPayload */

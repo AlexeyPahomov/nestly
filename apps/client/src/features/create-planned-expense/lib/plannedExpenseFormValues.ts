@@ -1,5 +1,5 @@
 import {
-  DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
+  DEFAULT_ICON_COLOR_KEY,
   DEFAULT_PLANNED_EXPENSE_ICON_KEY,
 } from '@nestly/shared'
 
@@ -14,7 +14,7 @@ export function emptyPlannedExpenseFormValues(): CreatePlannedExpenseFormValues 
     title: '',
     description: '',
     icon_name: DEFAULT_PLANNED_EXPENSE_ICON_KEY,
-    icon_color: DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
+    icon_color: DEFAULT_ICON_COLOR_KEY,
     amount: '',
     planned_date: todayDateInputValue(),
   }

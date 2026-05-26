@@ -5,6 +5,8 @@ import type { Category } from '@/entities/category/model/types'
 import { CategoryCard } from '@/entities/category/ui/CategoryCard'
 import { ItemsList } from '@/shared/ui'
 
+import { categoryListGridClassName } from '../lib/categoryListLayout'
+
 export type CategoryListProps = {
   className?: string
   headerEnd?: ReactNode
@@ -29,11 +31,12 @@ export function CategoryList({
       headerEnd={headerEnd}
       emptyMessage="Пока нет категорий. Добавьте первую."
       errorFallback="Не удалось загрузить категории"
-      listClassName="!space-y-2"
+      listAnimateEnter={false}
+      listClassName={categoryListGridClassName}
     >
       {(items) =>
         items.map((category) => (
-          <li key={category.id}>
+          <li key={category.id} className="min-w-0">
             <CategoryCard category={category} onEdit={onEdit} />
           </li>
         ))

@@ -3,7 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { isCategoryIconKey, isCategoryType } from '@nestly/shared';
+import {
+  isCategoryIconKey,
+  isCategoryType,
+  isIconColorKey,
+} from '@nestly/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoryFieldsDto } from './dto/category-fields.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -20,6 +24,9 @@ export class CategoryService {
     if (!isCategoryIconKey(dto.icon)) {
       throw new BadRequestException('Invalid category icon');
     }
+    if (!isIconColorKey(dto.icon_color)) {
+      throw new BadRequestException('Invalid category icon color');
+    }
   }
 
   private toWriteData(dto: CategoryFieldsDto) {
@@ -27,6 +34,7 @@ export class CategoryService {
       name: dto.name.trim(),
       type: dto.type,
       icon: dto.icon,
+      icon_color: dto.icon_color,
     };
   }
 

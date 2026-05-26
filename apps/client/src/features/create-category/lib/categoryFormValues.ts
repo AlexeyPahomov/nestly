@@ -1,6 +1,10 @@
 import type { Category } from '@/entities/category/model/types'
 import { resolveCategoryIconKey } from '@/entities/category/lib/categoryIcons'
-import { DEFAULT_CATEGORY_ICON_KEY } from '@nestly/shared'
+import {
+  DEFAULT_CATEGORY_ICON_KEY,
+  DEFAULT_ICON_COLOR_KEY,
+  resolveIconColorKey,
+} from '@nestly/shared'
 
 import type { CategoryFormValues } from '../model/types'
 
@@ -9,6 +13,7 @@ export function emptyCategoryFormValues(): CategoryFormValues {
     name: '',
     type: 'expense',
     icon: DEFAULT_CATEGORY_ICON_KEY,
+    icon_color: DEFAULT_ICON_COLOR_KEY,
   }
 }
 
@@ -27,5 +32,6 @@ export function resolveCategoryFormValues(
       category.name,
       category.type,
     ),
+    icon_color: resolveIconColorKey(category.icon_color),
   }
 }

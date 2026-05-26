@@ -1,7 +1,7 @@
 import {
-  DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
   DEFAULT_PLANNED_EXPENSE_ICON_KEY,
   getMonthKeyFromIso,
+  resolveIconColorKey,
 } from '@nestly/shared'
 
 import { apiDelete, apiGet, apiPatch, apiPost } from '@/shared/api/client'
@@ -56,7 +56,7 @@ function mapPlannedExpense(row: PlannedExpenseApiRow): PlannedExpense {
     title: row.title,
     description: row.description,
     icon_name: row.icon_name ?? DEFAULT_PLANNED_EXPENSE_ICON_KEY,
-    icon_color: row.icon_color ?? DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
+    icon_color: resolveIconColorKey(row.icon_color),
     amount: toMoneyNumber(row.amount),
     reserved_amount: toMoneyNumber(row.reserved_amount),
     planned_date: row.planned_date,

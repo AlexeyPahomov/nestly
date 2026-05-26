@@ -1,16 +1,13 @@
-import type { PlannedExpenseIconColorKey } from '@nestly/shared'
+import { resolveIconColorKey, type IconColorKey } from '@nestly/shared'
 
-export type PlannedExpenseIconTone = {
+export type IconColorTone = {
   avatarClassName: string
   iconClassName: string
   progressClassName: string
   swatchClassName: string
 }
 
-export const PLANNED_EXPENSE_ICON_TONES: Record<
-  PlannedExpenseIconColorKey,
-  PlannedExpenseIconTone
-> = {
+export const ICON_COLOR_TONES: Record<IconColorKey, IconColorTone> = {
   purple: {
     avatarClassName: 'bg-[#f3e8ff]',
     iconClassName: 'text-[#9333ea]',
@@ -61,12 +58,8 @@ export const PLANNED_EXPENSE_ICON_TONES: Record<
   },
 }
 
-export function resolvePlannedExpenseIconTone(
-  colorKey: string,
-): PlannedExpenseIconTone {
-  if (colorKey in PLANNED_EXPENSE_ICON_TONES) {
-    return PLANNED_EXPENSE_ICON_TONES[colorKey as PlannedExpenseIconColorKey]
-  }
-
-  return PLANNED_EXPENSE_ICON_TONES.purple
+export function resolveIconColorTone(
+  colorKey: string | null | undefined,
+): IconColorTone {
+  return ICON_COLOR_TONES[resolveIconColorKey(colorKey)]
 }

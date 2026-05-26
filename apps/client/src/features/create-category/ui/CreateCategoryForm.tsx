@@ -71,8 +71,10 @@ export function CreateCategoryForm({
       />
 
       <CategoryIconPicker
-        value={form.values.icon}
-        onChange={(icon) => form.patchValues({ icon })}
+        icon={form.values.icon}
+        iconColor={form.values.icon_color}
+        onIconChange={(icon) => form.patchValues({ icon })}
+        onColorChange={(icon_color) => form.patchValues({ icon_color })}
         disabled={form.submitting}
       />
 

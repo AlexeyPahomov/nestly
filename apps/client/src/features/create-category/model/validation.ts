@@ -1,4 +1,4 @@
-import { isCategoryIconKey, isCategoryType } from '@nestly/shared'
+import { isCategoryIconKey, isCategoryType, isIconColorKey } from '@nestly/shared'
 
 import type { CategoryFormValues, ValidCategoryFormPayload } from './types'
 
@@ -20,8 +20,17 @@ export function validateCategoryForm(
     return { ok: false as const, error: 'Выберите иконку категории' }
   }
 
+  if (!isIconColorKey(values.icon_color)) {
+    return { ok: false as const, error: 'Выберите цвет категории' }
+  }
+
   return {
     ok: true as const,
-    payload: { name, type: values.type, icon: values.icon },
+    payload: {
+      name,
+      type: values.type,
+      icon: values.icon,
+      icon_color: values.icon_color,
+    },
   }
 }
