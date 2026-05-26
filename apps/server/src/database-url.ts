@@ -1,3 +1,11 @@
+function appendPostgresOption(url: URL, option: string): void {
+  const current = url.searchParams.get('options') ?? '';
+  if (current.includes(option)) {
+    return;
+  }
+  url.searchParams.set('options', current ? `${current} ${option}` : option);
+}
+
 /** Supabase pooler (:6543) + Prisma: `pgbouncer=true` в строке подключения. */
 function normalizePoolerUrl(raw: string): string {
   try {
@@ -8,6 +16,12 @@ function normalizePoolerUrl(raw: string): string {
     if (isPooler && !url.searchParams.has('pgbouncer')) {
       url.searchParams.set('pgbouncer', 'true');
     }
+
+    // Обрыв Node во время materializeMonth оставлял idle in transaction и блокировал PATCH.
+    appendPostgresOption(
+      url,
+      '-c idle_in_transaction_session_timeout=60s',
+    );
 
     return url.toString();
   } catch {

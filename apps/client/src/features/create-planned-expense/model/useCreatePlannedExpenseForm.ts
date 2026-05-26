@@ -5,8 +5,11 @@ import { useUpdatePlannedExpenseMutation } from '@/entities/planned-expense/api/
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { currentMonthInputValue } from '@/shared/lib/date'
 
+import type { UpdatePlannedExpensePayload } from '@/entities/planned-expense/model/types'
+
 import {
   emptyPlannedExpenseFormValues,
+  plannedExpenseToFormValues,
   resolvePlannedExpenseFormValues,
 } from '../lib/plannedExpenseFormValues'
 
@@ -54,20 +57,30 @@ export function useCreatePlannedExpenseForm(
       values.planned_date ||
       `${anchorPeriodMonth ?? currentMonthInputValue()}-01`
 
-    const payload = {
-      title: values.title.trim(),
-      description: values.description.trim() || undefined,
-      amount,
-      planned_date: plannedDate,
-    }
-
     if (isEditing && editingPlannedExpense) {
+      const payload: UpdatePlannedExpensePayload = {
+        title: values.title.trim(),
+        description: values.description.trim() || undefined,
+        amount,
+      }
+      const previousDate = plannedExpenseToFormValues(
+        editingPlannedExpense,
+      ).planned_date
+      if (plannedDate !== previousDate) {
+        payload.planned_date = plannedDate
+      }
+
       await updateMutation.mutateAsync({
         id: editingPlannedExpense.id,
         payload,
       })
     } else {
-      await createMutation.mutateAsync(payload)
+      await createMutation.mutateAsync({
+        title: values.title.trim(),
+        description: values.description.trim() || undefined,
+        amount,
+        planned_date: plannedDate,
+      })
       reset()
     }
 

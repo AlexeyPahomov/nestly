@@ -78,15 +78,11 @@ export class PlannedExpenseService {
     return row;
   }
 
-  private periodMonthFromBudgetMonthId(budgetMonthId: string) {
-    return this.prisma.budgetMonth.findUnique({
-      where: { id: budgetMonthId },
-      select: { year: true, month: true },
-    });
-  }
-
-  private async ensureOpenForPeriod(userId: string, periodMonth: string) {
-    await this.budgetMonthService.ensurePeriodOpen(userId, periodMonth);
+  private dateKeyFromStoredDate(d: Date): string {
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 
   async create(dto: CreatePlannedExpenseDto) {
@@ -165,29 +161,26 @@ export class PlannedExpenseService {
         ? dto.amount
         : Number(before.amount.toString());
 
-    const plannedDate = dto.planned_date
-      ? new Date(dto.planned_date)
+    const hasPlannedDateInDto =
+      dto.planned_date !== undefined && dto.planned_date !== '';
+    const plannedDate = hasPlannedDateInDto
+      ? new Date(dto.planned_date!)
       : before.planned_date;
+    const plannedDateChanged =
+      hasPlannedDateInDto &&
+      dto.planned_date!.trim().slice(0, 10) !==
+        this.dateKeyFromStoredDate(before.planned_date);
+    const periodChanged =
+      plannedDateChanged &&
+      monthValueFromDate(plannedDate) !==
+        monthValueFromDate(before.planned_date);
 
-    const targetPeriodMonth = dto.planned_date
-      ? monthValueFromDate(plannedDate)
-      : await this.periodMonthFromBudgetMonthId(before.budget_month_id).then(
-          (anchor) =>
-            anchor
-              ? `${anchor.year}-${String(anchor.month).padStart(2, '0')}`
-              : null,
-        );
+    let budgetMonthId = before.budget_month_id;
 
-    if (targetPeriodMonth) {
-      await this.ensureOpenForPeriod(userId, targetPeriodMonth);
+    if (periodChanged) {
+      const targetPeriodMonth = monthValueFromDate(plannedDate);
+      budgetMonthId = await this.resolveBudgetMonthId(userId, targetPeriodMonth);
     }
-
-    const budgetMonthId = dto.planned_date
-      ? await this.resolveBudgetMonthId(
-          userId,
-          monthValueFromDate(plannedDate),
-        )
-      : before.budget_month_id;
 
     const reservedAmount = this.resolveReservedAmount(
       amount,
@@ -196,7 +189,7 @@ export class PlannedExpenseService {
       Number(before.reserved_amount.toString()),
     );
 
-    return this.prisma.plannedExpense.update({
+    await this.prisma.plannedExpense.update({
       where: { id },
       data: {
         title: dto.title?.trim(),
@@ -206,14 +199,24 @@ export class PlannedExpenseService {
             : dto.description?.trim() || null,
         amount: dto.amount,
         reserved_amount: reservedAmount,
-        planned_date: dto.planned_date ? plannedDate : undefined,
+        planned_date: plannedDateChanged ? plannedDate : undefined,
         status: dto.status,
         category_id:
           dto.category_id === undefined ? undefined : dto.category_id,
-        budget_month_id: budgetMonthId,
+        budget_month_id: periodChanged ? budgetMonthId : undefined,
       },
+    });
+
+    const row = await this.prisma.plannedExpense.findFirst({
+      where: { id, user_id: userId },
       include: PLANNED_EXPENSE_INCLUDE,
     });
+
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return row;
   }
 
   async remove(id: string, userId: string): Promise<void> {
