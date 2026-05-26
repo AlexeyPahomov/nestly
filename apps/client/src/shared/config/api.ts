@@ -1,8 +1,14 @@
-/** Базовый URL API: в dev через Vite proxy — `/api`, в проде — `VITE_API_URL`. */
+const raw = import.meta.env.VITE_API_URL
+
+/**
+ * Базовый URL API без завершающего слэша.
+ * Production: `VITE_API_URL` (например `https://api.example.com`).
+ * Локально без переменной: `/api` (прокси Vite → Nest).
+ */
+export const API_URL =
+  typeof raw === 'string' && raw.length > 0 ? raw.replace(/\/$/, '') : '/api'
+
+/** @deprecated Используйте `API_URL` */
 export function getApiBaseUrl(): string {
-  const raw = import.meta.env.VITE_API_URL
-  if (typeof raw === 'string' && raw.length > 0) {
-    return raw.replace(/\/$/, '')
-  }
-  return '/api'
+  return API_URL
 }
