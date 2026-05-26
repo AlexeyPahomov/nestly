@@ -2,6 +2,7 @@ import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import type { Expense } from '@/entities/expense/model/types'
+import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
 import type { CategoryType } from '@nestly/shared'
 import { formatAmount, formatExpenseDate } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
@@ -102,7 +103,7 @@ export function ExpenseCard({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start gap-2 text-destructive hover:text-destructive"
+                className={cancelMenuItemClassName}
                 disabled={isDeleting}
                 isLoading={isDeleting}
                 onClick={() => {
@@ -110,7 +111,7 @@ export function ExpenseCard({
                   onDelete()
                 }}
               >
-                <Trash2 className="size-4" />
+                <Trash2 className="size-4 shrink-0" />
                 Удалить
               </Button>
             ) : null}

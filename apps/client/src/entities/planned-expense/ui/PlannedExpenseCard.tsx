@@ -1,6 +1,7 @@
 import { Lock, LockOpen, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
+import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
 import { formatAmount } from '@/shared/lib/format'
 import {
   Button,
@@ -14,8 +15,11 @@ import {
 } from '@/shared/ui'
 
 import {
+  plannedExpensePlannedBadgeClassName,
+  plannedExpensePlannedBadgeStaticClassName,
   plannedExpenseReserveMenuItemClassName,
   plannedExpenseReservedBadgeClassName,
+  plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
 import { remainingToReserve } from '../lib/remainingToReserve'
 import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
@@ -26,9 +30,6 @@ const statusBadgeInteractiveClassName =
 
 const statusBadgeStaticClassName =
   'rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600'
-
-const statusBadgeReservedStaticClassName =
-  'rounded-md bg-orange-subtle px-2 py-0.5 text-xs font-medium text-orange'
 
 export type PlannedExpenseCardProps = {
   item: PlannedExpense
@@ -62,7 +63,9 @@ export function PlannedExpenseCard({
   const statusBadgeClassName =
     item.status === 'RESERVED' && showUnreserveMenu
       ? plannedExpenseReservedBadgeClassName
-      : statusBadgeInteractiveClassName
+      : showPlannedMenu
+        ? plannedExpensePlannedBadgeClassName
+        : statusBadgeInteractiveClassName
 
   return (
     <Card className="gap-1 border-zinc-200/80 shadow-none">
@@ -119,14 +122,14 @@ export function PlannedExpenseCard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start gap-2 text-destructive hover:text-destructive"
+                    className={cancelMenuItemClassName}
                     disabled={reservePending}
                     onClick={() => {
                       closeStatusMenu()
                       onCancelPlan(item.id)
                     }}
                   >
-                    <Trash2 className="size-4" />
+                    <Trash2 className="size-4 shrink-0" />
                     Отменить план
                   </Button>
                 ) : null}
@@ -152,8 +155,10 @@ export function PlannedExpenseCard({
             <span
               className={
                 item.status === 'RESERVED'
-                  ? statusBadgeReservedStaticClassName
-                  : statusBadgeStaticClassName
+                  ? plannedExpenseReservedBadgeStaticClassName
+                  : item.status === 'PLANNED'
+                    ? plannedExpensePlannedBadgeStaticClassName
+                    : statusBadgeStaticClassName
               }
             >
               {statusLabel}

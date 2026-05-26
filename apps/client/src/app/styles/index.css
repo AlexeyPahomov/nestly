@@ -8,7 +8,6 @@
 body {
   margin: 0;
   background-color: #f8f9fa;
-  color: rgb(24 24 27);
   font-family:
     Inter,
     system-ui,
@@ -122,7 +121,8 @@ body {
   [data-slot='dialog-overlay'][data-open],
   [data-slot='dialog-overlay'][data-closed],
   [data-slot='dialog-content'][data-state='open'] > [data-slot='dialog-panel'],
-  [data-slot='dialog-content'][data-state='closed'] > [data-slot='dialog-panel'],
+  [data-slot='dialog-content'][data-state='closed']
+    > [data-slot='dialog-panel'],
   [data-slot='dialog-content'][data-open] > [data-slot='dialog-panel'],
   [data-slot='dialog-content'][data-closed] > [data-slot='dialog-panel'] {
     animation: none;
@@ -183,8 +183,26 @@ body {
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --color-orange: var(--orange);
+  --color-orange-hover: var(--orange-hover);
   --color-orange-subtle: var(--orange-subtle);
   --color-orange-muted: var(--orange-muted);
+  --color-blue: var(--blue);
+  --color-blue-hover: var(--blue-hover);
+  --color-blue-subtle: var(--blue-subtle);
+  --color-blue-muted: var(--blue-muted);
+  --color-green: var(--green);
+  --color-green-hover: var(--green-hover);
+  --color-green-subtle: var(--green-subtle);
+  --color-green-muted: var(--green-muted);
+  --color-red: var(--red);
+  --color-red-hover: var(--red-hover);
+  --color-red-subtle: var(--red-subtle);
+  --color-red-muted: var(--red-muted);
+  --color-main-black: var(--main-black);
+  --color-main-black-strong: var(--main-black-strong);
+  --color-main-black-hover: var(--main-black-hover);
+  --color-zinc-900: var(--main-black);
+  --color-zinc-800: var(--main-black-hover);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -195,21 +213,25 @@ body {
 }
 
 :root {
+  /* основной «чёрный» — тёплый charcoal */
+  --main-black: #323230;
+  --main-black-strong: #3c3a38;
+  --main-black-hover: #534e4a;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: var(--main-black);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: var(--main-black);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --popover-foreground: var(--main-black);
+  --primary: var(--main-black-strong);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: var(--main-black-strong);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --accent-foreground: var(--main-black-strong);
+  --destructive: var(--red);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -220,17 +242,33 @@ body {
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-foreground: var(--main-black);
+  --sidebar-primary: var(--main-black-strong);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent-foreground: var(--main-black-strong);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  /* «Зарезервировано» — приглушённая оранжевая гамма */
-  --orange: #e89a62;
-  --orange-subtle: #fef7f2;
-  --orange-muted: #fceee3;
+  /* «Зарезервировано» — оранжевая гамма */
+  --orange: #d99548;
+  --orange-hover: #cc8a3a;
+  --orange-subtle: #fef3e6;
+  --orange-muted: #fde9d0;
+  /* синяя гамма */
+  --blue: #5f9fd0;
+  --blue-hover: #4f92c4;
+  --blue-subtle: #edf5fc;
+  --blue-muted: #d8eaf6;
+  /* зелёная гамма */
+  --green: #52ad82;
+  --green-hover: #429e73;
+  --green-subtle: #ecf7f0;
+  --green-muted: #d6efe3;
+  /* красная гамма (отмена, удаление) */
+  --red: #cf6b6b;
+  --red-hover: #c45f5f;
+  --red-subtle: #fdf4f4;
+  --red-muted: #fae8e8;
 }
 
 .dark {
@@ -248,7 +286,11 @@ body {
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --red: #e08a8a;
+  --red-hover: #eca0a0;
+  --red-subtle: oklch(0.28 0.04 25);
+  --red-muted: oklch(0.32 0.05 25);
+  --destructive: var(--red);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);

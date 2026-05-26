@@ -3,16 +3,16 @@ import { cn } from '@/shared/lib/utils'
 export type PlanningMetricAccent = 'forecast' | 'pool' | 'planned' | 'reserved'
 
 const accentBorderClassName: Record<PlanningMetricAccent, string> = {
-  forecast: 'border-l-emerald-500',
+  forecast: 'border-l-green',
   pool: 'border-l-teal-500',
-  planned: 'border-l-blue-500',
+  planned: 'border-l-blue',
   reserved: 'border-l-orange',
 }
 
 const accentValueClassName: Record<PlanningMetricAccent, string> = {
-  forecast: 'text-emerald-700',
+  forecast: 'text-green',
   pool: 'text-zinc-900',
-  planned: 'text-blue-700',
+  planned: 'text-blue',
   reserved: 'text-orange',
 }
 

@@ -37,8 +37,8 @@ const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'k
   },
   planned: {
     icon: Calendar,
-    iconWrapClassName: 'bg-blue-100 text-blue-600',
-    amountClassName: 'text-blue-700',
+    iconWrapClassName: 'bg-blue-subtle text-blue',
+    amountClassName: 'text-blue',
   },
   reserved: {
     icon: Lock,
@@ -47,8 +47,8 @@ const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'k
   },
   forecast: {
     icon: Landmark,
-    iconWrapClassName: 'bg-emerald-100 text-emerald-600',
-    amountClassName: 'text-emerald-700',
+    iconWrapClassName: 'bg-green-subtle text-green',
+    amountClassName: 'text-green',
   },
 }
 
