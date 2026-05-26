@@ -13,9 +13,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "npm run build && tsc -p tsconfig.test.json && node --test dist/src/projection/*.test.js dist/src/forecast/*.test.js",
-    "prepare": "npm run build"
+    "build": "pnpm exec tsc -p tsconfig.json",
+    "test": "pnpm run build && pnpm exec tsc -p tsconfig.test.json && node --test dist/src/projection/*.test.js dist/src/forecast/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.0.0"

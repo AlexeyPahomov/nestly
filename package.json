@@ -4,14 +4,15 @@
   "description": "finance tracker",
   "main": "index.js",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev:client": "npm run dev -w client",
-    "dev:server": "npm run start:dev -w server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:deps": "pnpm --filter @coffer/shared build && pnpm --filter @coffer/planning-core build",
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server start:dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version",
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/AlexeyPahomov/coffer/issues"
   },
-  "homepage": "https://github.com/AlexeyPahomov/coffer#readme"
+  "homepage": "https://github.com/AlexeyPahomov/coffer#readme",
+  "packageManager": "pnpm@10.0.0",
+  "devDependencies": {
+    "standard-version": "^9.5.0",
+    "typescript": "^5.7.3"
+  }
 }

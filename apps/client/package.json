@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build -w @coffer/shared && npm run build -w @coffer/planning-core && tsc -b && vite build",
+    "build": "pnpm --filter @coffer/shared build && pnpm --filter @coffer/planning-core build && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
-    "@coffer/planning-core": "1.0.0",
-    "@coffer/shared": "1.0.0",
+    "@coffer/planning-core": "workspace:*",
+    "@coffer/shared": "workspace:*",
     "@tanstack/react-query": "^5.100.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

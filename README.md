@@ -1,34 +1,222 @@
 # Coffer
 
-finance tracker
+Персональный трекер финансов с envelope-бюджетированием: учёт доходов, распределение по категориям, расходы, планирование крупных трат и месячное закрытие бюджета.
 
-Монорепозиторий на npm workspaces: приложения в `apps/client` и `apps/server`, общие пакеты — в `packages/*` (при появлении).
+Монорепозиторий на **npm workspaces**: фронтенд и бэкенд в `apps/*`, общая доменная логика — в `packages/*`.
+
+## Возможности
+
+- **Доходы** — учёт поступлений за период
+- **Allocation** — распределение дохода по категориям (конверты)
+- **Расходы** — траты по категориям с оперативным балансом
+- **Planning** — планируемые траты, резервирование ликвидности, прогноз по месяцам
+- **Категории** — настройка типов, иконок, политики переноса остатка (`RESET` / `CARRY` / `TRANSFER_TO_FREE`)
+- **Бюджетный месяц** — снимки (`CategoryMonthSnapshot`), проекции и отчёт при закрытии месяца
+
+## Стек
+
+| Слой | Технологии |
+|------|------------|
+| **Клиент** | React 19, TypeScript, Vite 8, React Router 7, TanStack Query, Tailwind CSS 4, Radix UI / shadcn, date-fns, Embla Carousel |
+| **Сервер** | NestJS 11, TypeScript, Prisma 7, PostgreSQL (`pg` + `@prisma/adapter-pg`) |
+| **Общие пакеты** | `@coffer/shared` — типы и расчёты конвертов; `@coffer/planning-core` — прогноз и проекции |
+| **База данных** | PostgreSQL (Supabase, connection pooler) |
+| **Версионирование** | [standard-version](https://github.com/conventional-changelog/standard-version), Conventional Commits |
+
+## Структура репозитория
+
+```
+coffer/
+├── apps/
+│   ├── client/          # SPA (Vite + React, FSD-архитектура)
+│   └── server/          # REST API (NestJS + Prisma)
+├── packages/
+│   ├── shared/          # @coffer/shared — доменные типы и envelope-математика
+│   └── planning-core/   # @coffer/planning-core — прогноз, резервы, carry-over
+├── docs/adr/            # архитектурные решения (ADR)
+├── .env.example         # шаблон переменных окружения
+├── .versionrc.json      # конфиг standard-version
+└── CHANGELOG.md         # история релизов
+```
+
+### Клиент (`apps/client`)
+
+Feature-Sliced Design: `app` → `pages` → `widgets` → `features` → `entities` → `shared`.
+
+Маршруты: `/income`, `/allocation`, `/expenses`, `/planning`, `/categories` (по умолчанию — `/planning`).
+
+### Сервер (`apps/server`)
+
+REST-модули NestJS:
+
+| Контроллер | Назначение |
+|------------|------------|
+| `income` | доходы |
+| `allocation` | распределения |
+| `category` | категории |
+| `expense` | расходы |
+| `planned-expense` | планируемые траты |
+| `budget-months` | бюджетные месяцы, снимки, закрытие |
+
+Prisma-схема: `apps/server/prisma/schema.prisma`. Клиент генерируется в `apps/server/src/generated/prisma`.
+
+### Общие пакеты
+
+- **`@coffer/shared`** — периоды, конверты, деньги, иконки; используется клиентом и сервером
+- **`@coffer/planning-core`** — `projectMonthBudget`, прогноз по цепочке месяцев; сервер делегирует через `ProjectionService`, клиент — через `processes/forecasting`
+
+Подробнее: [docs/adr/001-budget-projections.md](docs/adr/001-budget-projections.md), [docs/adr/002-planning-bounded-context.md](docs/adr/002-planning-bounded-context.md).
+
+## Инфраструктура
+
+```
+┌─────────────┐     /api (proxy)      ┌─────────────┐     Prisma/pg      ┌──────────────┐
+│   Browser   │ ────────────────────► │  NestJS     │ ─────────────────► │  PostgreSQL  │
+│  Vite :5173 │                       │  :3000      │                    │  (Supabase)  │
+└─────────────┘                       └─────────────┘                    └──────────────┘
+```
+
+- **Локальная разработка:** Vite проксирует `/api` → `http://localhost:3000` (см. `apps/client/vite.config.ts`)
+- **Production API:** задаётся через `VITE_API_URL` в клиенте
+- **БД:** Supabase PostgreSQL через pooler (Transaction mode, порт `6543` для dev — см. `.env.example`)
+- **CI / Docker / Husky:** в проекте не настроены
+
+## Требования
+
+- Node.js (рекомендуется LTS)
+- npm (workspaces)
+- Доступ к PostgreSQL (Supabase или локальный инстанс)
 
 ## Быстрый старт
 
-Из **корня репозитория** установите зависимости и запускайте приложения скриптами воркспейса:
+### 1. Установка
+
+Из корня репозитория:
 
 ```bash
-npm install
-npm run dev:server   # NestJS (режим разработки с перезапуском)
-npm run dev:client   # Vite + React
+pnpm install
 ```
 
-## Запуск из каталогов приложений
+При установке сервер автоматически выполняет `prisma generate` (postinstall).
 
-**Сервер** (`apps/server`):
+### 2. Переменные окружения
+
+Шаблон — [.env.example](.env.example). Значения разносятся по приложениям:
+
+**`apps/client/.env`**
+
+```env
+VITE_APP_NAME=Coffer
+# VITE_API_URL=https://api.example.com   # только для production-сборки
+```
+
+**`apps/server/.env`**
+
+```env
+DATABASE_URL=postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:6543/postgres
+DATABASE_PASS=<PASSWORD>
+PORT=3000
+# DATABASE_SSL_REJECT_UNAUTHORIZED=false   # при ошибках SSL в dev
+```
+
+Не коммитьте `.env` с реальными секретами.
+
+### 3. Миграции БД
 
 ```bash
 cd apps/server
-npm run start:dev    # разработка
-# npm run start      # обычный старт без watch
+npm run db:migrate
 ```
 
-**Клиент** (`apps/client`):
+### 4. Запуск
+
+Из **корня** (удобно для параллельной работы):
 
 ```bash
-cd apps/client
-npm run dev
+pnpm run dev:server   # NestJS, watch-режим
+pnpm run dev:client   # Vite dev server
 ```
 
-Сервер по умолчанию слушает порт из переменной `PORT` или `3000`. Клиент — адрес и порт из вывода Vite (обычно `http://localhost:5173`).
+Или из каталогов приложений:
+
+```bash
+# Сервер
+cd apps/server && npm run start:dev
+
+# Клиент
+cd apps/client && npm run dev
+```
+
+| Сервис | URL по умолчанию |
+|--------|------------------|
+| Клиент | http://localhost:5173 |
+| API | http://localhost:3000 |
+
+## Команды
+
+### Корень репозитория
+
+| Команда | Описание |
+|---------|----------|
+| `npm run dev:client` | клиент в режиме разработки |
+| `npm run dev:server` | сервер в watch-режиме |
+| `npm run release` | релиз (standard-version: bump, changelog, тег) |
+| `npm run release:patch` | принудительный patch-bump |
+| `npm run release:minor` | принудительный minor-bump |
+| `npm run release:major` | принудительный major-bump |
+
+### Клиент (`apps/client`)
+
+| Команда | Описание |
+|---------|----------|
+| `npm run dev` | dev-сервер Vite |
+| `npm run build` | production-сборка |
+| `npm run preview` | просмотр production-сборки |
+| `npm run lint` | ESLint |
+
+### Сервер (`apps/server`)
+
+| Команда | Описание |
+|---------|----------|
+| `npm run start:dev` | разработка с перезапуском |
+| `npm run start` | старт без watch |
+| `npm run start:prod` | production (`node dist/main.js`) |
+| `npm run build` | сборка NestJS |
+| `npm run db:generate` | `prisma generate` + patch клиента |
+| `npm run db:migrate` | `prisma migrate deploy` |
+| `npm run test` | unit-тесты (Jest) |
+| `npm run test:e2e` | e2e-тесты |
+| `npm run lint` | ESLint |
+
+### Пакеты (`packages/*`)
+
+```bash
+pnpm run build:deps
+pnpm --filter @coffer/shared test
+pnpm --filter @coffer/planning-core test
+```
+
+## Релизы
+
+Версия и changelog ведутся через **standard-version** в корне.
+
+1. Убедитесь, что рабочая директория чистая: `git status`
+2. Коммиты в повседневной работе — в формате Conventional Commits (`feat:`, `fix:`, `feat!:` для breaking changes)
+3. Релиз:
+
+```bash
+npm run release
+git push --follow-tags origin main
+```
+
+Первый релиз (changelog без смены версии):
+
+```bash
+npm run release -- --first-release
+```
+
+Релизный коммит: `release: 🚀vX.Y.Z` (см. `.versionrc.json`).
+
+## Лицензия
+
+ISC (корневой `package.json`).
