@@ -194,6 +194,10 @@ body {
   --color-green-hover: var(--green-hover);
   --color-green-subtle: var(--green-subtle);
   --color-green-muted: var(--green-muted);
+  --color-teal: var(--teal);
+  --color-teal-hover: var(--teal-hover);
+  --color-teal-subtle: var(--teal-subtle);
+  --color-teal-muted: var(--teal-muted);
   --color-red: var(--red);
   --color-red-hover: var(--red-hover);
   --color-red-subtle: var(--red-subtle);
@@ -264,6 +268,11 @@ body {
   --green-hover: #429e73;
   --green-subtle: #ecf7f0;
   --green-muted: #d6efe3;
+  /* бирюзовая гамма — свободный пул */
+  --teal: #14b8a6;
+  --teal-hover: #0d9488;
+  --teal-subtle: #f0fdfa;
+  --teal-muted: #ccfbf1;
   /* красная гамма (отмена, удаление) */
   --red: #cf6b6b;
   --red-hover: #c45f5f;

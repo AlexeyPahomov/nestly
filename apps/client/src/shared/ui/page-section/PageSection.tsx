@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
+import { PageTitle } from './PageTitle';
+
 type PageSectionProps = {
   title?: string;
   children: ReactNode;
@@ -25,11 +27,9 @@ function PageSection({
     >
       {header ?? (
         <div className="flex shrink-0 items-start justify-between gap-4">
-          {title ? (
-            <h1 className="text-3xl font-bold leading-none">{title}</h1>
-          ) : null}
+          {title ? <PageTitle>{title}</PageTitle> : null}
           {headerAction ? (
-            <div className="shrink-0 pt-2">{headerAction}</div>
+            <div className="shrink-0 pt-1">{headerAction}</div>
           ) : null}
         </div>
       )}

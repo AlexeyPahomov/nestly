@@ -38,7 +38,7 @@ export function PlanningMonthTimeline({
         aria-label="Прокрутить карточки назад"
         onClick={carousel.goPrev}
       >
-        <ChevronLeft className="size-5" strokeWidth={2} />
+        <ChevronLeft className="size-4" strokeWidth={2} />
       </button>
 
       <Carousel
@@ -73,7 +73,7 @@ export function PlanningMonthTimeline({
         aria-label="Прокрутить карточки вперёд"
         onClick={carousel.goNext}
       >
-        <ChevronRight className="size-5" strokeWidth={2} />
+        <ChevronRight className="size-4" strokeWidth={2} />
       </button>
     </div>
   )

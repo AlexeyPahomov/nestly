@@ -42,7 +42,9 @@ export {
   CardHeader,
   CardTitle,
 } from './card/Card'
+export { Logo } from './logo'
 export { PageSection } from './page-section/PageSection'
+export { PageTitle } from './page-section/PageTitle'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'
 export {

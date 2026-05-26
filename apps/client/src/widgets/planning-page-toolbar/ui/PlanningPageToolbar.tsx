@@ -2,9 +2,9 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
 import { CreatePlannedExpenseDialog } from '@/features/create-planned-expense/ui/CreatePlannedExpenseDialog'
-import { Button, primaryActionButtonClassName } from '@/shared/ui'
-import { PlanningMonthTimeline } from '@/widgets/planning-month-timeline/ui/PlanningMonthTimeline'
+import { Button, PageTitle, primaryActionButtonClassName } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { PlanningMonthTimeline } from '@/widgets/planning-month-timeline/ui/PlanningMonthTimeline'
 
 export type PlanningPageToolbarProps = {
   periodMonth: string
@@ -23,10 +23,8 @@ export function PlanningPageToolbar({
 
   return (
     <>
-      <div className="flex shrink-0 flex-col gap-4">
-        <h1 className="text-3xl font-bold leading-none text-zinc-900">
-          Планирование
-        </h1>
+      <div className="flex shrink-0 flex-col gap-6">
+        <PageTitle>Планирование</PageTitle>
 
         <div className="flex items-center justify-between gap-4">
           <PlanningMonthTimeline

@@ -4,7 +4,7 @@ export type PlanningMetricAccent = 'forecast' | 'pool' | 'planned' | 'reserved'
 
 const accentBorderClassName: Record<PlanningMetricAccent, string> = {
   forecast: 'border-l-green',
-  pool: 'border-l-teal-500',
+  pool: 'border-l-teal',
   planned: 'border-l-blue',
   reserved: 'border-l-orange',
 }

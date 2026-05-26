@@ -32,7 +32,7 @@ export function PlanningMonthCard({
     >
       <span
         className={cn(
-          'text-sm font-semibold leading-tight',
+          'text-sm font-semibold leading-none',
           active ? 'text-white' : 'text-zinc-900',
         )}
       >
@@ -40,7 +40,7 @@ export function PlanningMonthCard({
       </span>
       <span
         className={cn(
-          'text-xs leading-tight',
+          'text-xs leading-none',
           active ? 'text-zinc-300' : 'text-zinc-500',
         )}
       >

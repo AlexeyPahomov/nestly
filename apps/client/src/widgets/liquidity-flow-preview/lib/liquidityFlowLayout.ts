@@ -9,12 +9,12 @@ import {
 
 import { cn } from '@/shared/lib/utils'
 
-export type LiquidityFlowNodeKind =
-  | 'income'
-  | 'pool'
-  | 'planned'
-  | 'reserved'
-  | 'forecast'
+import {
+  liquidityFlowNodeLabels,
+  type LiquidityFlowNodeKind,
+} from './liquidityFlowCopy'
+
+export type { LiquidityFlowNodeKind }
 
 export type LiquidityFlowNodeConfig = {
   kind: LiquidityFlowNodeKind
@@ -32,8 +32,8 @@ const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'k
   },
   pool: {
     icon: Wallet,
-    iconWrapClassName: 'bg-zinc-100 text-zinc-600',
-    amountClassName: 'text-zinc-900',
+    iconWrapClassName: 'bg-teal-subtle text-teal',
+    amountClassName: 'text-teal',
   },
   planned: {
     icon: Calendar,
@@ -54,9 +54,8 @@ const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'k
 
 export function getLiquidityFlowNodeConfig(
   kind: LiquidityFlowNodeKind,
-  label: string,
 ): LiquidityFlowNodeConfig {
-  return { kind, label, ...nodeConfig[kind] }
+  return { kind, label: liquidityFlowNodeLabels[kind], ...nodeConfig[kind] }
 }
 
 export const liquidityFlowCardClassName =

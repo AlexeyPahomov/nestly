@@ -1,6 +1,11 @@
 import type { MonthBudgetProjection } from '@/processes/forecasting'
 import { formatAmount } from '@/shared/lib/format'
 
+import {
+  liquidityFlowIncomeDetailLabel,
+  liquidityFlowNodeLabels,
+} from '../lib/liquidityFlowCopy'
+
 export type LiquidityFlowDetailsProps = {
   projection: MonthBudgetProjection
   incomeTotal: number
@@ -19,15 +24,19 @@ export function LiquidityFlowDetails({
   const lines: DetailLine[] = []
 
   if (incomeTotal > 0) {
-    lines.push({ label: 'Доход за месяц', amount: incomeTotal, sign: '+' })
+    lines.push({
+      label: liquidityFlowIncomeDetailLabel,
+      amount: incomeTotal,
+      sign: '+',
+    })
   }
 
   lines.push(
-    { label: 'Свободный пул', amount: projection.available, sign: '+' },
-    { label: 'В планах', amount: projection.plannedTotal, sign: '−' },
-    { label: 'Зарезервировано', amount: projection.reservedTotal, sign: '−' },
+    { label: liquidityFlowNodeLabels.pool, amount: projection.available, sign: '+' },
+    { label: liquidityFlowNodeLabels.planned, amount: projection.plannedTotal, sign: '−' },
+    { label: liquidityFlowNodeLabels.reserved, amount: projection.reservedTotal, sign: '−' },
     {
-      label: 'Прогноз свободных',
+      label: liquidityFlowNodeLabels.forecast,
       amount: projection.projectedFree,
       sign: '=',
     },

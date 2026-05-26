@@ -22,11 +22,11 @@ export const planningMonthCarouselOptions: CarouselOptions = {
 
 /** Как на странице «Расходы»: кнопки outline / toolbar — rounded-lg. */
 export const planningMonthNavButtonClassName =
-  'flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 disabled:pointer-events-none disabled:opacity-40';
+  'flex size-8 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 disabled:pointer-events-none disabled:opacity-40';
 
 /** Карточка месяца в переключателе (rounded-lg, как Card / кнопки расходов). */
 export function planningMonthCardClassName(active: boolean): string {
   return active
-    ? 'min-w-[9rem] flex-col items-center gap-1 rounded-lg border border-zinc-900 bg-zinc-900 px-5 py-3 text-center text-white shadow-sm hover:bg-zinc-900 hover:border-zinc-900'
-    : 'min-w-[9rem] flex-col items-center gap-1 rounded-lg border border-zinc-200 bg-white px-5 py-3 text-center text-zinc-900 transition-colors hover:bg-zinc-50';
+    ? 'min-w-[9rem] flex-col items-center gap-0.5 rounded-lg border border-zinc-900 bg-zinc-900 px-4 py-2 text-center text-white shadow-sm hover:bg-zinc-900 hover:border-zinc-900'
+    : 'min-w-[9rem] flex-col items-center gap-0.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-zinc-900 transition-colors hover:bg-zinc-50';
 }
