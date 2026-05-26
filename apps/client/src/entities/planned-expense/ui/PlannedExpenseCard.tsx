@@ -35,6 +35,7 @@ export function PlannedExpenseCard({
   reservePending,
 }: PlannedExpenseCardProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [reserveMenuOpen, setReserveMenuOpen] = useState(false)
   const reserveLeft = remainingToReserve(item)
   const showReserve =
     item.status === 'PLANNED' && onReserve != null
@@ -42,6 +43,7 @@ export function PlannedExpenseCard({
     item.status === 'PLANNED' && onCancelPlan != null
   const hasMenu = onEdit != null || showCancelPlan
   const showUnreserve = item.reserved_amount > 0 && onUnreserve != null
+  const statusLabel = PLANNED_EXPENSE_STATUS_LABELS[item.status]
 
   return (
     <Card className="gap-1 border-zinc-200/80 shadow-none">
@@ -59,9 +61,39 @@ export function PlannedExpenseCard({
               Зарезервировать
             </Button>
           ) : null}
-          <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">
-            {PLANNED_EXPENSE_STATUS_LABELS[item.status]}
-          </span>
+          {showUnreserve ? (
+            <Popover open={reserveMenuOpen} onOpenChange={setReserveMenuOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  disabled={reservePending}
+                  className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200/80 disabled:pointer-events-none disabled:opacity-50"
+                  aria-label={`Статус: ${statusLabel}. Действия с резервом`}
+                >
+                  {statusLabel}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-44 p-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start"
+                  disabled={reservePending}
+                  onClick={() => {
+                    setReserveMenuOpen(false)
+                    onUnreserve(item.id)
+                  }}
+                >
+                  Снять резерв
+                </Button>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">
+              {statusLabel}
+            </span>
+          )}
           {hasMenu ? (
             <Popover open={menuOpen} onOpenChange={setMenuOpen}>
               <PopoverTrigger asChild>
@@ -132,19 +164,6 @@ export function PlannedExpenseCard({
             year: 'numeric',
           })}
         </p>
-        {showUnreserve ? (
-          <div className="pt-1">
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              disabled={reservePending}
-              onClick={() => onUnreserve(item.id)}
-            >
-              Снять резерв
-            </Button>
-          </div>
-        ) : null}
       </CardContent>
     </Card>
   )
