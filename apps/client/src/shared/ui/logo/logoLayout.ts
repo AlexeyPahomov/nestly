@@ -1,3 +1,3 @@
 export const LOGO_SRC = '/logo.png'
 
-export const logoClassName = 'size-10 object-contain'
+export const logoClassName = 'size-12 object-contain'
