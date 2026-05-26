@@ -49,7 +49,6 @@ export function EditPlannedExpenseDialog({
             onSubmit={form.submit}
             isPending={form.isPending}
             submitLabel="Сохранить"
-            submitClassName="bg-zinc-900 text-white hover:bg-zinc-800"
           />
         </div>
       </DialogContent>

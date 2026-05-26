@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { CategoryFormDialog } from '@/features/create-category/ui/CategoryFormDialog'
 import type { Category } from '@/entities/category/model/types'
-import { Button, PageSection } from '@/shared/ui'
+import { Button, PageSection, primaryActionButtonClassName } from '@/shared/ui'
 import { CategoryList } from '@/widgets/category-list'
 
 import { useCategoryFormDialog } from '../model/useCategoryFormDialog'
@@ -19,7 +19,12 @@ export function CategoryPage() {
         <CategoryList
           className="min-h-0 flex-1"
           headerEnd={
-            <Button type="button" size="lg" className="rounded-xl px-4" onClick={dialog.openForAdd}>
+            <Button
+              type="button"
+              size="lg"
+              className={primaryActionButtonClassName}
+              onClick={dialog.openForAdd}
+            >
               Добавить категорию
             </Button>
           }

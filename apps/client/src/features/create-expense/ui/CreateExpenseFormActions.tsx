@@ -92,6 +92,7 @@ export function CreateExpenseFormActions({
       <div className="flex flex-wrap items-center gap-2">
         <Button
           type="submit"
+          variant="default"
           isLoading={isRecording}
           size="lg"
           className="min-w-40"

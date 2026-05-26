@@ -41,7 +41,6 @@ export function CreatePlannedExpenseDialog({
             onChange={form.handleChange}
             onSubmit={form.submit}
             isPending={form.isPending}
-            submitClassName="bg-zinc-900 text-white hover:bg-zinc-800"
           />
         </div>
       </DialogContent>

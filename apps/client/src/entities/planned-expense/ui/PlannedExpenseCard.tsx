@@ -18,6 +18,7 @@ import {
   plannedExpensePlannedBadgeClassName,
   plannedExpensePlannedBadgeStaticClassName,
   plannedExpenseReserveMenuItemClassName,
+  plannedExpenseUnreserveMenuItemClassName,
   plannedExpenseReservedBadgeClassName,
   plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
@@ -138,14 +139,14 @@ export function PlannedExpenseCard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className={plannedExpenseReserveMenuItemClassName}
+                    className={plannedExpenseUnreserveMenuItemClassName}
                     disabled={reservePending}
                     onClick={() => {
                       closeStatusMenu()
                       onUnreserve(item.id)
                     }}
                   >
-                    <LockOpen className="size-4" />
+                    <LockOpen className="size-4 shrink-0" />
                     Снять резерв
                   </Button>
                 ) : null}

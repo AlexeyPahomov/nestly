@@ -9,7 +9,6 @@ export type CreatePlannedExpenseFieldsProps = {
   onSubmit: () => void
   isPending: boolean
   submitLabel?: string
-  submitClassName?: string
 }
 
 export function CreatePlannedExpenseFields({
@@ -18,7 +17,6 @@ export function CreatePlannedExpenseFields({
   onSubmit,
   isPending,
   submitLabel = 'Добавить план',
-  submitClassName,
 }: CreatePlannedExpenseFieldsProps) {
   const onFieldChange = createPlannedExpenseInputChangeHandler(onChange)
 
@@ -52,7 +50,10 @@ export function CreatePlannedExpenseFields({
       />
       <Button
         type="button"
-        className={submitClassName}
+        variant="default"
+        size="lg"
+        className="w-full"
+        isLoading={isPending}
         disabled={isPending}
         onClick={() => void onSubmit()}
       >

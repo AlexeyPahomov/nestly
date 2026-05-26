@@ -7,7 +7,7 @@ import type { Income } from '@/entities/income/model/types'
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui'
+import { Button, primaryActionButtonClassName } from '@/shared/ui'
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout'
 import { CategoryBudgetList } from '@/widgets/category-budget-list'
@@ -88,7 +88,7 @@ export function ExpenseWorkspace({
           <Button
             type="button"
             size="lg"
-            className="rounded-xl px-4"
+            className={primaryActionButtonClassName}
             onClick={dialog.openForAdd}
           >
             Добавить расход

@@ -1,6 +1,10 @@
-/** Пункты «Зарезервировать» / «Снять резерв» в дропдауне карточки. */
+/** Пункт «Зарезервировать» в дропдауне карточки. */
 export const plannedExpenseReserveMenuItemClassName =
   'w-full justify-start gap-2 text-orange hover:bg-orange-muted hover:text-orange-hover'
+
+/** Пункт «Снять резерв» в дропдауне карточки. */
+export const plannedExpenseUnreserveMenuItemClassName =
+  'w-full justify-start gap-2 text-blue hover:bg-blue-muted hover:text-blue-hover'
 
 /** Кликабельный тег статуса «План». */
 export const plannedExpensePlannedBadgeClassName =
