@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
 import { formatAmount } from '@/shared/lib/format'
 import {
+  Badge,
   Button,
   Card,
   CardTitle,
@@ -31,10 +32,9 @@ import type { PlannedExpenseStatusMutationArgs } from '../lib/fullReserveMutatio
 import type { PlannedExpense } from '../model/types'
 
 const statusBadgeInteractiveClassName =
-  'rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200/80 disabled:pointer-events-none disabled:opacity-50'
+  'rounded-md bg-zinc-100 text-zinc-600 hover:bg-zinc-200/80 disabled:pointer-events-none disabled:opacity-50'
 
-const statusBadgeStaticClassName =
-  'rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600'
+const statusBadgeStaticClassName = 'rounded-md bg-zinc-100 text-zinc-600'
 
 export type PlannedExpenseCardProps = {
   item: PlannedExpense
@@ -85,14 +85,15 @@ export function PlannedExpenseCard({
     showPlannedMenu || showUnreserveMenu ? (
       <Popover open={statusMenuOpen} onOpenChange={setStatusMenuOpen}>
         <PopoverTrigger asChild>
-          <button
-            type="button"
-            disabled={statusMutationPending}
-            className={statusBadgeClassName}
-            aria-label={`Статус: ${statusLabel}. Действия`}
-          >
-            {statusLabel}
-          </button>
+          <Badge asChild className={statusBadgeClassName}>
+            <button
+              type="button"
+              disabled={statusMutationPending}
+              aria-label={`Статус: ${statusLabel}. Действия`}
+            >
+              {statusLabel}
+            </button>
+          </Badge>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-44 p-1">
           {showReserve ? (
@@ -165,7 +166,7 @@ export function PlannedExpenseCard({
         </PopoverContent>
       </Popover>
     ) : (
-      <span
+      <Badge
         className={
           item.status === 'RESERVED'
             ? plannedExpenseReservedBadgeStaticClassName
@@ -175,7 +176,7 @@ export function PlannedExpenseCard({
         }
       >
         {statusLabel}
-      </span>
+      </Badge>
     )
 
   return (

@@ -25,16 +25,16 @@ export const plannedExpenseUnreserveMenuItemClassName =
 
 /** Кликабельный тег статуса «План». */
 export const plannedExpensePlannedBadgeClassName =
-  'rounded-md bg-blue-subtle px-2 py-0.5 text-xs font-medium text-blue transition-colors hover:bg-blue-muted disabled:pointer-events-none disabled:opacity-50'
+  'rounded-md bg-blue-subtle text-blue hover:bg-blue-muted disabled:pointer-events-none disabled:opacity-50'
 
 /** Неактивный тег «План». */
 export const plannedExpensePlannedBadgeStaticClassName =
-  'rounded-md bg-blue-subtle px-2 py-0.5 text-xs font-medium text-blue'
+  'rounded-md bg-blue-subtle text-blue'
 
 /** Кликабельный тег статуса «Резерв». */
 export const plannedExpenseReservedBadgeClassName =
-  'rounded-md bg-orange-subtle px-2 py-0.5 text-xs font-medium text-orange transition-colors hover:bg-orange-muted disabled:pointer-events-none disabled:opacity-50'
+  'rounded-md bg-orange-subtle text-orange hover:bg-orange-muted disabled:pointer-events-none disabled:opacity-50'
 
 /** Неактивный тег «Резерв». */
 export const plannedExpenseReservedBadgeStaticClassName =
-  'rounded-md bg-orange-subtle px-2 py-0.5 text-xs font-medium text-orange'
+  'rounded-md bg-orange-subtle text-orange'

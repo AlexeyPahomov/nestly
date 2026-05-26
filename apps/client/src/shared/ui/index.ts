@@ -1,3 +1,5 @@
+export { Badge } from './badge/Badge'
+export { badgeVariants } from './badge/variants'
 export { Button, buttonVariants, primaryActionButtonClassName } from './button'
 export { Calendar, CalendarDayButton } from './calendar/Calendar'
 export { Input } from './input/Input'
