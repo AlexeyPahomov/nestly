@@ -1,4 +1,8 @@
+import { useState } from 'react'
+
+import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { PlannedExpenseCard } from '@/entities/planned-expense/ui/PlannedExpenseCard'
+import { EditPlannedExpenseDialog } from '@/features/create-planned-expense/ui/EditPlannedExpenseDialog'
 import { PageSection, Spinner } from '@/shared/ui'
 import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
 import { PlanningMonthMetrics } from '@/widgets/planning-month-metrics'
@@ -8,6 +12,9 @@ import { usePlanningPage } from '../model/usePlanningPage'
 
 export function PlanningPage() {
   const page = usePlanningPage()
+  const [editingPlanned, setEditingPlanned] = useState<PlannedExpense | null>(
+    null,
+  )
 
   return (
     <PageSection
@@ -54,7 +61,15 @@ export function PlanningPage() {
                       key={item.id}
                       item={item}
                       onReserve={(id) => page.reserve(id, item.amount)}
-                      onCancel={page.cancelPlan}
+                      onCancelPlan={
+                        item.status === 'PLANNED' ? page.cancelPlan : undefined
+                      }
+                      onUnreserve={page.unreserve}
+                      onEdit={
+                        item.status === 'PLANNED'
+                          ? setEditingPlanned
+                          : undefined
+                      }
                       reservePending={page.reservePending}
                     />
                   ))}
@@ -64,6 +79,16 @@ export function PlanningPage() {
           </>
         )}
       </div>
+
+      <EditPlannedExpenseDialog
+        open={editingPlanned != null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditingPlanned(null)
+          }
+        }}
+        item={editingPlanned}
+      />
     </PageSection>
   )
 }

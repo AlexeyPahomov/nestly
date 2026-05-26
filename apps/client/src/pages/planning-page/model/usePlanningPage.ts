@@ -3,7 +3,10 @@ import { useMemo, useState } from 'react'
 import { computeOperationalSummary } from '@/entities/budget/lib/computeOperationalSummary'
 import { monthProjectionFromSummary } from '@/entities/budget/lib/monthProjectionFromSummary'
 import { formatPeriodMonthLabel } from '@/entities/budget/lib/periodLabels'
-import { fullReserveMutationArgs } from '@/entities/planned-expense/lib/fullReserveMutationArgs'
+import {
+  fullReserveMutationArgs,
+  unreservePlannedExpenseMutationArgs,
+} from '@/entities/planned-expense/lib/fullReserveMutationArgs'
 import { usePeriodBudgetCore } from '@/entities/budget/model/usePeriodBudgetCore'
 import { usePlannedExpensesQuery } from '@/entities/planned-expense/api/usePlannedExpensesQuery'
 import { usePlannedExpenseStatusMutation } from '@/entities/planned-expense/api/usePlannedExpenseStatusMutation'
@@ -76,6 +79,8 @@ export function usePlanningPage() {
       statusMutation.mutate(fullReserveMutationArgs(id, amount)),
     cancelPlan: (id: string) =>
       statusMutation.mutate({ id, status: 'CANCELLED' }),
+    unreserve: (id: string) =>
+      statusMutation.mutate(unreservePlannedExpenseMutationArgs(id)),
     reservePending: statusMutation.isPending,
     incomeTotal: operationalSummary.incomeTotal,
     isLoading: plannedQuery.isLoading || core.isCoreLoading,

@@ -1,18 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useCreatePlannedExpenseMutation } from '@/entities/planned-expense/api/useCreatePlannedExpenseMutation'
-import { currentMonthInputValue, todayDateInputValue } from '@/shared/lib/date'
+import { useUpdatePlannedExpenseMutation } from '@/entities/planned-expense/api/useUpdatePlannedExpenseMutation'
+import type { PlannedExpense } from '@/entities/planned-expense/model/types'
+import { currentMonthInputValue } from '@/shared/lib/date'
+
+import {
+  emptyPlannedExpenseFormValues,
+  resolvePlannedExpenseFormValues,
+} from '../lib/plannedExpenseFormValues'
 
 import type { CreatePlannedExpenseFormValues } from './types'
 
-const initialValues = (): CreatePlannedExpenseFormValues => ({
-  title: '',
-  description: '',
-  amount: '',
-  planned_date: todayDateInputValue(),
-})
-
 type UseCreatePlannedExpenseFormOptions = {
+  editingPlannedExpense?: PlannedExpense | null
   onSuccess?: () => void
 }
 
@@ -20,8 +21,19 @@ export function useCreatePlannedExpenseForm(
   anchorPeriodMonth?: string,
   options?: UseCreatePlannedExpenseFormOptions,
 ) {
-  const mutation = useCreatePlannedExpenseMutation()
-  const [values, setValues] = useState(initialValues)
+  const editingPlannedExpense = options?.editingPlannedExpense ?? null
+  const isEditing = editingPlannedExpense != null
+  const editingId = editingPlannedExpense?.id ?? null
+
+  const createMutation = useCreatePlannedExpenseMutation()
+  const updateMutation = useUpdatePlannedExpenseMutation()
+  const [values, setValues] = useState(() =>
+    resolvePlannedExpenseFormValues(editingPlannedExpense),
+  )
+
+  useEffect(() => {
+    setValues(resolvePlannedExpenseFormValues(editingPlannedExpense))
+  }, [editingId, editingPlannedExpense])
 
   const handleChange = (
     name: keyof CreatePlannedExpenseFormValues,
@@ -30,7 +42,7 @@ export function useCreatePlannedExpenseForm(
     setValues((prev) => ({ ...prev, [name]: value }))
   }
 
-  const reset = () => setValues(initialValues())
+  const reset = () => setValues(emptyPlannedExpenseFormValues())
 
   const submit = async () => {
     const amount = Number(values.amount.replace(/\s/g, '').replace(',', '.'))
@@ -38,24 +50,38 @@ export function useCreatePlannedExpenseForm(
       return
     }
 
-    const plannedDate = values.planned_date || `${anchorPeriodMonth ?? currentMonthInputValue()}-01`
+    const plannedDate =
+      values.planned_date ||
+      `${anchorPeriodMonth ?? currentMonthInputValue()}-01`
 
-    await mutation.mutateAsync({
+    const payload = {
       title: values.title.trim(),
       description: values.description.trim() || undefined,
       amount,
       planned_date: plannedDate,
-    })
+    }
 
-    reset()
+    if (isEditing && editingPlannedExpense) {
+      await updateMutation.mutateAsync({
+        id: editingPlannedExpense.id,
+        payload,
+      })
+    } else {
+      await createMutation.mutateAsync(payload)
+      reset()
+    }
+
     options?.onSuccess?.()
   }
+
+  const activeMutation = isEditing ? updateMutation : createMutation
 
   return {
     values,
     handleChange,
     submit,
-    isPending: mutation.isPending,
-    error: mutation.error,
+    isPending: activeMutation.isPending,
+    error: activeMutation.error,
+    isEditing,
   }
 }

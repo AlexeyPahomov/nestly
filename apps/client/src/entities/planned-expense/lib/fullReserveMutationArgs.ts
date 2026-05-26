@@ -13,3 +13,10 @@ export function fullReserveMutationArgs(
 ): PlannedExpenseStatusMutationArgs {
   return { id, status: 'RESERVED', reserveAmount: amount }
 }
+
+/** Снять резерв: PLANNED + reserved_amount = 0. */
+export function unreservePlannedExpenseMutationArgs(
+  id: string,
+): PlannedExpenseStatusMutationArgs {
+  return { id, status: 'PLANNED', reserveAmount: 0 }
+}
