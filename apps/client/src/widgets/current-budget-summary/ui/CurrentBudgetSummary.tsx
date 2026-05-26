@@ -26,7 +26,7 @@ function ReserveCategoryIcon({
   reserveCategory: ReserveCategorySummary
 }) {
   return (
-    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-green-subtle text-green">
       <CategoryLucideIcon
         {...toCategoryLucideIconProps(reserveCategory)}
         className="size-4"
@@ -46,7 +46,7 @@ export function CurrentBudgetSummary({
 }: CurrentBudgetSummaryProps) {
   const availableTone =
     available > 0
-      ? 'text-emerald-700'
+      ? 'text-green'
       : available < 0
         ? 'text-destructive'
         : undefined
@@ -95,7 +95,7 @@ export function CurrentBudgetSummary({
               ) : undefined
             }
             value={inReserve}
-            valueClassName={inReserve > 0 ? 'text-emerald-700' : undefined}
+            valueClassName={inReserve > 0 ? 'text-green' : undefined}
             trailing={
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -114,7 +114,11 @@ export function CurrentBudgetSummary({
             }
           />
 
-          <SummaryMetricCard label="Потрачено в месяце" value={spentThisMonth} />
+          <SummaryMetricCard
+            label="Потрачено в месяце"
+            value={spentThisMonth}
+            valueClassName="text-slate"
+          />
         </div>
       </div>
     </TooltipProvider>

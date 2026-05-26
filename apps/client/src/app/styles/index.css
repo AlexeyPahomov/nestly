@@ -202,6 +202,10 @@ body {
   --color-red-hover: var(--red-hover);
   --color-red-subtle: var(--red-subtle);
   --color-red-muted: var(--red-muted);
+  --color-slate: var(--slate);
+  --color-slate-hover: var(--slate-hover);
+  --color-slate-subtle: var(--slate-subtle);
+  --color-slate-muted: var(--slate-muted);
   --color-main-black: var(--main-black);
   --color-main-black-strong: var(--main-black-strong);
   --color-main-black-hover: var(--main-black-hover);
@@ -278,6 +282,11 @@ body {
   --red-hover: #c45f5f;
   --red-subtle: #fdf4f4;
   --red-muted: #fae8e8;
+  /* тёмно-серая гамма */
+  --slate: #5a5754;
+  --slate-hover: #4a4845;
+  --slate-subtle: #f5f4f3;
+  --slate-muted: #ebe9e7;
 }
 
 .dark {
@@ -299,6 +308,10 @@ body {
   --red-hover: #eca0a0;
   --red-subtle: oklch(0.28 0.04 25);
   --red-muted: oklch(0.32 0.05 25);
+  --slate: oklch(0.78 0.01 80);
+  --slate-hover: oklch(0.85 0.01 80);
+  --slate-subtle: oklch(0.24 0.005 80);
+  --slate-muted: oklch(0.3 0.008 80);
   --destructive: var(--red);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);

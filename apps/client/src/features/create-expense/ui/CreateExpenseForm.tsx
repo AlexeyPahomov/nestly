@@ -134,10 +134,10 @@ function CreateExpenseFormFields({
       />
 
       {form.validationError ? (
-        <p className="text-sm text-red-600">{form.validationError}</p>
+        <p className="text-sm text-red">{form.validationError}</p>
       ) : null}
       {form.serverError ? (
-        <p className="text-sm text-red-600">{form.serverError}</p>
+        <p className="text-sm text-red">{form.serverError}</p>
       ) : null}
 
       <CreateExpenseFormActions

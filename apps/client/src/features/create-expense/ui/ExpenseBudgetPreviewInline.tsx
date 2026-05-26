@@ -21,7 +21,7 @@ export function ExpenseBudgetPreviewInline({
       className={cn(
         'rounded-lg border px-3 py-2.5 text-sm transition-colors',
         isOver
-          ? 'border-red-200/90 bg-red-50/70'
+          ? 'border-red-muted bg-red-subtle'
           : 'border-zinc-200/90 bg-zinc-50/80',
       )}
     >

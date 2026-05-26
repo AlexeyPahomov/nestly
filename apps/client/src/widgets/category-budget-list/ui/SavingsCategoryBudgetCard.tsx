@@ -39,7 +39,7 @@ export function SavingsCategoryBudgetCard({
     >
       <CardContent className="flex flex-col gap-4 p-4">
         <div className="flex items-start gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-green-subtle text-green">
             <Landmark className="size-5" aria-hidden />
           </span>
           <div className="min-w-0 flex-1 self-start">
@@ -50,27 +50,27 @@ export function SavingsCategoryBudgetCard({
           </div>
           <div className="shrink-0 text-right">
             <p className="text-sm text-zinc-500">Отложено</p>
-            <p className="text-2xl font-bold leading-tight tracking-tight text-emerald-700 tabular-nums sm:text-3xl">
+            <p className="text-2xl font-bold leading-tight tracking-tight text-green tabular-nums sm:text-3xl">
               {formatAmount(setAside)}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm text-emerald-900">
-          <Lock className="size-4 shrink-0 text-emerald-700" aria-hidden />
+        <div className="flex items-center gap-2 rounded-xl bg-green-subtle px-3 py-2.5 text-sm text-green">
+          <Lock className="size-4 shrink-0 text-green" aria-hidden />
           <p className="min-w-0 flex-1 leading-snug">
             Резервные средства. Используйте только для целей накопления.
           </p>
           <ChevronRight
-            className="size-4 shrink-0 text-emerald-600/80"
+            className="size-4 shrink-0 text-green/80"
             aria-hidden
           />
         </div>
 
         <Progress
           value={usage.barPercent}
-          className="h-2.5 bg-emerald-100"
-          indicatorClassName="bg-emerald-600"
+          className="h-2.5 bg-green-muted"
+          indicatorClassName="bg-green"
           aria-label={`Цель накоплений: ${usage.displayPercent}%`}
         />
       </CardContent>

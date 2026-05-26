@@ -12,15 +12,15 @@ export function previewRemainingClassName(
   preview: ExpenseBudgetPreview,
 ): string {
   if (preview.isOverBudget) {
-    return 'text-red-600'
+    return 'text-red'
   }
 
   if (
     preview.allocated > 0 &&
     preview.remainingAfter / preview.allocated < LOW_REMAINING_RATIO
   ) {
-    return 'text-amber-700'
+    return 'text-orange'
   }
 
-  return 'text-emerald-700'
+  return 'text-green'
 }

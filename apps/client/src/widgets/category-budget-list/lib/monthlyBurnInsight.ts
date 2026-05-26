@@ -76,9 +76,9 @@ export function monthlyBurnPaceClassName(
 ): string {
   switch (direction) {
     case 'above':
-      return 'font-medium text-amber-800';
+      return 'font-medium text-orange';
     case 'below':
-      return 'font-medium text-emerald-800';
+      return 'font-medium text-green';
     default:
       return 'text-zinc-500';
   }

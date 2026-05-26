@@ -1,15 +1,15 @@
 import type { EnvelopeBalanceTone } from '@/entities/budget/lib/envelopeBalanceTone'
 
 const toneAccentClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'bg-blue-50 text-blue-600',
-  low: 'bg-orange-50 text-orange-600',
-  over: 'bg-red-50 text-red-600',
+  healthy: 'bg-blue-subtle text-blue',
+  low: 'bg-orange-subtle text-orange',
+  over: 'bg-red-subtle text-red',
 }
 
 const toneTextClassName: Record<EnvelopeBalanceTone, string> = {
-  healthy: 'text-blue-700',
-  low: 'text-orange-700',
-  over: 'text-red-600',
+  healthy: 'text-blue',
+  low: 'text-orange',
+  over: 'text-red',
 }
 
 export function categoryIconWrapClassName(tone: EnvelopeBalanceTone): string {

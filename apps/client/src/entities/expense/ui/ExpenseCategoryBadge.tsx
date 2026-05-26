@@ -10,9 +10,10 @@ type ExpenseCategoryBadgeProps = {
   icon?: string | null
 }
 
-const savingsStyles =
-  'bg-emerald-50 text-emerald-800 ring-emerald-200/80'
-const expenseStyles = 'bg-blue-50 text-blue-700 ring-blue-200/80'
+const expenseIconWrapClassName = 'bg-blue-subtle ring-blue-muted'
+const expenseIconClassName = 'text-blue'
+const savingsIconWrapClassName = 'bg-green-subtle ring-green-muted'
+const savingsIconClassName = 'text-green'
 
 export function ExpenseCategoryBadge({
   name,
@@ -26,21 +27,24 @@ export function ExpenseCategoryBadge({
       <span
         className={cn(
           'flex size-9 shrink-0 items-center justify-center rounded-full ring-1 ring-inset',
-          isSavings ? savingsStyles : expenseStyles,
+          isSavings ? savingsIconWrapClassName : expenseIconWrapClassName,
         )}
       >
         <CategoryLucideIcon
           categoryName={name}
           categoryType={categoryType}
           icon={icon}
-          className="size-4"
+          className={cn(
+            'size-4',
+            isSavings ? savingsIconClassName : expenseIconClassName,
+          )}
           aria-hidden
         />
       </span>
       <span
         className={cn(
           'truncate text-sm font-semibold',
-          isSavings ? 'text-emerald-800' : 'text-zinc-900',
+          isSavings ? 'text-green' : 'text-slate',
         )}
       >
         {name}

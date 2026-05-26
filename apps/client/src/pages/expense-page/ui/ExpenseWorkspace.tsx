@@ -1,41 +1,41 @@
-import type { UIEventHandler } from 'react'
+import type { UIEventHandler } from 'react';
 
-import type { Allocation } from '@/entities/allocation/model/types'
-import type { Category } from '@/entities/category/model/types'
-import type { Expense } from '@/entities/expense/model/types'
-import type { Income } from '@/entities/income/model/types'
-import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
-import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog'
-import { cn } from '@/shared/lib/utils'
-import { Button, primaryActionButtonClassName } from '@/shared/ui'
-import type { CategoryBudgetItem } from '@/entities/budget/model/types'
-import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout'
-import { CategoryBudgetList } from '@/widgets/category-budget-list'
+import type { Allocation } from '@/entities/allocation/model/types';
+import type { Category } from '@/entities/category/model/types';
+import type { Expense } from '@/entities/expense/model/types';
+import type { Income } from '@/entities/income/model/types';
+import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget';
+import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog';
+import { cn } from '@/shared/lib/utils';
+import { Button, primaryActionButtonClassName } from '@/shared/ui';
+import type { CategoryBudgetItem } from '@/entities/budget/model/types';
+import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
+import { CategoryBudgetList } from '@/widgets/category-budget-list';
 
-import type { ExpensePagePaneBoost } from '../lib/expensePageLayout'
-import { useExpenseFormDialog } from '../model/useExpenseFormDialog'
+import type { ExpensePagePaneBoost } from '../lib/expensePageLayout';
+import { useExpenseFormDialog } from '../model/useExpenseFormDialog';
 
 type ExpenseWorkspaceProps = {
-  categories: Category[]
-  budgets: CategoryBudgetSnapshot[]
-  incomes: Income[]
-  allocations: Allocation[]
-  budgetItems: CategoryBudgetItem[]
-  selectedCategoryId: string | null
-  editingExpense?: Expense | null
-  onCancelEdit?: () => void
-  stressCategoryId: string | null
-  onStressCategoryChange: (categoryId: string | null) => void
-  onCategorySelect: (categoryId: string) => void
-  isBudgetPending: boolean
-  isBudgetError: boolean
-  budgetError: unknown
-  isBudgetFetching: boolean
-  onBudgetListScroll?: UIEventHandler<HTMLUListElement>
-  onTitleClick?: () => void
-  expensesHistoryCollapsed?: boolean
-  paneBoost?: ExpensePagePaneBoost
-}
+  categories: Category[];
+  budgets: CategoryBudgetSnapshot[];
+  incomes: Income[];
+  allocations: Allocation[];
+  budgetItems: CategoryBudgetItem[];
+  selectedCategoryId: string | null;
+  editingExpense?: Expense | null;
+  onCancelEdit?: () => void;
+  stressCategoryId: string | null;
+  onStressCategoryChange: (categoryId: string | null) => void;
+  onCategorySelect: (categoryId: string) => void;
+  isBudgetPending: boolean;
+  isBudgetError: boolean;
+  budgetError: unknown;
+  isBudgetFetching: boolean;
+  onBudgetListScroll?: UIEventHandler<HTMLUListElement>;
+  onTitleClick?: () => void;
+  expensesHistoryCollapsed?: boolean;
+  paneBoost?: ExpensePagePaneBoost;
+};
 
 export function ExpenseWorkspace({
   categories,
@@ -58,9 +58,8 @@ export function ExpenseWorkspace({
   expensesHistoryCollapsed = false,
   paneBoost = 'none',
 }: ExpenseWorkspaceProps) {
-  const dialog = useExpenseFormDialog(editingExpense, onCancelEdit)
-  const categoriesCompact =
-    !expensesHistoryCollapsed && paneBoost === 'none'
+  const dialog = useExpenseFormDialog(editingExpense, onCancelEdit);
+  const categoriesCompact = !expensesHistoryCollapsed && paneBoost === 'none';
 
   return (
     <div
@@ -110,5 +109,5 @@ export function ExpenseWorkspace({
         onStressCategoryChange={onStressCategoryChange}
       />
     </div>
-  )
+  );
 }
