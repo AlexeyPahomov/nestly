@@ -1,5 +1,5 @@
 -- =============================================================================
--- Nestly: Budget months, category snapshots, close reports, allocation types
+-- Coffer: Budget months, category snapshots, close reports, allocation types
 -- Run in SQL Editor (manual). Order matters.
 -- After run: npm run db:generate -w server
 -- =============================================================================

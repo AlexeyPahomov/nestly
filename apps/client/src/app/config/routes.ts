@@ -11,8 +11,8 @@ export type AppRouteId = (typeof APP_ROUTES)[number]['id']
 
 export type AppRouteSegment = (typeof APP_ROUTES)[number]['segment']
 
-/** Сегмент первого маршрута — цель редиректа с `/`. */
-export const APP_DEFAULT_SEGMENT = APP_ROUTES[0].segment
+/** Сегмент главного экрана — цель редиректа с `/`. */
+export const APP_DEFAULT_SEGMENT = 'planning' satisfies AppRouteSegment
 
 /** Полный путь: `/income`, `/allocation`, … */
 export function appRouteHref(segment: AppRouteSegment): string {

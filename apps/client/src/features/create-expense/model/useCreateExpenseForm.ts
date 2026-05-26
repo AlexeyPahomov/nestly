@@ -1,4 +1,4 @@
-import { parseMoneyInput } from '@nestly/shared'
+import { parseMoneyInput } from '@coffer/shared'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { pickIncomeForTopUp } from '@/entities/allocation/lib/pickIncomeForTopUp'

@@ -2,7 +2,7 @@ import {
   DEFAULT_PLANNED_EXPENSE_ICON_KEY,
   getMonthKeyFromIso,
   resolveIconColorKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 import { apiDelete, apiGet, apiPatch, apiPost } from '@/shared/api/client'
 import { DEV_USER_ID } from '@/shared/lib/constants'

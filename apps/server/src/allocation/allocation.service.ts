@@ -1,4 +1,4 @@
-import { DEFAULT_ALLOCATION_TYPE, monthValueFromDate } from '@nestly/shared';
+import { DEFAULT_ALLOCATION_TYPE, monthValueFromDate } from '@coffer/shared';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { BudgetMonthService } from '../budget/budget-month.service';
 import { BudgetProjectorService } from '../budget/budget-projector.service';

@@ -1,4 +1,4 @@
-import { parseMoneyInput } from '@nestly/shared'
+import { parseMoneyInput } from '@coffer/shared'
 import { useEffect, useState } from 'react'
 
 import { useCreatePlannedExpenseMutation } from '@/entities/planned-expense/api/useCreatePlannedExpenseMutation'

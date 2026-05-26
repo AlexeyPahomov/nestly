@@ -4,7 +4,7 @@ import {
   type CategoryIconKey,
   type IconColorKey,
   resolveIconColorKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 import { createElement } from 'react'
 
 import { getLucideIconByKey } from '@/entities/category/lib/categoryIcons'

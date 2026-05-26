@@ -1,8 +1,8 @@
-import type { CategoryIconKey, CategoryType } from '@nestly/shared'
+import type { CategoryIconKey, CategoryType } from '@coffer/shared'
 import {
   DEFAULT_CATEGORY_ICON_KEY,
   isCategoryIconKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 import {
   Building2,
   Car,

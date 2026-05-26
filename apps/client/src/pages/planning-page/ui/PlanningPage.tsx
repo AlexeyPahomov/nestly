@@ -54,7 +54,7 @@ export function PlanningPage() {
                 </p>
               ) : (
                 <PlannedExpensesList title={`Планы на ${page.periodLabel}`}>
-                  <div className="nestly-scroll-list max-h-[min(28rem,50vh)] overflow-y-auto">
+                  <div className="coffer-scroll-list max-h-[min(28rem,50vh)] overflow-y-auto">
                     {page.periodPlanned.map((item) => (
                       <PlannedExpenseCard
                         key={item.id}

@@ -1,4 +1,4 @@
-import type { AllocationType } from '@nestly/shared'
+import type { AllocationType } from '@coffer/shared'
 
 import type { Category } from '@/entities/category/model/types'
 import type { Income } from '@/entities/income/model/types'

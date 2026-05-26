@@ -1,4 +1,4 @@
-import { parseMoneyInput } from '@nestly/shared'
+import { parseMoneyInput } from '@coffer/shared'
 
 import type {
   CreateAllocationFormValues,

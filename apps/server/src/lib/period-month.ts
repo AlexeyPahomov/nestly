@@ -3,4 +3,4 @@ export type ParsedPeriodMonth = {
   month: number;
 };
 
-export { parsePeriodMonthKey } from '@nestly/shared';
+export { parsePeriodMonthKey } from '@coffer/shared';

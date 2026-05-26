@@ -1,7 +1,7 @@
 import {
   getNextPeriodMonth,
   getPreviousPeriodMonth,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 const CAROUSEL_RADIUS = 2
 

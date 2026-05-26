@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, CATEGORY_TYPE_LABELS } from '@nestly/shared'
+import { CATEGORY_TYPES, CATEGORY_TYPE_LABELS } from '@coffer/shared'
 
 import type { Category } from '@/entities/category/model/types'
 import { cn } from '@/shared/lib/utils'

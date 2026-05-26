@@ -2,7 +2,7 @@ import type {
   CategoryIconKey,
   CategoryType,
   IconColorKey,
-} from '@nestly/shared';
+} from '@coffer/shared';
 
 export class CategoryFieldsDto {
   name: string;

@@ -1,5 +1,5 @@
 import type { Expense } from '@/entities/expense/model/types'
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
 
 /** Строка списка: entity + метаданные категории с orchestration layer. */
 export type ExpenseListItem = Expense & {

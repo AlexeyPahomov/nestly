@@ -2,7 +2,7 @@ import {
   ICON_COLOR_KEYS,
   ICON_COLOR_LABELS,
   type IconColorKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 import type { IconPickerColorOption } from '@/shared/ui/icon-picker'
 

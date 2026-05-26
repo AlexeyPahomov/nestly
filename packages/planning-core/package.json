@@ -1,5 +1,5 @@
 {
-  "name": "@nestly/planning-core",
+  "name": "@coffer/planning-core",
   "version": "1.0.0",
   "private": true,
   "type": "module",

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   computeCategoryBudgetsForPeriod,
   type RebuiltCategoryBudget,
-} from '@nestly/shared';
+} from '@coffer/shared';
 import type { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 

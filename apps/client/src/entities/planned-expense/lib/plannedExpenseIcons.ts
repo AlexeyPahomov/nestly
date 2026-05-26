@@ -1,8 +1,8 @@
-import type { PlannedExpenseIconKey } from '@nestly/shared'
+import type { PlannedExpenseIconKey } from '@coffer/shared'
 import {
   DEFAULT_PLANNED_EXPENSE_ICON_KEY,
   isPlannedExpenseIconKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 import {
   Building2,
   Car,

@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import type { Expense } from '@/entities/expense/model/types'
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
 import { formatExpenseDate, formatMoneyWithRub } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'

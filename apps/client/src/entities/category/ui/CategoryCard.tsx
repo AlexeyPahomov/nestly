@@ -1,6 +1,6 @@
 import { Pencil } from 'lucide-react'
 
-import { CATEGORY_TYPE_LABELS } from '@nestly/shared'
+import { CATEGORY_TYPE_LABELS } from '@coffer/shared'
 
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'

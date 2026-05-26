@@ -1,5 +1,5 @@
-import type { CategoryType } from '@nestly/shared'
-import { parseMoneyInput } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
+import { parseMoneyInput } from '@coffer/shared'
 
 export type CategoryBudgetSnapshot = {
   categoryId: string

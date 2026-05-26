@@ -1,4 +1,4 @@
-import { sumMoneyAmounts } from '@nestly/shared'
+import { sumMoneyAmounts } from '@coffer/shared'
 
 type AmountRow = { amount: string }
 

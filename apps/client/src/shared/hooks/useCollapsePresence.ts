@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-/** Длительность collapse-анимаций в `index.css` (`.nestly-collapse`). */
-export const NESTLY_COLLAPSE_MS = 300
+/** Длительность collapse-анимаций в `index.css` (`.coffer-collapse`). */
+export const COFFER_COLLAPSE_MS = 300
 
 /**
  * Держит узел в DOM после `active === false`, чтобы успела отыграть CSS-анимация скрытия.
@@ -10,7 +10,7 @@ export const NESTLY_COLLAPSE_MS = 300
 export function useCollapsePresence<T>(
   active: boolean,
   value: T | null,
-  durationMs = NESTLY_COLLAPSE_MS,
+  durationMs = COFFER_COLLAPSE_MS,
 ) {
   const [mounted, setMounted] = useState(active)
   const [heldValue, setHeldValue] = useState<T | null>(null)

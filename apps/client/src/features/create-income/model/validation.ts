@@ -1,4 +1,4 @@
-import { parseMoneyInput } from '@nestly/shared'
+import { parseMoneyInput } from '@coffer/shared'
 
 import { monthInputToPeriodMonth } from '@/shared/lib/date'
 

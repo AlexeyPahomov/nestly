@@ -1,1 +1,1 @@
-export * from '@nestly/planning-core'
+export * from '@coffer/planning-core'

@@ -1,4 +1,4 @@
-import { computeClosing } from '@nestly/shared'
+import { computeClosing } from '@coffer/shared'
 
 import type { CategoryBudgetItem } from '../model/types'
 

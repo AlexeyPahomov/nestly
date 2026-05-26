@@ -16,4 +16,4 @@ export {
   getPreviousPeriodMonth,
   isBeforePeriodMonth,
   isSamePeriodMonth,
-} from '@nestly/shared'
+} from '@coffer/shared'

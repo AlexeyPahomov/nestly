@@ -52,7 +52,7 @@ export function CreateExpenseFormActions({
       ) : previewPresence.isMounted && previewPresence.displayValue ? (
         <div
           className={cn(
-            'nestly-collapse grid',
+            'coffer-collapse grid',
             previewPresence.isOpen
               ? 'grid-rows-[1fr] opacity-100'
               : 'grid-rows-[0fr] opacity-0',
@@ -62,7 +62,7 @@ export function CreateExpenseFormActions({
           <div className="min-h-0 overflow-hidden">
             <div
               className={cn(
-                previewPresence.isOpen && 'nestly-budget-preview-enter',
+                previewPresence.isOpen && 'coffer-budget-preview-enter',
               )}
             >
               <ExpenseBudgetPreviewInline

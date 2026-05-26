@@ -1,4 +1,4 @@
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
 
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'

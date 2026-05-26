@@ -1,4 +1,4 @@
-import { isCategoryIconKey, isCategoryType, isIconColorKey } from '@nestly/shared'
+import { isCategoryIconKey, isCategoryType, isIconColorKey } from '@coffer/shared'
 
 import type { CategoryFormValues, ValidCategoryFormPayload } from './types'
 

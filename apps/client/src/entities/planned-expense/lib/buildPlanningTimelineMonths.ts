@@ -1,7 +1,7 @@
 import {
   getNextPeriodMonth,
   getPreviousPeriodMonth,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 /** Три месяца вокруг выбранного — ось планирования. */
 export function buildPlanningTimelineMonths(

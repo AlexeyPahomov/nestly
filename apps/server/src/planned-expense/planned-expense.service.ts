@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { monthValueFromDate, parsePeriodMonthKey } from '@nestly/shared';
+import { monthValueFromDate, parsePeriodMonthKey } from '@coffer/shared';
 
 import { BudgetMonthService } from '../budget/budget-month.service';
 import { DEV_USER_ID } from '../lib/dev-user';

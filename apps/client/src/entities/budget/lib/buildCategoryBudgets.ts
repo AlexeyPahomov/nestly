@@ -2,7 +2,7 @@ import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
 import type { Expense } from '@/entities/expense/model/types'
 import type { Income } from '@/entities/income/model/types'
-import { computeCategoryBudgetsForPeriod } from '@nestly/shared'
+import { computeCategoryBudgetsForPeriod } from '@coffer/shared'
 
 import type { CategoryBudgetItem } from '../model/types'
 import type { BudgetTotals } from '../model/budgetTotals'

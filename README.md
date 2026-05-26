@@ -1,4 +1,4 @@
-# Nestly
+# Coffer
 
 finance tracker
 

@@ -6,7 +6,7 @@ Accepted (2026-05-25)
 
 ## Context
 
-Forecasting rules evolve (recurring, carry-over, goals, month close). `@nestly/shared` must stay domain-light (envelope math, period keys).
+Forecasting rules evolve (recurring, carry-over, goals, month close). `@coffer/shared` must stay domain-light (envelope math, period keys).
 
 ## Decision
 
@@ -15,15 +15,15 @@ Forecasting rules evolve (recurring, carry-over, goals, month close). `@nestly/s
 | Layer | Question | Location |
 |-------|----------|----------|
 | Reporting | What happened? | `entities/budget`, `CurrentBudgetSummary` |
-| Forecasting | What will happen? | `@nestly/planning-core`, UI via `processes/forecasting` |
+| Forecasting | What will happen? | `@coffer/planning-core`, UI via `processes/forecasting` |
 
 `projectMonthBudget()`, `sumPlannedExpenseCommitments()`, `buildMonthProjection()` live in:
 
-- **Source of truth:** `packages/planning-core` (`@nestly/planning-core`)
+- **Source of truth:** `packages/planning-core` (`@coffer/planning-core`)
 - **Client facade:** `apps/client/src/processes/forecasting` (re-export for FSD)
-- **Server:** `ProjectionService` delegates to `@nestly/planning-core`
+- **Server:** `ProjectionService` delegates to `@coffer/planning-core`
 
-Not in `@nestly/shared`.
+Not in `@coffer/shared`.
 
 ### Planned expense commitments
 
@@ -45,7 +45,7 @@ Close / reopen / validate belong in `planning/month-lifecycle/` (next milestone)
 
 ## Consequences
 
-- Client and server must depend on `@nestly/planning-core`; build workspace packages before app build/dev (as with `@nestly/shared`).
+- Client and server must depend on `@coffer/planning-core`; build workspace packages before app build/dev (as with `@coffer/shared`).
 - Migrations required for `reserved_amount` and `carry_over_policy`.
 - `buildForecastChain()` in planning-core: sequential liquidity propagation (not independent `map(projectMonthBudget)`).
 - Next: wire planning UI to chain; liquidity policy helper; `ProjectionSnapshot` on month close.

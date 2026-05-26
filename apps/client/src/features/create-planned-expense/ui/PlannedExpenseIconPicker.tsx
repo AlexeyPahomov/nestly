@@ -4,7 +4,7 @@ import {
   type PlannedExpenseIconKey,
   type IconColorKey,
   resolveIconColorKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 import { createElement } from 'react'
 
 import {

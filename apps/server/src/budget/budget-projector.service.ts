@@ -7,7 +7,7 @@ import {
   computeClosing,
   monthValueFromDate,
   parsePeriodMonthKey,
-} from '@nestly/shared';
+} from '@coffer/shared';
 import { toMoneyNumber } from '../lib/money';
 import type { BudgetDbClient } from './budget-db';
 import { BudgetMonthService } from './budget-month.service';

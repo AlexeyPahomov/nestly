@@ -1,4 +1,4 @@
-import { formatMoneyAmount } from '@nestly/shared'
+import { formatMoneyAmount } from '@coffer/shared'
 import type { ChangeEvent } from 'react'
 
 export function formatMoneyInputOnBlur(raw: string): string {

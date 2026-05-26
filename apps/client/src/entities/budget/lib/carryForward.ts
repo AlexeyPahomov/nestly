@@ -1,7 +1,7 @@
 import type { CategoryBudgetItem } from '../model/types'
 
 import { formatPeriodMonthGenitive } from './periodLabels'
-import { getPreviousPeriodMonth } from '@nestly/shared'
+import { getPreviousPeriodMonth } from '@coffer/shared'
 
 export type CarryForwardMeta = {
   total: number

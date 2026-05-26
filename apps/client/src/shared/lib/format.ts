@@ -1,4 +1,4 @@
-import { formatMoneyAmount } from '@nestly/shared'
+import { formatMoneyAmount } from '@coffer/shared'
 
 export function formatAmount(value: string | number): string {
   const formatted = formatMoneyAmount(value)

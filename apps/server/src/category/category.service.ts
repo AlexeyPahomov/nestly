@@ -7,7 +7,7 @@ import {
   isCategoryIconKey,
   isCategoryType,
   isIconColorKey,
-} from '@nestly/shared';
+} from '@coffer/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoryFieldsDto } from './dto/category-fields.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';

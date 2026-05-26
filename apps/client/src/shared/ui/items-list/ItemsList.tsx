@@ -47,7 +47,7 @@ export type ItemsListProps<T> = {
 };
 
 const listUlFillClassName =
-  'nestly-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-y-contain [overflow-anchor:none] p-1.5';
+  'coffer-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-y-contain [overflow-anchor:none] p-1.5';
 
 const listUlFitClassName = 'list-none space-y-3';
 
@@ -104,7 +104,7 @@ export function ItemsList<T>({
       <div
             aria-hidden={!showLoader}
             className={cn(
-              'nestly-list-fade flex min-h-0 flex-1 flex-col',
+              'coffer-list-fade flex min-h-0 flex-1 flex-col',
               showLoader
                 ? 'opacity-100'
                 : 'pointer-events-none absolute inset-0 z-10 opacity-0',
@@ -119,7 +119,7 @@ export function ItemsList<T>({
 
           <div
             className={cn(
-              'nestly-list-fade flex min-h-0 flex-col gap-3',
+              'coffer-list-fade flex min-h-0 flex-col gap-3',
               showLoader
                 ? cn(
                     itemsListShellClassName,
@@ -145,7 +145,7 @@ export function ItemsList<T>({
                     listUlClassName,
                     'p-1',
                     listAnimateEnter &&
-                      'nestly-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
+                      'coffer-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
                     listClassName,
                   )}
                   onScroll={onListScroll}
@@ -164,7 +164,7 @@ export function ItemsList<T>({
   const listBodyNode = (
     <div
       className={cn(
-        'nestly-collapse flex min-h-0 flex-col overflow-hidden',
+        'coffer-collapse flex min-h-0 flex-col overflow-hidden',
         bodyPresence.isOpen
           ? layout === 'fill'
             ? 'min-h-0 flex-1 opacity-100'

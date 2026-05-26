@@ -5,7 +5,7 @@ import {
   getMonthKeyFromIso,
   isBeforePeriodMonth,
   isSamePeriodMonth,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 export function filterIncomesByPeriod(
   incomes: readonly Income[],

@@ -1,4 +1,4 @@
-/** Planning / forecasting domain (не @nestly/shared). */
+/** Planning / forecasting domain (не @coffer/shared). */
 
 export type ActivePlannedExpenseStatus = 'PLANNED' | 'RESERVED'
 

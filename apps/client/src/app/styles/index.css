@@ -17,23 +17,23 @@ body {
     sans-serif;
 }
 
-.nestly-list-fade {
+.coffer-list-fade {
   transition: opacity 300ms ease-in-out;
 }
 
-.nestly-collapse {
+.coffer-collapse {
   transition:
     grid-template-rows 300ms ease-in-out,
     flex-grow 300ms ease-in-out,
     opacity 300ms ease-in-out;
 }
 
-.nestly-budget-warning-enter,
-.nestly-budget-preview-enter {
-  animation: nestly-budget-warning-in 300ms ease-out both;
+.coffer-budget-warning-enter,
+.coffer-budget-preview-enter {
+  animation: coffer-budget-warning-in 300ms ease-out both;
 }
 
-@keyframes nestly-budget-warning-in {
+@keyframes coffer-budget-warning-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
@@ -44,7 +44,7 @@ body {
   }
 }
 
-@keyframes nestly-dialog-overlay-in {
+@keyframes coffer-dialog-overlay-in {
   from {
     opacity: 0;
   }
@@ -53,7 +53,7 @@ body {
   }
 }
 
-@keyframes nestly-dialog-overlay-out {
+@keyframes coffer-dialog-overlay-out {
   from {
     opacity: 1;
   }
@@ -62,7 +62,7 @@ body {
   }
 }
 
-@keyframes nestly-dialog-panel-in {
+@keyframes coffer-dialog-panel-in {
   from {
     opacity: 0;
     transform: translateY(10px) scale(0.97);
@@ -73,7 +73,7 @@ body {
   }
 }
 
-@keyframes nestly-dialog-panel-out {
+@keyframes coffer-dialog-panel-out {
   from {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -86,33 +86,33 @@ body {
 
 [data-slot='dialog-overlay'][data-state='open'],
 [data-slot='dialog-overlay'][data-open] {
-  animation: nestly-dialog-overlay-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: coffer-dialog-overlay-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 [data-slot='dialog-overlay'][data-state='closed'],
 [data-slot='dialog-overlay'][data-closed] {
-  animation: nestly-dialog-overlay-out 200ms ease-in both;
+  animation: coffer-dialog-overlay-out 200ms ease-in both;
 }
 
 [data-slot='dialog-content'][data-state='open'] > [data-slot='dialog-panel'],
 [data-slot='dialog-content'][data-open] > [data-slot='dialog-panel'] {
-  animation: nestly-dialog-panel-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: coffer-dialog-panel-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 [data-slot='dialog-content'][data-state='closed'] > [data-slot='dialog-panel'],
 [data-slot='dialog-content'][data-closed] > [data-slot='dialog-panel'] {
-  animation: nestly-dialog-panel-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: coffer-dialog-panel-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nestly-list-fade,
-  .nestly-collapse {
+  .coffer-list-fade,
+  .coffer-collapse {
     transition: none;
   }
 
-  .nestly-list-enter,
-  .nestly-budget-warning-enter,
-  .nestly-budget-preview-enter {
+  .coffer-list-enter,
+  .coffer-budget-warning-enter,
+  .coffer-budget-preview-enter {
     animation: none;
   }
 
@@ -129,21 +129,21 @@ body {
   }
 }
 
-.nestly-scroll-list {
+.coffer-scroll-list {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgb(212 212 216) transparent;
 }
 
-.nestly-scroll-list::-webkit-scrollbar {
+.coffer-scroll-list::-webkit-scrollbar {
   width: 6px;
 }
 
-.nestly-scroll-list::-webkit-scrollbar-track {
+.coffer-scroll-list::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.nestly-scroll-list::-webkit-scrollbar-thumb {
+.coffer-scroll-list::-webkit-scrollbar-thumb {
   border-radius: 9999px;
   background-color: rgb(212 212 216);
 }

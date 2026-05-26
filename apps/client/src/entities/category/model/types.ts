@@ -1,4 +1,4 @@
-import type { CategoryIconKey, CategoryType, IconColorKey } from '@nestly/shared'
+import type { CategoryIconKey, CategoryType, IconColorKey } from '@coffer/shared'
 
 export type { CategoryType, CategoryIconKey, IconColorKey }
 

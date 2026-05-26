@@ -1,4 +1,4 @@
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
 
 export function isSavingsCategory(type: CategoryType): boolean {
   return type === 'savings'

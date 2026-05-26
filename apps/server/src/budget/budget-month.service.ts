@@ -25,7 +25,7 @@ import type {
   BudgetMonthViewDto,
   CategorySnapshotDto,
 } from './budget-month.view.dto';
-import type { RebuiltCategoryBudget } from '@nestly/shared';
+import type { RebuiltCategoryBudget } from '@coffer/shared';
 
 export type { BudgetMonthViewDto, CategorySnapshotDto } from './budget-month.view.dto';
 

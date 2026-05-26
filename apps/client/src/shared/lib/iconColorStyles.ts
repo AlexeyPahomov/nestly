@@ -1,4 +1,4 @@
-import { resolveIconColorKey, type IconColorKey } from '@nestly/shared'
+import { resolveIconColorKey, type IconColorKey } from '@coffer/shared'
 
 export type IconColorTone = {
   avatarClassName: string

@@ -1,7 +1,7 @@
 import {
   DEFAULT_ICON_COLOR_KEY,
   DEFAULT_PLANNED_EXPENSE_ICON_KEY,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { dateInputValueFromDate, todayDateInputValue } from '@/shared/lib/date'

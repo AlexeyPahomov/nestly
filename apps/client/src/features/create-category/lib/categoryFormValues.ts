@@ -4,7 +4,7 @@ import {
   DEFAULT_CATEGORY_ICON_KEY,
   DEFAULT_ICON_COLOR_KEY,
   resolveIconColorKey,
-} from '@nestly/shared'
+} from '@coffer/shared'
 
 import type { CategoryFormValues } from '../model/types'
 

@@ -1,1 +1,1 @@
-export { toMoneyNumber } from '@nestly/shared'
+export { toMoneyNumber } from '@coffer/shared'

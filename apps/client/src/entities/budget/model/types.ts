@@ -1,4 +1,4 @@
-import type { CategoryType } from '@nestly/shared'
+import type { CategoryType } from '@coffer/shared'
 
 import type { Category } from '@/entities/category/model/types'
 

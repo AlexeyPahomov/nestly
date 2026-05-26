@@ -10,7 +10,7 @@ import {
 
 } from '@nestjs/common';
 
-import { monthValueFromDate } from '@nestly/shared';
+import { monthValueFromDate } from '@coffer/shared';
 
 import { runBudgetProjection } from '../lib/budget-projection';
 
