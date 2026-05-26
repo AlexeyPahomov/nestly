@@ -1,3 +1,4 @@
+import { parseMoneyInput } from '@nestly/shared'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { pickIncomeForTopUp } from '@/entities/allocation/lib/pickIncomeForTopUp'
@@ -140,7 +141,7 @@ export function useCreateExpenseForm({
       return
     }
 
-    const amount = Number.parseFloat(values.amount.replace(',', '.'))
+    const amount = parseMoneyInput(values.amount)!
     const payload = {
       category_id: values.category_id,
       amount,

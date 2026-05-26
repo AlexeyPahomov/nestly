@@ -1,4 +1,5 @@
-import { Button, DatePicker, Input } from '@/shared/ui'
+import { Button, DatePicker, Input, MoneyInput } from '@/shared/ui'
+import { bindMoneyAmountField } from '@/shared/lib/moneyInput'
 
 import { createPlannedExpenseInputChangeHandler } from '../lib/plannedExpenseFormFieldHandlers'
 import { PlannedExpenseIconPicker } from './PlannedExpenseIconPicker'
@@ -42,14 +43,12 @@ export function CreatePlannedExpenseFields({
         value={values.description}
         onChange={onFieldChange}
       />
-      <Input
+      <MoneyInput
         name="amount"
-        type="number"
-        min={0}
-        step="0.01"
         placeholder="Сумма"
-        value={values.amount}
-        onChange={onFieldChange}
+        {...bindMoneyAmountField(values.amount, (amount) =>
+          onChange('amount', amount),
+        )}
       />
       <DatePicker
         label="Дата"

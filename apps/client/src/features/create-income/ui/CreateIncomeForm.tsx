@@ -1,3 +1,4 @@
+import { bindMoneyAmountField } from '@/shared/lib/moneyInput';
 import {
   Button,
   Card,
@@ -5,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
   Input,
+  MoneyInput,
   MonthPicker,
 } from '@/shared/ui';
 
@@ -26,16 +28,14 @@ export function CreateIncomeForm() {
             void form.submit();
           }}
         >
-          <Input
+          <MoneyInput
             id="income-amount"
             label="Сумма"
             name="amount"
-            type="text"
-            inputMode="decimal"
-            autoComplete="off"
             placeholder="0"
-            value={form.values.amount}
-            onChange={form.handleChange}
+            {...bindMoneyAmountField(form.values.amount, (amount) =>
+              form.patchValues({ amount }),
+            )}
           />
 
           <Input

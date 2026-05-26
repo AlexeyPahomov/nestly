@@ -9,6 +9,8 @@ export type {
   IconPickerProps,
 } from './icon-picker'
 export { Input } from './input/Input'
+export { MoneyInput } from './input/MoneyInput'
+export type { MoneyInputProps } from './input/MoneyInput'
 export {
   ItemsList,
   ListEmpty,

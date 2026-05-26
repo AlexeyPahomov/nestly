@@ -2,7 +2,7 @@ import { Lock, LockOpen, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
-import { formatAmount } from '@/shared/lib/format'
+import { formatMoneyRange, formatMoneyWithRub } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import {
   Badge,
@@ -231,7 +231,7 @@ export function PlannedExpenseCard({
 
         <div className={plannedExpenseCardFinanceClassName}>
           <p className={plannedExpenseCardAmountClassName}>
-            {formatAmount(targetAmount)} ₽
+            {formatMoneyWithRub(targetAmount)}
           </p>
           {showProgress ? (
             <>
@@ -241,7 +241,7 @@ export function PlannedExpenseCard({
                 indicatorClassName={tone.progressClassName}
               />
               <p className={plannedExpenseCardProgressTextClassName}>
-                {formatAmount(currentAmount)} / {formatAmount(targetAmount)} ₽
+                {formatMoneyRange(currentAmount, targetAmount)}
               </p>
             </>
           ) : null}

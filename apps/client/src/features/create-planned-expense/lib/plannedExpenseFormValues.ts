@@ -5,6 +5,7 @@ import {
 
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { dateInputValueFromDate, todayDateInputValue } from '@/shared/lib/date'
+import { moneyAmountToFormValue } from '@/shared/lib/moneyInput'
 
 import type { CreatePlannedExpenseFormValues } from '../model/types'
 
@@ -28,7 +29,7 @@ export function plannedExpenseToFormValues(
     description: item.description ?? '',
     icon_name: item.icon_name,
     icon_color: item.icon_color,
-    amount: String(item.amount),
+    amount: moneyAmountToFormValue(item.amount),
     planned_date: Number.isNaN(date.getTime())
       ? item.planned_date.slice(0, 10)
       : dateInputValueFromDate(date),

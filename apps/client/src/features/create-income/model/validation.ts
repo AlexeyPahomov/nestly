@@ -1,3 +1,5 @@
+import { parseMoneyInput } from '@nestly/shared'
+
 import { monthInputToPeriodMonth } from '@/shared/lib/date'
 
 import type { CreateIncomeFormValues, ValidCreateIncomeFormPayload } from './types'
@@ -7,8 +9,8 @@ export function validateCreateIncomeForm(
 ):
   | { ok: true; payload: ValidCreateIncomeFormPayload }
   | { ok: false; error: string } {
-  const parsed = Number.parseFloat(values.amount.replace(',', '.'))
-  if (Number.isNaN(parsed) || parsed <= 0) {
+  const parsed = parseMoneyInput(values.amount)
+  if (parsed === null) {
     return { ok: false as const, error: 'Укажите сумму больше нуля' }
   }
 

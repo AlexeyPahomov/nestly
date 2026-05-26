@@ -1,18 +1,55 @@
 /** Число, JSON-строка или Prisma Decimal (через `toString`). */
 export type MoneyInput = number | string | { toString(): string }
 
+const moneyGroupingSeparatorPattern = /[\s\u00a0\u202f]/g
+
+const ruMoneyFormatter = new Intl.NumberFormat('ru-RU', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+  useGrouping: true,
+})
+
 /** Prisma Decimal и JSON-строки сумм → число для арифметики (пока без Decimal.js). */
 export function toMoneyNumber(value: MoneyInput): number {
   return Number(value)
 }
 
+function normalizeMoneyNumber(value: MoneyInput): number | null {
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) {
+      return null
+    }
+
+    const normalized = trimmed
+      .replace(moneyGroupingSeparatorPattern, '')
+      .replace(',', '.')
+
+    const parsed = Number.parseFloat(normalized)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  const parsed = toMoneyNumber(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
 /** Парсинг суммы из поля ввода (`1 234,56` → `1234.56`). */
 export function parseMoneyInput(raw: string): number | null {
-  const parsed = Number.parseFloat(raw.trim().replace(',', '.'))
-  if (Number.isNaN(parsed) || parsed <= 0) {
+  const parsed = normalizeMoneyNumber(raw)
+  if (parsed === null || parsed <= 0) {
     return null
   }
   return parsed
+}
+
+/** Форматирование суммы для UI (`5000` → `5 000`). */
+export function formatMoneyAmount(value: MoneyInput): string {
+  const amount = normalizeMoneyNumber(value)
+  if (amount === null) {
+    return ''
+  }
+
+  return ruMoneyFormatter.format(amount)
 }
 
 export function sumMoneyAmounts(amounts: readonly MoneyInput[]): number {

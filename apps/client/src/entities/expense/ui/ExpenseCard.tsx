@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { Expense } from '@/entities/expense/model/types'
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
 import type { CategoryType } from '@nestly/shared'
-import { formatAmount, formatExpenseDate } from '@/shared/lib/format'
+import { formatExpenseDate, formatMoneyWithRub } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'
 import {
@@ -60,7 +60,7 @@ export function ExpenseCard({
       )}
 
       <span className="shrink-0 text-base font-bold tabular-nums text-zinc-900">
-        {formatAmount(expense.amount)}
+        {formatMoneyWithRub(expense.amount)}
       </span>
 
       <span className="hidden shrink-0 text-sm tabular-nums text-zinc-500 md:inline">

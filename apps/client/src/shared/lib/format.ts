@@ -1,14 +1,35 @@
-import { toMoneyNumber } from '@/shared/lib/money'
+import { formatMoneyAmount } from '@nestly/shared'
 
 export function formatAmount(value: string | number): string {
-  const n = toMoneyNumber(value)
-  if (Number.isNaN(n)) {
+  const formatted = formatMoneyAmount(value)
+  if (!formatted) {
     return '—'
   }
-  return new Intl.NumberFormat('ru-RU', {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 0,
-  }).format(n)
+  return formatted
+}
+
+const RUBLE_SIGN = '₽'
+
+/** Сумма с разделителями разрядов и знаком ₽. */
+export function formatMoneyWithRub(value: string | number): string {
+  const amount = formatAmount(value)
+  if (amount === '—') {
+    return amount
+  }
+  return `${amount} ${RUBLE_SIGN}`
+}
+
+/** Диапазон сумм с одним знаком ₽ в конце (`5 000 / 10 000 ₽`). */
+export function formatMoneyRange(
+  from: string | number,
+  to: string | number,
+): string {
+  const fromAmount = formatAmount(from)
+  const toAmount = formatAmount(to)
+  if (fromAmount === '—' || toAmount === '—') {
+    return '—'
+  }
+  return `${fromAmount} / ${toAmount} ${RUBLE_SIGN}`
 }
 
 export function formatDateLabel(isoDate: string): string {

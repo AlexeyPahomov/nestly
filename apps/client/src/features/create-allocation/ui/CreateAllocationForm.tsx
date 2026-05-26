@@ -1,12 +1,13 @@
 import type { Category } from '@/entities/category/model/types'
-import { formatAmount } from '@/shared/lib/format'
+import { formatMoneyWithRub } from '@/shared/lib/format'
+import { bindMoneyAmountField } from '@/shared/lib/moneyInput'
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Input,
+  MoneyInput,
   Select,
 } from '@/shared/ui'
 
@@ -62,21 +63,19 @@ export function CreateAllocationForm({
             disabled={controlsDisabled || noCategories}
           />
 
-          <Input
+          <MoneyInput
             id="allocation-amount"
             label="Сумма"
             name="amount"
-            type="text"
-            inputMode="decimal"
-            autoComplete="off"
             placeholder="0"
-            value={form.values.amount}
-            onChange={form.handleChange}
             disabled={controlsDisabled}
+            {...bindMoneyAmountField(form.values.amount, (amount) =>
+              form.patchValues({ amount }),
+            )}
           />
 
           <p className="text-sm text-muted-foreground">
-            Доступно: {formatAmount(remainingBalance)}
+            Доступно: {formatMoneyWithRub(remainingBalance)}
           </p>
 
           {form.validationError ? (

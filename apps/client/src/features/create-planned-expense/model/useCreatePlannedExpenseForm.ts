@@ -1,3 +1,4 @@
+import { parseMoneyInput } from '@nestly/shared'
 import { useEffect, useState } from 'react'
 
 import { useCreatePlannedExpenseMutation } from '@/entities/planned-expense/api/useCreatePlannedExpenseMutation'
@@ -48,8 +49,8 @@ export function useCreatePlannedExpenseForm(
   const reset = () => setValues(emptyPlannedExpenseFormValues())
 
   const submit = async () => {
-    const amount = Number(values.amount.replace(/\s/g, '').replace(',', '.'))
-    if (!values.title.trim() || !Number.isFinite(amount) || amount <= 0) {
+    const amount = parseMoneyInput(values.amount)
+    if (!values.title.trim() || amount === null) {
       return
     }
 

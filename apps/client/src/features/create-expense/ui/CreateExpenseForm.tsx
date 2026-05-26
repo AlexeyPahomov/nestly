@@ -4,6 +4,7 @@ import type { Allocation } from '@/entities/allocation/model/types';
 import type { Category } from '@/entities/category/model/types';
 import type { Expense } from '@/entities/expense/model/types';
 import type { Income } from '@/entities/income/model/types';
+import { bindMoneyAmountField } from '@/shared/lib/moneyInput';
 import { cn } from '@/shared/lib/utils';
 import {
   Card,
@@ -12,6 +13,7 @@ import {
   CardTitle,
   DatePicker,
   Input,
+  MoneyInput,
   Select,
 } from '@/shared/ui';
 
@@ -97,18 +99,16 @@ function CreateExpenseFormFields({
         disabled={form.isBusy || noCategories}
       />
 
-      <Input
+      <MoneyInput
         id="expense-amount"
         label="Сумма"
         name="amount"
-        type="text"
-        inputMode="decimal"
-        autoComplete="off"
         autoFocus={!form.isEditing}
         placeholder="0"
-        value={form.values.amount}
-        onChange={onFieldChange}
         disabled={form.isBusy}
+        {...bindMoneyAmountField(form.values.amount, (amount) =>
+          form.handleChange('amount', amount),
+        )}
       />
 
       <Input

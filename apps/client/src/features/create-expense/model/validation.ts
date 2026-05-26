@@ -1,3 +1,5 @@
+import { parseMoneyInput } from '@nestly/shared'
+
 import type { CreateExpenseFormValues } from './types'
 
 export function validateCreateExpenseForm(
@@ -7,9 +9,9 @@ export function validateCreateExpenseForm(
     return 'Выберите категорию'
   }
 
-  const parsedAmount = Number.parseFloat(values.amount.replace(',', '.'))
+  const parsedAmount = parseMoneyInput(values.amount)
 
-  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+  if (parsedAmount === null) {
     return 'Укажите сумму больше нуля'
   }
 
