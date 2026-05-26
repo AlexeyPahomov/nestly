@@ -6,8 +6,6 @@ import { formatAmount } from '@/shared/lib/format'
 import {
   Button,
   Card,
-  CardContent,
-  CardHeader,
   CardTitle,
   Popover,
   PopoverContent,
@@ -15,6 +13,12 @@ import {
 } from '@/shared/ui'
 
 import {
+  plannedExpenseAmountClassName,
+  plannedExpenseCardBodyClassName,
+  plannedExpenseCardClassName,
+  plannedExpenseCardContextClassName,
+  plannedExpenseCardStatusBadgeClassName,
+  plannedExpenseCardTitleClassName,
   plannedExpensePlannedBadgeClassName,
   plannedExpensePlannedBadgeStaticClassName,
   plannedExpenseReserveMenuItemClassName,
@@ -22,7 +26,6 @@ import {
   plannedExpenseReservedBadgeClassName,
   plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
-import { remainingToReserve } from '../lib/remainingToReserve'
 import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
 import type { PlannedExpense } from '../model/types'
 
@@ -50,7 +53,6 @@ export function PlannedExpenseCard({
   reservePending,
 }: PlannedExpenseCardProps) {
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
-  const reserveLeft = remainingToReserve(item)
   const showReserve = item.status === 'PLANNED' && onReserve != null
   const showCancelPlan = item.status === 'PLANNED' && onCancelPlan != null
   const showPlannedMenu =
@@ -68,124 +70,121 @@ export function PlannedExpenseCard({
         ? plannedExpensePlannedBadgeClassName
         : statusBadgeInteractiveClassName
 
-  return (
-    <Card className="gap-1 border-zinc-200/80 shadow-none">
-      <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0 pb-0">
-        <CardTitle className="text-base font-medium">{item.title}</CardTitle>
-        <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
-          {showPlannedMenu || showUnreserveMenu ? (
-            <Popover open={statusMenuOpen} onOpenChange={setStatusMenuOpen}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  disabled={reservePending}
-                  className={statusBadgeClassName}
-                  aria-label={`Статус: ${statusLabel}. Действия`}
-                >
-                  {statusLabel}
-                </button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-44 p-1">
-                {showReserve ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className={plannedExpenseReserveMenuItemClassName}
-                    disabled={reservePending}
-                    onClick={() => {
-                      closeStatusMenu()
-                      onReserve(item.id)
-                    }}
-                  >
-                    <Lock className="size-4 shrink-0" />
-                    Зарезервировать
-                  </Button>
-                ) : null}
-                {showPlannedMenu && onEdit ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="w-full justify-start gap-2"
-                    disabled={reservePending}
-                    onClick={() => {
-                      closeStatusMenu()
-                      onEdit(item)
-                    }}
-                  >
-                    <Pencil className="size-4" />
-                    Изменить
-                  </Button>
-                ) : null}
-                {showPlannedMenu && showCancelPlan ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className={cancelMenuItemClassName}
-                    disabled={reservePending}
-                    onClick={() => {
-                      closeStatusMenu()
-                      onCancelPlan(item.id)
-                    }}
-                  >
-                    <Trash2 className="size-4 shrink-0" />
-                    Отменить план
-                  </Button>
-                ) : null}
-                {showUnreserveMenu && !showPlannedMenu ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className={plannedExpenseUnreserveMenuItemClassName}
-                    disabled={reservePending}
-                    onClick={() => {
-                      closeStatusMenu()
-                      onUnreserve(item.id)
-                    }}
-                  >
-                    <LockOpen className="size-4 shrink-0" />
-                    Снять резерв
-                  </Button>
-                ) : null}
-              </PopoverContent>
-            </Popover>
-          ) : (
-            <span
-              className={
-                item.status === 'RESERVED'
-                  ? plannedExpenseReservedBadgeStaticClassName
-                  : item.status === 'PLANNED'
-                    ? plannedExpensePlannedBadgeStaticClassName
-                    : statusBadgeStaticClassName
-              }
+  const statusBadge =
+    showPlannedMenu || showUnreserveMenu ? (
+      <Popover open={statusMenuOpen} onOpenChange={setStatusMenuOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            disabled={reservePending}
+            className={statusBadgeClassName}
+            aria-label={`Статус: ${statusLabel}. Действия`}
+          >
+            {statusLabel}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-44 p-1">
+          {showReserve ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={plannedExpenseReserveMenuItemClassName}
+              disabled={reservePending}
+              onClick={() => {
+                closeStatusMenu()
+                onReserve(item.id)
+              }}
             >
-              {statusLabel}
-            </span>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 pt-0 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">{formatAmount(item.amount)}</p>
-        {item.reserved_amount > 0 ? (
-          <p className="text-xs text-zinc-500">
-            В резерве: {formatAmount(item.reserved_amount)}
-            {reserveLeft > 0
-              ? ` · осталось зарезервировать ${formatAmount(reserveLeft)}`
-              : null}
+              <Lock className="size-4 shrink-0" />
+              Зарезервировать
+            </Button>
+          ) : null}
+          {showPlannedMenu && onEdit ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start gap-2"
+              disabled={reservePending}
+              onClick={() => {
+                closeStatusMenu()
+                onEdit(item)
+              }}
+            >
+              <Pencil className="size-4" />
+              Изменить
+            </Button>
+          ) : null}
+          {showPlannedMenu && showCancelPlan ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={cancelMenuItemClassName}
+              disabled={reservePending}
+              onClick={() => {
+                closeStatusMenu()
+                onCancelPlan(item.id)
+              }}
+            >
+              <Trash2 className="size-4 shrink-0" />
+              Отменить план
+            </Button>
+          ) : null}
+          {showUnreserveMenu && !showPlannedMenu ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={plannedExpenseUnreserveMenuItemClassName}
+              disabled={reservePending}
+              onClick={() => {
+                closeStatusMenu()
+                onUnreserve(item.id)
+              }}
+            >
+              <LockOpen className="size-4 shrink-0" />
+              Снять резерв
+            </Button>
+          ) : null}
+        </PopoverContent>
+      </Popover>
+    ) : (
+      <span
+        className={
+          item.status === 'RESERVED'
+            ? plannedExpenseReservedBadgeStaticClassName
+            : item.status === 'PLANNED'
+              ? plannedExpensePlannedBadgeStaticClassName
+              : statusBadgeStaticClassName
+        }
+      >
+        {statusLabel}
+      </span>
+    )
+
+  return (
+    <Card className={plannedExpenseCardClassName}>
+      <div className={plannedExpenseCardBodyClassName}>
+        <CardTitle className={plannedExpenseCardTitleClassName}>
+          {item.title}
+        </CardTitle>
+        <div className={plannedExpenseCardStatusBadgeClassName}>{statusBadge}</div>
+        <div className={plannedExpenseCardContextClassName}>
+          {item.description ? <p>{item.description}</p> : null}
+          <p>
+            {new Date(item.planned_date).toLocaleDateString('ru-RU', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
           </p>
-        ) : null}
-        {item.description ? <p>{item.description}</p> : null}
-        <p>
-          {new Date(item.planned_date).toLocaleDateString('ru-RU', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })}
+        </div>
+        <p className={plannedExpenseAmountClassName}>
+          {formatAmount(item.amount)}
         </p>
-      </CardContent>
+      </div>
     </Card>
   )
 }
