@@ -6,14 +6,14 @@ const accentBorderClassName: Record<PlanningMetricAccent, string> = {
   forecast: 'border-l-emerald-500',
   pool: 'border-l-teal-500',
   planned: 'border-l-blue-500',
-  reserved: 'border-l-orange-500',
+  reserved: 'border-l-orange',
 }
 
 const accentValueClassName: Record<PlanningMetricAccent, string> = {
   forecast: 'text-emerald-700',
   pool: 'text-zinc-900',
   planned: 'text-blue-700',
-  reserved: 'text-orange-600',
+  reserved: 'text-orange',
 }
 
 export const planningMetricCardShellClassName =

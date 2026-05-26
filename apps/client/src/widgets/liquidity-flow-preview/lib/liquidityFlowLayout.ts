@@ -42,8 +42,8 @@ const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'k
   },
   reserved: {
     icon: Lock,
-    iconWrapClassName: 'bg-orange-100 text-orange-600',
-    amountClassName: 'text-orange-600',
+    iconWrapClassName: 'bg-orange-subtle text-orange',
+    amountClassName: 'text-orange',
   },
   forecast: {
     icon: Landmark,
