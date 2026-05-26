@@ -100,6 +100,8 @@ export class PlannedExpenseService {
         user_id: DEV_USER_ID,
         title: dto.title.trim(),
         description: dto.description?.trim() || null,
+        icon_name: dto.icon_name?.trim() || 'gift',
+        icon_color: dto.icon_color?.trim() || 'purple',
         amount: dto.amount,
         planned_date: plannedDate,
         category_id: dto.category_id ?? null,
@@ -197,6 +199,8 @@ export class PlannedExpenseService {
           dto.description === undefined
             ? undefined
             : dto.description?.trim() || null,
+        icon_name: dto.icon_name?.trim(),
+        icon_color: dto.icon_color?.trim(),
         amount: dto.amount,
         reserved_amount: reservedAmount,
         planned_date: plannedDateChanged ? plannedDate : undefined,

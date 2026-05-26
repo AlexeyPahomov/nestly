@@ -1,6 +1,7 @@
 import { Button, DatePicker, Input } from '@/shared/ui'
 
 import { createPlannedExpenseInputChangeHandler } from '../lib/plannedExpenseFormFieldHandlers'
+import { PlannedExpenseIconPicker } from './PlannedExpenseIconPicker'
 import type { CreatePlannedExpenseFormValues } from '../model/types'
 
 export type CreatePlannedExpenseFieldsProps = {
@@ -22,6 +23,13 @@ export function CreatePlannedExpenseFields({
 
   return (
     <>
+      <PlannedExpenseIconPicker
+        iconName={values.icon_name}
+        iconColor={values.icon_color}
+        disabled={isPending}
+        onIconChange={(icon_name) => onChange('icon_name', icon_name)}
+        onColorChange={(icon_color) => onChange('icon_color', icon_color)}
+      />
       <Input
         name="title"
         placeholder="Название (поездка, страховка…)"

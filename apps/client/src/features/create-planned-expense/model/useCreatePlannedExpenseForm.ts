@@ -61,6 +61,8 @@ export function useCreatePlannedExpenseForm(
       const payload: UpdatePlannedExpensePayload = {
         title: values.title.trim(),
         description: values.description.trim() || undefined,
+        icon_name: values.icon_name,
+        icon_color: values.icon_color,
         amount,
       }
       const previousDate = plannedExpenseToFormValues(
@@ -78,6 +80,8 @@ export function useCreatePlannedExpenseForm(
       await createMutation.mutateAsync({
         title: values.title.trim(),
         description: values.description.trim() || undefined,
+        icon_name: values.icon_name,
+        icon_color: values.icon_color,
         amount,
         planned_date: plannedDate,
       })

@@ -3,22 +3,27 @@ import { useState } from 'react'
 
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
 import { formatAmount } from '@/shared/lib/format'
+import { cn } from '@/shared/lib/utils'
 import {
   Badge,
   Button,
-  Card,
-  CardTitle,
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Progress,
 } from '@/shared/ui'
 
 import {
-  plannedExpenseAmountClassName,
-  plannedExpenseCardBodyClassName,
+  plannedExpenseCardAmountClassName,
   plannedExpenseCardClassName,
-  plannedExpenseCardContextClassName,
-  plannedExpenseCardStatusBadgeClassName,
+  plannedExpenseCardDateClassName,
+  plannedExpenseCardDescriptionClassName,
+  plannedExpenseCardFinanceClassName,
+  plannedExpenseCardMainClassName,
+  plannedExpenseCardProgressTextClassName,
+  plannedExpenseCardRowClassName,
+  plannedExpenseCardStatusClassName,
+  plannedExpenseCardTextClassName,
   plannedExpenseCardTitleClassName,
   plannedExpensePlannedBadgeClassName,
   plannedExpensePlannedBadgeStaticClassName,
@@ -27,14 +32,29 @@ import {
   plannedExpenseReservedBadgeClassName,
   plannedExpenseReservedBadgeStaticClassName,
 } from '../lib/plannedExpenseCardLayout'
-import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
 import type { PlannedExpenseStatusMutationArgs } from '../lib/fullReserveMutationArgs'
+import { resolvePlannedExpenseIconTone } from '../lib/plannedExpenseIconStyles'
+import { PLANNED_EXPENSE_STATUS_LABELS } from '../lib/plannedExpenseStatus'
 import type { PlannedExpense } from '../model/types'
+import { PlannedExpenseIconAvatar } from './PlannedExpenseIconAvatar'
 
 const statusBadgeInteractiveClassName =
   'rounded-md bg-zinc-100 text-zinc-600 hover:bg-zinc-200/80 disabled:pointer-events-none disabled:opacity-50'
 
 const statusBadgeStaticClassName = 'rounded-md bg-zinc-100 text-zinc-600'
+
+function formatPlannedDate(isoDate: string): string {
+  const date = new Date(isoDate)
+  if (Number.isNaN(date.getTime())) {
+    return isoDate
+  }
+
+  return date.toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
 
 export type PlannedExpenseCardProps = {
   item: PlannedExpense
@@ -43,6 +63,7 @@ export type PlannedExpenseCardProps = {
   onUnreserve?: (id: string) => void
   onEdit?: (item: PlannedExpense) => void
   pendingStatusMutation?: PlannedExpenseStatusMutationArgs
+  className?: string
 }
 
 export function PlannedExpenseCard({
@@ -52,6 +73,7 @@ export function PlannedExpenseCard({
   onUnreserve,
   onEdit,
   pendingStatusMutation,
+  className,
 }: PlannedExpenseCardProps) {
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
   const statusMutationPending = pendingStatusMutation != null
@@ -71,6 +93,15 @@ export function PlannedExpenseCard({
     (showReserve || onEdit != null || showCancelPlan)
   const showUnreserveMenu = item.reserved_amount > 0 && onUnreserve != null
   const statusLabel = PLANNED_EXPENSE_STATUS_LABELS[item.status]
+  const tone = resolvePlannedExpenseIconTone(item.icon_color)
+  const currentAmount = item.reserved_amount
+  const targetAmount = item.amount
+  const showProgress =
+    currentAmount > 0 && currentAmount < targetAmount && targetAmount > 0
+  const progressValue =
+    targetAmount > 0
+      ? Math.min(100, Math.round((currentAmount / targetAmount) * 100))
+      : 0
 
   const closeStatusMenu = () => setStatusMenuOpen(false)
 
@@ -180,26 +211,48 @@ export function PlannedExpenseCard({
     )
 
   return (
-    <Card className={plannedExpenseCardClassName}>
-      <div className={plannedExpenseCardBodyClassName}>
-        <CardTitle className={plannedExpenseCardTitleClassName}>
-          {item.title}
-        </CardTitle>
-        <div className={plannedExpenseCardStatusBadgeClassName}>{statusBadge}</div>
-        <div className={plannedExpenseCardContextClassName}>
-          {item.description ? <p>{item.description}</p> : null}
-          <p>
-            {new Date(item.planned_date).toLocaleDateString('ru-RU', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </p>
+    <article className={cn(plannedExpenseCardClassName, className)}>
+      <div className={plannedExpenseCardRowClassName}>
+        <div className={plannedExpenseCardMainClassName}>
+          <PlannedExpenseIconAvatar
+            iconName={item.icon_name}
+            iconColor={item.icon_color}
+          />
+
+          <div className={plannedExpenseCardTextClassName}>
+            <h3 className={plannedExpenseCardTitleClassName}>{item.title}</h3>
+            {item.description ? (
+              <p className={plannedExpenseCardDescriptionClassName}>
+                {item.description}
+              </p>
+            ) : null}
+          </div>
         </div>
-        <p className={plannedExpenseAmountClassName}>
-          {formatAmount(item.amount)}
+
+        <div className={plannedExpenseCardFinanceClassName}>
+          <p className={plannedExpenseCardAmountClassName}>
+            {formatAmount(targetAmount)} ₽
+          </p>
+          {showProgress ? (
+            <>
+              <Progress
+                value={progressValue}
+                className="h-1 w-full bg-zinc-100"
+                indicatorClassName={tone.progressClassName}
+              />
+              <p className={plannedExpenseCardProgressTextClassName}>
+                {formatAmount(currentAmount)} / {formatAmount(targetAmount)} ₽
+              </p>
+            </>
+          ) : null}
+        </div>
+
+        <p className={plannedExpenseCardDateClassName}>
+          {formatPlannedDate(item.planned_date)}
         </p>
+
+        <div className={plannedExpenseCardStatusClassName}>{statusBadge}</div>
       </div>
-    </Card>
+    </article>
   )
 }

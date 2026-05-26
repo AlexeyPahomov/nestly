@@ -1,19 +1,41 @@
-export const plannedExpenseCardClassName = 'gap-0 border-zinc-200/80 py-4 shadow-none'
+export const plannedExpenseListClassName =
+  'overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10'
 
-export const plannedExpenseCardBodyClassName =
-  'grid grid-cols-[1fr_auto] items-start gap-x-3 gap-y-1.5 px-4'
+export const plannedExpenseListHeaderClassName =
+  'border-b border-zinc-200/80 px-4 py-3'
+
+export const plannedExpenseListHeaderTitleClassName =
+  'text-base font-semibold text-zinc-900'
+
+export const plannedExpenseCardClassName =
+  'border-b border-zinc-200/80 px-4 py-3.5 last:border-b-0'
+
+export const plannedExpenseCardRowClassName =
+  'flex min-w-0 items-center gap-4'
+
+export const plannedExpenseCardMainClassName = 'flex min-w-0 flex-1 items-center gap-3'
+
+export const plannedExpenseCardTextClassName = 'min-w-0 flex-1'
 
 export const plannedExpenseCardTitleClassName =
-  'col-start-1 row-start-1 min-w-0 text-base font-medium leading-tight'
+  'truncate text-base font-semibold leading-tight text-zinc-900'
 
-export const plannedExpenseCardStatusBadgeClassName =
-  'col-start-2 row-start-1 justify-self-end'
+export const plannedExpenseCardDescriptionClassName =
+  'truncate text-sm text-zinc-500'
 
-export const plannedExpenseCardContextClassName =
-  'col-start-1 row-start-2 flex min-w-0 flex-col gap-1 text-sm text-zinc-600'
+export const plannedExpenseCardFinanceClassName =
+  'flex w-28 shrink-0 flex-col items-end gap-1 sm:w-36'
 
-export const plannedExpenseAmountClassName =
-  'col-start-2 row-start-2 justify-self-end self-end text-xl font-bold tabular-nums leading-none text-zinc-900'
+export const plannedExpenseCardAmountClassName =
+  'text-base font-bold tabular-nums leading-none text-zinc-900'
+
+export const plannedExpenseCardProgressTextClassName =
+  'text-xs tabular-nums text-zinc-500'
+
+export const plannedExpenseCardDateClassName =
+  'hidden shrink-0 text-sm text-zinc-500 md:block md:w-32 lg:w-36'
+
+export const plannedExpenseCardStatusClassName = 'shrink-0'
 
 /** Пункт «Зарезервировать» в дропдауне карточки. */
 export const plannedExpenseReserveMenuItemClassName =

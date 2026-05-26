@@ -1,0 +1,62 @@
+import type { PlannedExpenseIconKey } from '@nestly/shared'
+import {
+  DEFAULT_PLANNED_EXPENSE_ICON_KEY,
+  isPlannedExpenseIconKey,
+} from '@nestly/shared'
+import {
+  Building2,
+  Car,
+  Gift,
+  GraduationCap,
+  HeartPulse,
+  Home,
+  Kayak,
+  Landmark,
+  Plane,
+  Shield,
+  ShoppingCart,
+  Smartphone,
+  Sparkles,
+  Trees,
+  Utensils,
+  Wallet,
+  type LucideIcon,
+} from 'lucide-react'
+
+export const PLANNED_EXPENSE_ICON_COMPONENTS: Record<
+  PlannedExpenseIconKey,
+  LucideIcon
+> = {
+  gift: Gift,
+  plane: Plane,
+  kayak: Kayak,
+  trees: Trees,
+  car: Car,
+  home: Home,
+  landmark: Landmark,
+  health: HeartPulse,
+  wallet: Wallet,
+  utensils: Utensils,
+  'shopping-cart': ShoppingCart,
+  'building-2': Building2,
+  'graduation-cap': GraduationCap,
+  smartphone: Smartphone,
+  shield: Shield,
+  sparkles: Sparkles,
+}
+
+export function getPlannedExpenseLucideIcon(
+  iconKey: PlannedExpenseIconKey,
+): LucideIcon {
+  return PLANNED_EXPENSE_ICON_COMPONENTS[iconKey]
+}
+
+export function resolvePlannedExpenseIconKey(
+  icon: string | null | undefined,
+): PlannedExpenseIconKey {
+  if (icon && isPlannedExpenseIconKey(icon)) {
+    return icon
+  }
+
+  return DEFAULT_PLANNED_EXPENSE_ICON_KEY
+}

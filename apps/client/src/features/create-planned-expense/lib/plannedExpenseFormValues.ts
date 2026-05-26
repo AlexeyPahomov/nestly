@@ -1,3 +1,8 @@
+import {
+  DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
+  DEFAULT_PLANNED_EXPENSE_ICON_KEY,
+} from '@nestly/shared'
+
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { dateInputValueFromDate, todayDateInputValue } from '@/shared/lib/date'
 
@@ -7,6 +12,8 @@ export function emptyPlannedExpenseFormValues(): CreatePlannedExpenseFormValues 
   return {
     title: '',
     description: '',
+    icon_name: DEFAULT_PLANNED_EXPENSE_ICON_KEY,
+    icon_color: DEFAULT_PLANNED_EXPENSE_ICON_COLOR_KEY,
     amount: '',
     planned_date: todayDateInputValue(),
   }
@@ -19,6 +26,8 @@ export function plannedExpenseToFormValues(
   return {
     title: item.title,
     description: item.description ?? '',
+    icon_name: item.icon_name,
+    icon_color: item.icon_color,
     amount: String(item.amount),
     planned_date: Number.isNaN(date.getTime())
       ? item.planned_date.slice(0, 10)

@@ -9,6 +9,8 @@ export type PlannedExpense = {
   user_id: string
   title: string
   description: string | null
+  icon_name: string
+  icon_color: string
   amount: number
   reserved_amount: number
   planned_date: string
@@ -24,6 +26,8 @@ export type PlannedExpense = {
 export type CreatePlannedExpensePayload = {
   title: string
   description?: string
+  icon_name?: string
+  icon_color?: string
   amount: number
   planned_date: string
   category_id?: string
@@ -32,6 +36,8 @@ export type CreatePlannedExpensePayload = {
 export type UpdatePlannedExpensePayload = {
   title?: string
   description?: string
+  icon_name?: string
+  icon_color?: string
   amount?: number
   planned_date?: string
   status?: PlannedExpenseStatus

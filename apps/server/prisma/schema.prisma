@@ -106,6 +106,8 @@ model PlannedExpense {
   user_id         String
   title           String
   description     String?
+  icon_name       String               @default("gift")
+  icon_color      String               @default("purple")
   amount          Decimal
   reserved_amount Decimal              @default(0)
   planned_date    DateTime

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { PlannedExpenseCard } from '@/entities/planned-expense/ui/PlannedExpenseCard'
+import { PlannedExpensesList } from '@/entities/planned-expense/ui/PlannedExpensesList'
 import { EditPlannedExpenseDialog } from '@/features/create-planned-expense/ui/EditPlannedExpenseDialog'
 import { PageSection, Spinner } from '@/shared/ui'
 import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
@@ -46,34 +47,33 @@ export function PlanningPage() {
               incomeTotal={page.incomeTotal}
             />
 
-            <div className="flex min-h-0 flex-1 flex-col gap-3">
-              <h2 className="text-sm font-semibold text-zinc-700">
-                {page.periodLabel}
-              </h2>
+            <div className="flex min-h-0 flex-1 flex-col">
               {page.periodPlanned.length === 0 ? (
                 <p className="text-sm text-zinc-500">
                   Нет запланированных трат на этот месяц.
                 </p>
               ) : (
-                <div className="nestly-scroll-list flex min-h-0 flex-col gap-3 overflow-y-auto">
-                  {page.periodPlanned.map((item) => (
-                    <PlannedExpenseCard
-                      key={item.id}
-                      item={item}
-                      onReserve={(id) => page.reserve(id, item.amount)}
-                      onCancelPlan={
-                        item.status === 'PLANNED' ? page.cancelPlan : undefined
-                      }
-                      onUnreserve={page.unreserve}
-                      onEdit={
-                        item.status === 'PLANNED'
-                          ? setEditingPlanned
-                          : undefined
-                      }
-                      pendingStatusMutation={page.pendingStatusMutation}
-                    />
-                  ))}
-                </div>
+                <PlannedExpensesList title={`Планы на ${page.periodLabel}`}>
+                  <div className="nestly-scroll-list max-h-[min(28rem,50vh)] overflow-y-auto">
+                    {page.periodPlanned.map((item) => (
+                      <PlannedExpenseCard
+                        key={item.id}
+                        item={item}
+                        onReserve={(id) => page.reserve(id, item.amount)}
+                        onCancelPlan={
+                          item.status === 'PLANNED' ? page.cancelPlan : undefined
+                        }
+                        onUnreserve={page.unreserve}
+                        onEdit={
+                          item.status === 'PLANNED'
+                            ? setEditingPlanned
+                            : undefined
+                        }
+                        pendingStatusMutation={page.pendingStatusMutation}
+                      />
+                    ))}
+                  </div>
+                </PlannedExpensesList>
               )}
             </div>
           </>

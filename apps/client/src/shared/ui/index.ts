@@ -2,6 +2,12 @@ export { Badge } from './badge/Badge'
 export { badgeVariants } from './badge/variants'
 export { Button, buttonVariants, primaryActionButtonClassName } from './button'
 export { Calendar, CalendarDayButton } from './calendar/Calendar'
+export { IconPicker } from './icon-picker'
+export type {
+  IconPickerColorOption,
+  IconPickerIconOption,
+  IconPickerProps,
+} from './icon-picker'
 export { Input } from './input/Input'
 export {
   ItemsList,
