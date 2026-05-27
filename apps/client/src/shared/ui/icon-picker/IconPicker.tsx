@@ -32,6 +32,15 @@ export type IconPickerProps<
 const pickerGridClassName =
   'grid grid-cols-4 gap-2 sm:grid-cols-8 justify-items-center'
 
+const colorSwatchBaseClassName =
+  'size-9 rounded-full outline-none transition-[transform,box-shadow,ring-color] duration-150 focus-visible:ring-3 focus-visible:ring-ring/50'
+
+const colorSwatchSelectedClassName =
+  'z-[1] scale-110 ring-[3px] ring-zinc-900 ring-offset-[3px] ring-offset-white shadow-md'
+
+const colorSwatchUnselectedClassName =
+  'border border-zinc-200/90 hover:border-zinc-400 hover:scale-105'
+
 type IconPickerIconButtonProps<TIcon extends string> = {
   option: IconPickerIconOption<TIcon>
   selected: boolean
@@ -128,11 +137,11 @@ export function IconPicker<TIcon extends string, TColor extends string>({
               title={option.label}
               disabled={disabled}
               className={cn(
-                'size-9 rounded-full border-2 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                colorSwatchBaseClassName,
                 option.swatchClassName,
                 colorValue === option.value
-                  ? 'border-zinc-900'
-                  : 'border-transparent',
+                  ? colorSwatchSelectedClassName
+                  : colorSwatchUnselectedClassName,
                 disabled && 'pointer-events-none opacity-50',
               )}
               onClick={() => onColorChange(option.value)}
