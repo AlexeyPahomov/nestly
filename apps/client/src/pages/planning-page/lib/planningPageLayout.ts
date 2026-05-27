@@ -2,6 +2,7 @@ import {
   mobilePageScrollPaddingClassName,
   scrollAreaClassName,
 } from '@/shared/lib/scrollLayout'
+import { planningPageMobileStickyReserveClassName } from '@/widgets/planning-page-toolbar/lib/planningPageToolbarLayout'
 
 export const planningPageSectionClassName = 'gap-4 md:gap-6'
 
@@ -9,6 +10,7 @@ export const planningPageContentClassName = [
   scrollAreaClassName,
   mobilePageScrollPaddingClassName,
   'flex min-h-0 flex-1 flex-col gap-4 md:gap-6',
+  planningPageMobileStickyReserveClassName,
 ].join(' ')
 
 /** На мобилке — в общем скролле страницы; на десктопе — flex для внутреннего скролла списка. */

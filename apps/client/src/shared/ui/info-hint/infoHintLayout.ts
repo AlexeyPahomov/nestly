@@ -18,3 +18,9 @@ export const infoHintButtonClassName =
   'inline-flex size-5 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 aria-expanded:bg-zinc-100 aria-expanded:text-zinc-600'
 
 export const infoHintIconClassName = 'size-3.5'
+
+/** Строка заголовка: текст слева, info прижат к правому padding контейнера. */
+export const infoHintTitleRowClassName =
+  'flex w-full items-center justify-between gap-2'
+
+export const infoHintTitleTextClassName = 'min-w-0'

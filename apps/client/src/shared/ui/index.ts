@@ -8,6 +8,10 @@ export { IconPicker } from './icon-picker'
 export { IconColorAvatar } from './icon-color-avatar'
 export { InfoHint, getInfoHintLabel } from './info-hint'
 export type { InfoHintProps } from './info-hint'
+export {
+  infoHintTitleRowClassName,
+  infoHintTitleTextClassName,
+} from './info-hint'
 export type {
   IconPickerColorOption,
   IconPickerIconOption,

@@ -17,6 +17,7 @@ import {
   liquidityFlowCardMaxHeightClassName,
   liquidityFlowTrackScrollHeightClassName,
 } from './liquidityFlowDimensions'
+import { infoHintTitleRowClassName } from '@/shared/ui/info-hint/infoHintLayout'
 
 export type { LiquidityFlowNodeKind }
 
@@ -70,8 +71,10 @@ export const liquidityFlowCardClassName = cn(
   liquidityFlowCardMaxHeightClassName,
 )
 
-export const liquidityFlowHeaderClassName =
-  'flex shrink-0 items-center gap-1.5 pb-2'
+export const liquidityFlowHeaderClassName = cn(
+  infoHintTitleRowClassName,
+  'shrink-0 pb-2',
+)
 
 export const liquidityFlowTitleClassName =
   'min-w-0 text-sm font-medium text-zinc-900 sm:text-base'

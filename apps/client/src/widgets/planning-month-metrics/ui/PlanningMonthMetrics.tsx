@@ -47,6 +47,7 @@ export function PlanningMonthMetrics({
         title={copy.reserved.title}
         caption={copy.reserved.caption}
         infoText={copy.reserved.infoText}
+        infoBottomOnMax240
         value={projection.reservedTotal}
       />
     </div>

@@ -1,8 +1,13 @@
-import type { ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 
+import { useElementWidthThreshold } from '@/shared/hooks/use-element-width-threshold'
 import { formatAmount } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import { InfoHint, getInfoHintLabel } from '@/shared/ui'
+import {
+  infoHintTitleRowClassName,
+  infoHintTitleTextClassName,
+} from '@/shared/ui/info-hint/infoHintLayout'
 
 import {
   planningMetricCardAccentClassName,
@@ -18,6 +23,8 @@ export type PlanningMetricCardProps = {
   accent: PlanningMetricAccent
   /** Текст info-подсказки. */
   infoText: string
+  /** До 240px переносит info-иконку в правый нижний угол карточки. */
+  infoBottomOnMax240?: boolean
 }
 
 export function PlanningMetricCard({
@@ -26,13 +33,38 @@ export function PlanningMetricCard({
   value,
   accent,
   infoText,
+  infoBottomOnMax240 = false,
 }: PlanningMetricCardProps) {
+  const rootRef = useRef<HTMLElement | null>(null)
+  const isCompactInfoLayout = useElementWidthThreshold(
+    rootRef,
+    240,
+    infoBottomOnMax240,
+  )
+
   return (
-    <article className={planningMetricCardAccentClassName(accent)}>
+    <article
+      ref={rootRef}
+      className={cn(
+        planningMetricCardAccentClassName(accent),
+        infoBottomOnMax240 && isCompactInfoLayout && 'pb-10',
+      )}
+    >
       <div className="space-y-1">
-        <div className="flex items-center gap-1.5">
-          <p className="text-xs font-medium text-zinc-600 sm:text-sm">{title}</p>
-          <InfoHint label={getInfoHintLabel(title)}>{infoText}</InfoHint>
+        <div className={infoHintTitleRowClassName}>
+          <p
+            className={cn(
+              'text-xs font-medium text-zinc-600 sm:text-sm',
+              infoHintTitleTextClassName,
+            )}
+          >
+            {title}
+          </p>
+          {!isCompactInfoLayout ? (
+            <InfoHint label={getInfoHintLabel(title)} className="shrink-0">
+              {infoText}
+            </InfoHint>
+          ) : null}
         </div>
 
         <p
@@ -46,6 +78,14 @@ export function PlanningMetricCard({
 
         <p className="hidden text-xs text-zinc-500 sm:block">{caption}</p>
       </div>
+      {infoBottomOnMax240 && isCompactInfoLayout ? (
+        <InfoHint
+          label={getInfoHintLabel(title)}
+          className="absolute bottom-2.5 right-2.5"
+        >
+          {infoText}
+        </InfoHint>
+      ) : null}
     </article>
   )
 }

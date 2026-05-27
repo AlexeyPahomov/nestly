@@ -5,7 +5,9 @@ import { AddButton, PageSectionTitleRow } from '@/shared/ui'
 import { PlanningMonthTimeline } from '@/widgets/planning-month-timeline/ui/PlanningMonthTimeline'
 
 import {
-  planningPageAddButtonClassName,
+  planningPageAddButtonDesktopClassName,
+  planningPageAddButtonMobileStickyClassName,
+  planningPageAddButtonMobileStickyWrapClassName,
   planningPageToolbarClassName,
   planningPageToolbarRowClassName,
 } from '../lib/planningPageToolbarLayout'
@@ -39,12 +41,21 @@ export function PlanningPageToolbar({
           />
 
           <AddButton
-            className={planningPageAddButtonClassName}
+            className={planningPageAddButtonDesktopClassName}
             onClick={() => setCreateOpen(true)}
           >
             Новый план
           </AddButton>
         </div>
+      </div>
+
+      <div className={planningPageAddButtonMobileStickyWrapClassName}>
+        <AddButton
+          className={planningPageAddButtonMobileStickyClassName}
+          onClick={() => setCreateOpen(true)}
+        >
+          Новый план
+        </AddButton>
       </div>
 
       <CreatePlannedExpenseDialog

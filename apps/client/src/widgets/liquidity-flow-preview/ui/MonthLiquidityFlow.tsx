@@ -1,7 +1,9 @@
 import { Fragment } from 'react'
 
 import type { MonthBudgetProjection } from '@/processes/forecasting'
+import { cn } from '@/shared/lib/utils'
 import { InfoHint } from '@/shared/ui'
+import { infoHintTitleTextClassName } from '@/shared/ui/info-hint/infoHintLayout'
 
 import { buildLiquidityFlowNodes } from '../lib/buildLiquidityFlowNodes'
 import {
@@ -31,7 +33,9 @@ export function MonthLiquidityFlow({
   return (
     <section className={liquidityFlowCardClassName}>
       <div className={liquidityFlowHeaderClassName}>
-        <h2 className={liquidityFlowTitleClassName}>Поток ликвидности</h2>
+        <h2 className={cn(liquidityFlowTitleClassName, infoHintTitleTextClassName)}>
+          Поток ликвидности
+        </h2>
         <InfoHint label="Поток ликвидности" align="end" className="shrink-0">
           <LiquidityFlowDetails
             projection={projection}

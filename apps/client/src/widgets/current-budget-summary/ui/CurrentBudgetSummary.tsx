@@ -69,12 +69,13 @@ export function CurrentBudgetSummary({
 
         <SummaryMetricCard
           label={reserveLabel}
-          infoText={CURRENT_BUDGET_RESERVE_INFO}
-          headerEnd={
+          labelStart={
             reserveCategory ? (
               <ReserveCategoryIcon reserveCategory={reserveCategory} />
             ) : undefined
           }
+          infoText={CURRENT_BUDGET_RESERVE_INFO}
+          infoBottomOnMax240
           value={inReserve}
           valueClassName={inReserve > 0 ? 'text-green' : undefined}
         />
