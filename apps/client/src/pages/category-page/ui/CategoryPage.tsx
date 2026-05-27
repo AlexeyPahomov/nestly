@@ -1,9 +1,9 @@
 import { CategoryFormDialog } from '@/features/create-category/ui/CategoryFormDialog'
-import { useIsMobile } from '@/shared/hooks/use-mobile'
-import { AddButton, Fab, fabDesktopAddButtonClassName, PageSection } from '@/shared/ui'
+import { Fab, PageSection } from '@/shared/ui'
 import { CategoryList } from '@/widgets/category-list'
 
 import {
+  categoryPageListClassName,
   categoryPageListShellClassName,
   categoryPageSectionClassName,
   categoryPageShellClassName,
@@ -12,7 +12,6 @@ import { useCategoryPage } from '../model/useCategoryPage'
 
 export function CategoryPage() {
   const page = useCategoryPage()
-  const isMobile = useIsMobile()
   const { data, isPending, isError, error } = page.categoriesQuery
 
   return (
@@ -24,39 +23,21 @@ export function CategoryPage() {
       <div className={categoryPageShellClassName}>
         <div className={categoryPageListShellClassName}>
           <CategoryList
-            className="min-h-0 flex-1 max-md:flex-none"
+            className={categoryPageListClassName}
             data={data}
             isPending={isPending}
             isError={isError}
             error={error}
             layout={page.listLayout}
-            headerEnd={
-              isMobile ? undefined : (
-                <AddButton
-                  className={fabDesktopAddButtonClassName}
-                  onClick={page.dialog.openForAdd}
-                >
-                  Добавить категорию
-                </AddButton>
-              )
-            }
-            onEdit={page.setEditingCategory}
+            onEdit={page.onEditCategory}
+            onAdd={page.onAddCategory}
           />
         </div>
       </div>
 
-      <Fab
-        label="Добавить категорию"
-        onClick={page.dialog.openForAdd}
-      />
+      <Fab label={page.fab.label} onClick={page.fab.onClick} />
 
-      <CategoryFormDialog
-        open={page.dialog.isOpen}
-        onOpenChange={page.dialog.onOpenChange}
-        isEditing={page.dialog.isEditing}
-        onClose={page.dialog.close}
-        editingCategory={page.editingCategory}
-      />
+      <CategoryFormDialog {...page.formDialog} />
     </PageSection>
   )
 }

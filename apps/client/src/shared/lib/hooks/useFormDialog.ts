@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-/** Длительность exit-анимации sheet/dialog (см. `Sheet` — `duration-200`). */
-const FORM_DIALOG_EXIT_MS = 220
+import { FORM_DIALOG_EXIT_MS } from '@/shared/config/formDialogTiming'
 
 type UseFormDialogOptions = {
   onClearEditing?: () => void

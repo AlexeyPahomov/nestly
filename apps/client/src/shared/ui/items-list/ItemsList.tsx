@@ -46,6 +46,8 @@ export type ItemsListProps<T> = {
   listAnimateEnter?: boolean;
   /** Показывать карточку-лоадер в теле списка при `isPending`. */
   showPendingLoader?: boolean;
+  /** Показать тело списка при пустом `data` (напр. плитка «добавить»). */
+  forceShowList?: boolean;
 };
 
 const listUlFillClassName =
@@ -74,6 +76,7 @@ export function ItemsList<T>({
   bodyCollapsed = false,
   listAnimateEnter = true,
   showPendingLoader = true,
+  forceShowList = false,
 }: ItemsListProps<T>) {
   const bodyPresence = useCollapsePresence(!bodyCollapsed, true);
   const bodyLayoutExpanded = !bodyCollapsed || bodyPresence.isMounted;
@@ -93,8 +96,10 @@ export function ItemsList<T>({
   const items = data ?? [];
   const showLoader = isPending && showPendingLoader;
   const showError = !isPending && isError && data === undefined;
-  const showEmpty = !isPending && !showError && items.length === 0;
-  const showList = !isPending && !showError && items.length > 0;
+  const showEmpty =
+    !isPending && !showError && items.length === 0 && !forceShowList;
+  const showList =
+    !isPending && !showError && (items.length > 0 || forceShowList);
   const showHeaderExtras = bodyPresence.isOpen;
 
   const listBody = (

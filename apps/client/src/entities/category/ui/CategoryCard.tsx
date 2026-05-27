@@ -6,9 +6,12 @@ import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import {
   categoryCardPressableClassName,
   categoryCardPressingClassName,
-} from '@/entities/category/lib/categoryCardLayout'
+  categoryTileCardClassName,
+} from '@/entities/category/lib/categoryTileLayout'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
 import type { Category } from '@/entities/category/model/types'
+import { CategoryTileShell } from '@/entities/category/ui/CategoryTileShell'
+import { useCardActivate } from '@/shared/hooks/use-card-activate'
 import { useLongPress } from '@/shared/hooks/use-long-press'
 import { cn } from '@/shared/lib/utils'
 import { Card, IconColorAvatar } from '@/shared/ui'
@@ -23,68 +26,46 @@ export function CategoryCard({ category, onEdit }: CategoryCardProps) {
     onEdit?.(category)
   }, [category, onEdit])
 
+  const isEditable = onEdit != null
+
   const { isPressing, longPressHandlers } = useLongPress({
     onLongPress: handleEdit,
-    disabled: !onEdit,
+    disabled: !isEditable,
   })
 
-  const isEditable = onEdit != null
+  const activateProps = useCardActivate(handleEdit, {
+    contextMenu: isEditable,
+    ariaLabel: isEditable
+      ? `${category.name}, ${CATEGORY_TYPE_LABELS[category.type]}. Удерживайте для редактирования.`
+      : undefined,
+  })
 
   return (
     <Card
       size="sm"
       className={cn(
-        'relative h-full gap-0 py-0 transition-[transform,background-color,box-shadow] duration-150',
+        categoryTileCardClassName,
         isEditable && categoryCardPressableClassName,
         isPressing && categoryCardPressingClassName,
       )}
-      tabIndex={isEditable ? 0 : undefined}
-      role={isEditable ? 'button' : undefined}
-      aria-label={
-        isEditable
-          ? `${category.name}, ${CATEGORY_TYPE_LABELS[category.type]}. Удерживайте для редактирования.`
-          : undefined
-      }
-      onContextMenu={
-        isEditable
-          ? (event) => {
-              event.preventDefault()
-              handleEdit()
-            }
-          : undefined
-      }
-      onKeyDown={
-        isEditable
-          ? (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault()
-                handleEdit()
-              }
-            }
-          : undefined
-      }
-      {...longPressHandlers}
+      {...(isEditable ? activateProps : {})}
+      {...(isEditable ? longPressHandlers : {})}
     >
-      <div className="flex flex-col items-center gap-2.5 px-3 py-4 text-center">
-        <IconColorAvatar iconColor={category.icon_color} className="size-12">
-          {(iconClassName) => (
-            <CategoryLucideIcon
-              {...toCategoryLucideIconProps(category)}
-              className={cn('size-6', iconClassName)}
-              aria-hidden
-            />
-          )}
-        </IconColorAvatar>
-
-        <div className="flex w-full min-w-0 flex-col gap-0.5">
-          <p className="truncate text-sm font-semibold leading-snug text-zinc-900">
-            {category.name}
-          </p>
-          <p className="truncate text-xs leading-snug text-zinc-500">
-            {CATEGORY_TYPE_LABELS[category.type]}
-          </p>
-        </div>
-      </div>
+      <CategoryTileShell
+        icon={
+          <IconColorAvatar iconColor={category.icon_color} className="size-12">
+            {(iconClassName) => (
+              <CategoryLucideIcon
+                {...toCategoryLucideIconProps(category)}
+                className={cn('size-6', iconClassName)}
+                aria-hidden
+              />
+            )}
+          </IconColorAvatar>
+        }
+        title={category.name}
+        subtitle={CATEGORY_TYPE_LABELS[category.type]}
+      />
     </Card>
   )
 }
