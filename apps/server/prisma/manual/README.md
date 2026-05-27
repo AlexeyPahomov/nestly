@@ -3,7 +3,7 @@
 Если БД обновляется через SQL Editor, выполните файл миграции целиком, затем:
 
 ```bash
-npm run db:generate -w server
+pnpm --filter server db:generate
 ```
 
 Опционально зарегистрируйте миграцию в Prisma (если используете `migrate deploy`):

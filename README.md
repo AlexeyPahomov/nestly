@@ -2,7 +2,7 @@
 
 Персональный трекер финансов с envelope-бюджетированием: учёт доходов, распределение по категориям, расходы, планирование крупных трат и месячное закрытие бюджета.
 
-Монорепозиторий на **npm workspaces**: фронтенд и бэкенд в `apps/*`, общая доменная логика — в `packages/*`.
+Монорепозиторий на **pnpm workspaces**: фронтенд и бэкенд в `apps/*`, общая доменная логика — в `packages/*`.
 
 ## Возможности
 
@@ -84,7 +84,7 @@ Prisma-схема: `apps/server/prisma/schema.prisma`. Клиент генери
 ## Требования
 
 - Node.js (рекомендуется LTS)
-- npm (workspaces)
+- pnpm (см. `packageManager` в корневом `package.json`)
 - Доступ к PostgreSQL (Supabase или локальный инстанс)
 
 ## Быстрый старт
@@ -124,8 +124,13 @@ PORT=3000
 ### 3. Миграции БД
 
 ```bash
-cd apps/server
-npm run db:migrate
+pnpm --filter server db:migrate
+```
+
+Или из каталога сервера:
+
+```bash
+cd apps/server && pnpm db:migrate
 ```
 
 ### 4. Запуск
@@ -133,18 +138,19 @@ npm run db:migrate
 Из **корня** (удобно для параллельной работы):
 
 ```bash
-pnpm run dev:server   # NestJS, watch-режим
-pnpm run dev:client   # Vite dev server
+pnpm dev              # клиент + сервер параллельно
+pnpm dev:server       # только NestJS, watch-режим
+pnpm dev:client       # только Vite dev server
 ```
 
 Или из каталогов приложений:
 
 ```bash
 # Сервер
-cd apps/server && npm run start:dev
+cd apps/server && pnpm dev
 
 # Клиент
-cd apps/client && npm run dev
+cd apps/client && pnpm dev
 ```
 
 | Сервис | URL по умолчанию |
@@ -158,40 +164,43 @@ cd apps/client && npm run dev
 
 | Команда | Описание |
 |---------|----------|
-| `npm run dev:client` | клиент в режиме разработки |
-| `npm run dev:server` | сервер в watch-режиме |
-| `npm run release` | релиз (standard-version: bump, changelog, тег) |
-| `npm run release:patch` | принудительный patch-bump |
-| `npm run release:minor` | принудительный minor-bump |
-| `npm run release:major` | принудительный major-bump |
+| `pnpm dev` | клиент и сервер параллельно |
+| `pnpm dev:client` | клиент в режиме разработки |
+| `pnpm dev:server` | сервер в watch-режиме |
+| `pnpm build` | production-сборка всех workspace-пакетов |
+| `pnpm start` | production-старт сервера |
+| `pnpm release` | релиз (standard-version: bump, changelog, тег) |
+| `pnpm release:patch` | принудительный patch-bump |
+| `pnpm release:minor` | принудительный minor-bump |
+| `pnpm release:major` | принудительный major-bump |
 
 ### Клиент (`apps/client`)
 
 | Команда | Описание |
 |---------|----------|
-| `npm run dev` | dev-сервер Vite |
-| `npm run build` | production-сборка |
-| `npm run preview` | просмотр production-сборки |
-| `npm run lint` | ESLint |
+| `pnpm dev` | dev-сервер Vite |
+| `pnpm build` | production-сборка |
+| `pnpm preview` | просмотр production-сборки |
+| `pnpm lint` | ESLint |
 
 ### Сервер (`apps/server`)
 
 | Команда | Описание |
 |---------|----------|
-| `npm run start:dev` | разработка с перезапуском |
-| `npm run start` | старт без watch |
-| `npm run start:prod` | production (`node dist/main.js`) |
-| `npm run build` | сборка NestJS |
-| `npm run db:generate` | `prisma generate` + patch клиента |
-| `npm run db:migrate` | `prisma migrate deploy` |
-| `npm run test` | unit-тесты (Jest) |
-| `npm run test:e2e` | e2e-тесты |
-| `npm run lint` | ESLint |
+| `pnpm dev` | разработка с перезапуском |
+| `pnpm start` | старт без watch |
+| `pnpm start:prod` | production (`node dist/main.js`) |
+| `pnpm build` | сборка NestJS |
+| `pnpm db:generate` | `prisma generate` + patch клиента |
+| `pnpm db:migrate` | `prisma migrate deploy` |
+| `pnpm test` | unit-тесты (Jest) |
+| `pnpm test:e2e` | e2e-тесты |
+| `pnpm lint` | ESLint |
 
 ### Пакеты (`packages/*`)
 
 ```bash
-pnpm run build:deps
+pnpm build:deps
 pnpm --filter @coffer/shared test
 pnpm --filter @coffer/planning-core test
 ```
@@ -205,14 +214,14 @@ pnpm --filter @coffer/planning-core test
 3. Релиз:
 
 ```bash
-npm run release
+pnpm release
 git push --follow-tags origin main
 ```
 
 Первый релиз (changelog без смены версии):
 
 ```bash
-npm run release -- --first-release
+pnpm release -- --first-release
 ```
 
 Релизный коммит: `release: 🚀vX.Y.Z` (см. `.versionrc.json`).

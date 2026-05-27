@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm --filter @coffer/shared build && pnpm --filter @coffer/planning-core build && tsc -b && vite build",
+    "build": "pnpm -w run build:deps && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
