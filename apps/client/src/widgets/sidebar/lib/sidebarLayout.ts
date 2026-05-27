@@ -1,1 +1,1 @@
-export const sidebarLogoClassName = 'mb-3'
+export const sidebarLogoClassName = 'mb-1';
