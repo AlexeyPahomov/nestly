@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
 
 import { Spinner, TooltipProvider } from '@/shared/ui';
 import { SidebarInset, SidebarProvider } from '@/shared/ui/sidebar';
 import { Sidebar } from '@/widgets/sidebar';
 
 import { appInsetClassName, appMainClassName } from './appLayoutLayout';
+import { PageTransitionOutlet } from './PageTransitionOutlet';
 
 function RouteFallback() {
   return (
@@ -33,7 +33,7 @@ export function AppLayout() {
                 </div>
               }
             >
-              <Outlet />
+              <PageTransitionOutlet />
             </Suspense>
           </div>
         </SidebarInset>
