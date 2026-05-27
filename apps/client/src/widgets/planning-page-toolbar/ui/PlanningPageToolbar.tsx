@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { CreatePlannedExpenseDialog } from '@/features/create-planned-expense/ui/CreatePlannedExpenseDialog'
-import { AddButton, Fab, PageSectionTitleRow } from '@/shared/ui'
+import { AddButton, Fab } from '@/shared/ui'
 import { PlanningMonthTimeline } from '@/widgets/planning-month-timeline/ui/PlanningMonthTimeline'
 
 import {
@@ -28,8 +28,6 @@ export function PlanningPageToolbar({
   return (
     <>
       <div className={planningPageToolbarClassName}>
-        <PageSectionTitleRow>Планирование</PageSectionTitleRow>
-
         <div className={planningPageToolbarRowClassName}>
           <PlanningMonthTimeline
             periodMonth={periodMonth}

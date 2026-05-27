@@ -23,6 +23,7 @@ export function PlanningPage() {
 
   return (
     <PageSection
+      title="Планирование"
       className={planningPageSectionClassName}
       header={<PlanningPageHeader page={page} />}
     >

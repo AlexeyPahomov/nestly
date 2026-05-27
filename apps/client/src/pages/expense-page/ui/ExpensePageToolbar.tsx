@@ -1,5 +1,4 @@
 import { PageTitle } from '@/shared/ui'
-import { SidebarTrigger } from '@/shared/ui/sidebar'
 
 import {
   expensePageToolbarClassName,
@@ -25,7 +24,6 @@ export function ExpensePageToolbar({
           value={periodMonth}
           onChange={onPeriodMonthChange}
         />
-        <SidebarTrigger className="shrink-0 md:hidden" />
       </div>
     </div>
   )

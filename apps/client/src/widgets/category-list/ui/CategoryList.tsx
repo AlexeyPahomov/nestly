@@ -1,25 +1,35 @@
 import type { ReactNode } from 'react'
 
-import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import type { Category } from '@/entities/category/model/types'
 import { CategoryCard } from '@/entities/category/ui/CategoryCard'
 import { ItemsList } from '@/shared/ui'
+import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList'
 
 import { categoryListGridClassName } from '../lib/categoryListLayout'
 
 export type CategoryListProps = {
   className?: string
+  data: Category[] | undefined
+  isPending: boolean
+  isError: boolean
+  error: unknown
+  isFetching: boolean
   headerEnd?: ReactNode
+  layout?: ItemsListLayout
   onEdit?: (category: Category) => void
 }
 
 export function CategoryList({
   className,
+  data,
+  isPending,
+  isError,
+  error,
+  isFetching,
   headerEnd,
+  layout = 'fill',
   onEdit,
 }: CategoryListProps) {
-  const { data, isPending, isError, error, isFetching } = useCategoriesQuery()
-
   return (
     <ItemsList
       className={className}
@@ -28,9 +38,11 @@ export function CategoryList({
       error={error}
       data={data}
       isFetching={isFetching}
+      showPendingLoader={false}
       headerEnd={headerEnd}
       emptyMessage="Пока нет категорий. Добавьте первую."
       errorFallback="Не удалось загрузить категории"
+      layout={layout}
       listAnimateEnter={false}
       listClassName={categoryListGridClassName}
     >
