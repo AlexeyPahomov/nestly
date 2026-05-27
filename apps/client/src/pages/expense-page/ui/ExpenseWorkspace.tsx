@@ -5,13 +5,12 @@ import type { Income } from '@/entities/income/model/types';
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget';
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog';
 import { cn } from '@/shared/lib/utils';
-import { AddButton, Fab } from '@/shared/ui';
+import { AddButton, Fab, fabDesktopAddButtonClassName } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 import type { CategoryBudgetItem } from '@/entities/budget/model/types';
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
 import { CategoryBudgetList } from '@/widgets/category-budget-list';
 
-import { expensePageAddButtonDesktopClassName } from '../lib/expensePageLayout';
 import { useExpenseFormDialog } from '../model/useExpenseFormDialog';
 
 type ExpenseWorkspaceProps = {
@@ -84,7 +83,7 @@ export function ExpenseWorkspace({
           onCategorySelect={onCategorySelect}
           headerEnd={
             <AddButton
-              className={expensePageAddButtonDesktopClassName}
+              className={fabDesktopAddButtonClassName}
               onClick={dialog.openForAdd}
             >
               Добавить расход

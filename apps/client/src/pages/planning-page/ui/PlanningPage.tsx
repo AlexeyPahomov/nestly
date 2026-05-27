@@ -6,10 +6,7 @@ import { PageSection, Spinner } from '@/shared/ui'
 import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
 import { PlanningMonthMetrics } from '@/widgets/planning-month-metrics'
 
-import {
-  planningPageContentClassName,
-  planningPageSectionClassName,
-} from '../lib/planningPageLayout'
+import { planningPageContentClassName } from '../lib/planningPageLayout'
 import { usePlanningPage } from '../model/usePlanningPage'
 
 import { PlanningPageHeader } from './PlanningPageHeader'
@@ -24,7 +21,6 @@ export function PlanningPage() {
   return (
     <PageSection
       title="Планирование"
-      className={planningPageSectionClassName}
       header={<PlanningPageHeader page={page} />}
     >
       <div className={planningPageContentClassName}>

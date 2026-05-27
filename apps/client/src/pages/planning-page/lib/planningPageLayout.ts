@@ -5,8 +5,6 @@ import {
 } from '@/shared/lib/scrollLayout'
 import { mobileFabScrollReserveClassName } from '@/shared/ui/fab'
 
-export const planningPageSectionClassName = 'gap-4 md:gap-6'
-
 export const planningPageContentClassName = cn(
   'flex min-h-0 flex-1 flex-col gap-4 md:gap-6',
   pageScrollRingInsetClassName,

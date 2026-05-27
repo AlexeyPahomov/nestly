@@ -13,7 +13,6 @@ export type CategoryListProps = {
   isPending: boolean
   isError: boolean
   error: unknown
-  isFetching: boolean
   headerEnd?: ReactNode
   layout?: ItemsListLayout
   onEdit?: (category: Category) => void
@@ -25,7 +24,6 @@ export function CategoryList({
   isPending,
   isError,
   error,
-  isFetching,
   headerEnd,
   layout = 'fill',
   onEdit,
@@ -37,7 +35,7 @@ export function CategoryList({
       isError={isError}
       error={error}
       data={data}
-      isFetching={isFetching}
+      isFetching={false}
       showPendingLoader={false}
       headerEnd={headerEnd}
       emptyMessage="Пока нет категорий. Добавьте первую."

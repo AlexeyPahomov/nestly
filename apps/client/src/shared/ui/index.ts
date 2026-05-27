@@ -64,9 +64,13 @@ export {
   CardTitle,
 } from './card/Card'
 export { Logo } from './logo'
-export { PageSection } from './page-section/PageSection'
-export { PageSectionTitleRow } from './page-section/PageSectionTitleRow'
-export { PageTitle } from './page-section/PageTitle'
+export {
+  PageSection,
+  PageSectionTitleRow,
+  PageTitle,
+  pageSectionClassName,
+  pageSectionToolbarClassName,
+} from './page-section'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
 export { Spinner } from './spinner/Spinner'
 export {

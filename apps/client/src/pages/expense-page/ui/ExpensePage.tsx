@@ -5,7 +5,7 @@ import type { Expense } from '@/entities/expense/model/types';
 import type { ExpenseListItem } from '@/widgets/expense-list';
 import { PageSection } from '@/shared/ui';
 
-import { expensePageSectionClassName, getExpensePageShellClassName } from '../lib/expensePageLayout';
+import { getExpensePageShellClassName } from '../lib/expensePageLayout';
 import { toBudgetSnapshots } from '../lib/toBudgetSnapshots';
 import { useExpensePageCategorySelection } from '../model/useExpensePageCategorySelection';
 import { useExpensePageOutsideInteraction } from '../model/useExpensePageOutsideInteraction';
@@ -85,7 +85,6 @@ export function ExpensePage() {
 
   return (
     <PageSection
-      className={expensePageSectionClassName}
       header={
         <ExpensePageToolbar
           periodMonth={periodMonth}

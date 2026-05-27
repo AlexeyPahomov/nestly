@@ -14,7 +14,7 @@ import {
   expensePageExpensesPaneClassName,
   expensePageWorkAreaClassName,
 } from '../lib/expensePageLayout'
-import { useExpensePageListLayout } from '../model/useExpensePageListLayout'
+import { usePageListLayout } from '@/shared/hooks/use-page-list-layout'
 
 import { ExpenseWorkspace } from './ExpenseWorkspace'
 
@@ -74,7 +74,7 @@ export function ExpensePageWorkArea({
   onEditExpense,
   onDeleteExpense,
 }: ExpensePageWorkAreaProps) {
-  const listLayout = useExpensePageListLayout()
+  const listLayout = usePageListLayout()
 
   return (
     <div className={expensePageWorkAreaClassName}>

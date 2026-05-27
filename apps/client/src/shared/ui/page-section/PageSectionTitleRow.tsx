@@ -4,6 +4,7 @@ import { cn } from '@/shared/lib/utils'
 import { Spinner } from '@/shared/ui/spinner/Spinner'
 
 import { PageTitle } from './PageTitle'
+import { pageSectionTitleRowClassName } from './pageSectionLayout'
 
 type PageSectionTitleRowProps = {
   children: ReactNode
@@ -19,7 +20,7 @@ export function PageSectionTitleRow({
   isLoading = false,
 }: PageSectionTitleRowProps) {
   return (
-    <div className={cn('flex min-w-0 items-center gap-2', className)}>
+    <div className={cn(pageSectionTitleRowClassName, className)}>
       <PageTitle className="min-w-0">{children}</PageTitle>
       {isLoading ? (
         <Spinner

@@ -1,9 +1,6 @@
-import { PageTitle } from '@/shared/ui'
+import { PageTitle, pageSectionToolbarClassName } from '@/shared/ui'
 
-import {
-  expensePageToolbarClassName,
-  expensePageToolbarTitleEndClassName,
-} from '../lib/expensePageLayout'
+import { expensePageToolbarTitleEndClassName } from '../lib/expensePageLayout'
 
 import { ExpensePageMonthPicker } from './ExpensePageMonthPicker'
 
@@ -17,7 +14,7 @@ export function ExpensePageToolbar({
   onPeriodMonthChange,
 }: ExpensePageToolbarProps) {
   return (
-    <div className={expensePageToolbarClassName}>
+    <div className={pageSectionToolbarClassName}>
       <PageTitle className="min-w-0 flex-1">Расходы</PageTitle>
       <div className={expensePageToolbarTitleEndClassName}>
         <ExpensePageMonthPicker

@@ -1,42 +1,19 @@
-import { useState } from 'react'
-
-import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import { CategoryFormDialog } from '@/features/create-category/ui/CategoryFormDialog'
-import type { Category } from '@/entities/category/model/types'
-import { useIsMobile } from '@/shared/hooks/use-mobile'
-import { AddButton, Fab, PageSection } from '@/shared/ui'
+import { AddButton, Fab, fabDesktopAddButtonClassName, PageSection } from '@/shared/ui'
 import { CategoryList } from '@/widgets/category-list'
 
 import {
   categoryPageListShellClassName,
-  categoryPageSectionClassName,
   categoryPageShellClassName,
 } from '../lib/categoryPageLayout'
-import { useCategoryFormDialog } from '../model/useCategoryFormDialog'
-import { useCategoryPageListLayout } from '../model/useCategoryPageListLayout'
+import { useCategoryPage } from '../model/useCategoryPage'
 
 export function CategoryPage() {
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const isMobile = useIsMobile()
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-    isFetching,
-  } = useCategoriesQuery()
-  const dialog = useCategoryFormDialog(editingCategory, () =>
-    setEditingCategory(null),
-  )
-  const listLayout = useCategoryPageListLayout()
-  const isLoading = isPending || isFetching
+  const page = useCategoryPage()
+  const { data, isPending, isError, error } = page.categoriesQuery
 
   return (
-    <PageSection
-      title="Категории"
-      titleLoading={isLoading}
-      className={categoryPageSectionClassName}
-    >
+    <PageSection title="Категории" titleLoading={page.isLoading}>
       <div className={categoryPageShellClassName}>
         <div className={categoryPageListShellClassName}>
           <CategoryList
@@ -45,28 +22,31 @@ export function CategoryPage() {
             isPending={isPending}
             isError={isError}
             error={error}
-            isFetching={false}
-            layout={listLayout}
+            layout={page.listLayout}
             headerEnd={
-              isMobile ? undefined : (
-                <AddButton onClick={dialog.openForAdd}>
-                  Добавить категорию
-                </AddButton>
-              )
+              <AddButton
+                className={fabDesktopAddButtonClassName}
+                onClick={page.dialog.openForAdd}
+              >
+                Добавить категорию
+              </AddButton>
             }
-            onEdit={setEditingCategory}
+            onEdit={page.setEditingCategory}
           />
         </div>
       </div>
 
-      <Fab label="Добавить категорию" onClick={dialog.openForAdd} />
+      <Fab
+        label="Добавить категорию"
+        onClick={page.dialog.openForAdd}
+      />
 
       <CategoryFormDialog
-        open={dialog.isOpen}
-        onOpenChange={dialog.onOpenChange}
-        isEditing={dialog.isEditing}
-        onClose={dialog.close}
-        editingCategory={editingCategory}
+        open={page.dialog.isOpen}
+        onOpenChange={page.dialog.onOpenChange}
+        isEditing={page.dialog.isEditing}
+        onClose={page.dialog.close}
+        editingCategory={page.editingCategory}
       />
     </PageSection>
   )
