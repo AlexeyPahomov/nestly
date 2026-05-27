@@ -16,16 +16,16 @@ export const planningMonthTimelineClassName =
 export const planningMonthCarouselContentClassName = 'ml-0 gap-3';
 
 export const planningMonthCarouselOptions: CarouselOptions = {
-  align: 'center',
+  align: 'start',
   duration: 32,
   skipSnaps: false,
   containScroll: 'trimSnaps',
   slidesToScroll: 1,
-};
+}
 
-/** Как на странице «Расходы»: кнопки outline / toolbar — rounded-lg. */
+/** Как на странице «Расходы»: кнопки outline / toolbar — rounded-lg. С md (планшет). */
 export const planningMonthNavButtonClassName =
-  'flex size-8 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 disabled:pointer-events-none disabled:opacity-40';
+  'hidden size-8 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 disabled:pointer-events-none disabled:opacity-40 md:flex';
 
 /** Карточка месяца в переключателе (rounded-lg, как Card / кнопки расходов). */
 export function planningMonthCardClassName(active: boolean): string {

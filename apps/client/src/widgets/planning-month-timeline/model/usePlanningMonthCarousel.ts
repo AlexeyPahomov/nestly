@@ -43,7 +43,7 @@ export function usePlanningMonthCarousel({
     setCanScrollNext(api.canScrollNext())
   }, [])
 
-  const alignToCenter = useCallback((api: CarouselApi | undefined) => {
+  const alignToSelection = useCallback((api: CarouselApi | undefined) => {
     if (!api) {
       return
     }
@@ -57,8 +57,8 @@ export function usePlanningMonthCarousel({
   }, [syncScrollState])
 
   useLayoutEffect(() => {
-    alignToCenter(carouselApi)
-  }, [carouselApi, periodMonth, monthsKey, alignToCenter])
+    alignToSelection(carouselApi)
+  }, [carouselApi, periodMonth, monthsKey, alignToSelection])
 
   useEffect(() => {
     if (!carouselApi) {
@@ -66,7 +66,7 @@ export function usePlanningMonthCarousel({
     }
 
     const onSnap = () => syncScrollState(carouselApi)
-    const onReInit = () => alignToCenter(carouselApi)
+    const onReInit = () => alignToSelection(carouselApi)
 
     carouselApi.on('select', onSnap)
     carouselApi.on('reInit', onReInit)
@@ -76,7 +76,7 @@ export function usePlanningMonthCarousel({
       carouselApi.off('select', onSnap)
       carouselApi.off('reInit', onReInit)
     }
-  }, [carouselApi, alignToCenter, syncScrollState])
+  }, [carouselApi, alignToSelection, syncScrollState])
 
   const selectMonth = useCallback((month: string) => {
     if (month === periodMonthRef.current) {
