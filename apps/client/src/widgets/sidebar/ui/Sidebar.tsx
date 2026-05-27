@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from '@/shared/ui/sidebar'
 
 import { sidebarLogoClassName } from '../lib/sidebarLayout'
@@ -41,11 +42,13 @@ function SidebarNavItem({
   label,
   Icon,
   isActive,
+  onNavigate,
 }: {
   to: string
   label: string
   Icon: IconFn
   isActive: boolean
+  onNavigate?: () => void
 }) {
   return (
     <SidebarMenuItem>
@@ -59,6 +62,7 @@ function SidebarNavItem({
         <NavLink
           to={to}
           aria-label={label}
+          onClick={onNavigate}
           className="flex w-full items-center gap-2 group-data-[collapsible=icon]:justify-center"
         >
           <Icon />
@@ -73,6 +77,11 @@ function SidebarNavItem({
 
 export function Sidebar() {
   const location = useLocation()
+  const { isMobile, setOpenMobile } = useSidebar()
+
+  const handleNavigate = () => {
+    if (isMobile) setOpenMobile(false)
+  }
 
   return (
     <ShadcnSidebar collapsible="icon">
@@ -103,6 +112,7 @@ export function Sidebar() {
                     label={route.label}
                     Icon={Icon}
                     isActive={location.pathname === to}
+                    onNavigate={handleNavigate}
                   />
                 )
               })}
