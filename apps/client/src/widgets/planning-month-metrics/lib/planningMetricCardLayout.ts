@@ -17,7 +17,7 @@ const accentValueClassName: Record<PlanningMetricAccent, string> = {
 }
 
 export const planningMetricCardShellClassName =
-  'relative overflow-hidden rounded-xl border border-zinc-200/80 border-l-4 bg-white py-4 pl-4 pr-4 shadow-sm'
+  'relative overflow-hidden rounded-xl border border-zinc-200/80 border-l-4 bg-white p-2.5 shadow-sm sm:p-4'
 
 export function planningMetricCardAccentClassName(
   accent: PlanningMetricAccent,

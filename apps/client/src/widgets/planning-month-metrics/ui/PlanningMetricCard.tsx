@@ -34,7 +34,7 @@ export function PlanningMetricCard({
     <article className={planningMetricCardAccentClassName(accent)}>
       <div className="space-y-1">
         <div className="flex items-center gap-1.5">
-          <p className="text-sm font-medium text-zinc-600">{title}</p>
+          <p className="text-xs font-medium text-zinc-600 sm:text-sm">{title}</p>
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -53,14 +53,14 @@ export function PlanningMetricCard({
 
         <p
           className={cn(
-            'text-2xl font-bold tracking-tight tabular-nums',
+            'text-lg font-bold tracking-tight tabular-nums sm:text-2xl',
             planningMetricValueClassName(accent, value),
           )}
         >
           {formatAmount(value)}
         </p>
 
-        <p className="text-xs text-zinc-500">{hint}</p>
+        <p className="hidden text-xs text-zinc-500 sm:block">{hint}</p>
       </div>
     </article>
   )

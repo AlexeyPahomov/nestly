@@ -2,6 +2,8 @@ import { parseMonthStringToDate } from '@/shared/lib/date'
 
 type FormatPeriodMonthLabelOptions = {
   lowercase?: boolean
+  /** Без года, например «Май» вместо «Май 2026». */
+  omitYear?: boolean
 }
 
 export function formatPeriodMonthLabel(
@@ -16,16 +18,23 @@ export function formatPeriodMonthLabel(
 
   const label = new Intl.DateTimeFormat('ru-RU', {
     month: 'long',
-    year: 'numeric',
+    ...(options?.omitYear ? {} : { year: 'numeric' }),
   }).format(date)
 
-  const withoutYearSuffix = label.replace(/\s*г\.?$/, '')
+  const withoutYearSuffix = options?.omitYear
+    ? label
+    : label.replace(/\s*г\.?$/, '')
 
   if (options?.lowercase) {
     return withoutYearSuffix.toLowerCase()
   }
 
   return withoutYearSuffix.charAt(0).toUpperCase() + withoutYearSuffix.slice(1)
+}
+
+/** Короткая подпись месяца для экрана планирования (без года). */
+export function formatPlanningPeriodLabel(periodMonth: string): string {
+  return formatPeriodMonthLabel(periodMonth, { omitYear: true })
 }
 
 /** Месяц в родительном падеже для «перенесено с …» (без года). */

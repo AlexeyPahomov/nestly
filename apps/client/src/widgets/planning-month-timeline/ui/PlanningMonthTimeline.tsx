@@ -9,6 +9,7 @@ import {
   planningMonthCarouselViewportClassName,
   planningMonthCardWidthClassName,
   planningMonthNavButtonClassName,
+  planningMonthTimelineClassName,
 } from '../lib/planningMonthSwitcherLayout'
 import { usePlanningMonthCarousel } from '../model/usePlanningMonthCarousel'
 
@@ -30,7 +31,7 @@ export function PlanningMonthTimeline({
   const carousel = usePlanningMonthCarousel({ periodMonth, onSelect })
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={planningMonthTimelineClassName}>
       <button
         type="button"
         className={planningMonthNavButtonClassName}

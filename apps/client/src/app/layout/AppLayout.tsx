@@ -2,12 +2,10 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Spinner, TooltipProvider } from '@/shared/ui';
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/shared/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/shared/ui/sidebar';
 import { Sidebar } from '@/widgets/sidebar';
+
+import { appInsetClassName, appMainClassName } from './appLayoutLayout';
 
 function RouteFallback() {
   return (
@@ -26,20 +24,16 @@ export function AppLayout() {
       >
         <Sidebar />
 
-        <SidebarInset className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-8 py-5">
-          <SidebarTrigger className="fixed right-4 top-4 z-50 md:hidden" />
-
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <SidebarInset className={appInsetClassName}>
+          <div className={appMainClassName}>
             <Suspense
               fallback={
-                <div className="flex min-h-0 flex-1 flex-col">
+                <div className={appMainClassName}>
                   <RouteFallback />
                 </div>
               }
             >
-              <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                <Outlet />
-              </div>
+              <Outlet />
             </Suspense>
           </div>
         </SidebarInset>

@@ -19,6 +19,7 @@ import {
   plannedExpenseCardDateClassName,
   plannedExpenseCardDescriptionClassName,
   plannedExpenseCardFinanceClassName,
+  plannedExpenseCardMetaClassName,
   plannedExpenseCardMainClassName,
   plannedExpenseCardProgressTextClassName,
   plannedExpenseCardRowClassName,
@@ -229,29 +230,31 @@ export function PlannedExpenseCard({
           </div>
         </div>
 
-        <div className={plannedExpenseCardFinanceClassName}>
-          <p className={plannedExpenseCardAmountClassName}>
-            {formatMoneyWithRub(targetAmount)}
-          </p>
-          {showProgress ? (
-            <>
-              <Progress
-                value={progressValue}
-                className="h-1 w-full bg-zinc-100"
-                indicatorClassName={tone.progressClassName}
-              />
-              <p className={plannedExpenseCardProgressTextClassName}>
-                {formatMoneyRange(currentAmount, targetAmount)}
-              </p>
-            </>
-          ) : null}
+        <div className={plannedExpenseCardMetaClassName}>
+          <div className={plannedExpenseCardFinanceClassName}>
+            <p className={plannedExpenseCardAmountClassName}>
+              {formatMoneyWithRub(targetAmount)}
+            </p>
+            {showProgress ? (
+              <>
+                <Progress
+                  value={progressValue}
+                  className="h-1 w-full max-w-36 bg-zinc-100"
+                  indicatorClassName={tone.progressClassName}
+                />
+                <p className={plannedExpenseCardProgressTextClassName}>
+                  {formatMoneyRange(currentAmount, targetAmount)}
+                </p>
+              </>
+            ) : null}
+          </div>
+
+          <div className={plannedExpenseCardStatusClassName}>{statusBadge}</div>
         </div>
 
         <p className={plannedExpenseCardDateClassName}>
           {formatPlannedDate(item.planned_date)}
         </p>
-
-        <div className={plannedExpenseCardStatusClassName}>{statusBadge}</div>
       </div>
     </article>
   )

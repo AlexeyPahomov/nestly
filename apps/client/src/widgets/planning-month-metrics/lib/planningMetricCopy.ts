@@ -1,5 +1,7 @@
-export function planningForecastMetricTitle(periodLabel: string): string {
-  return `Прогноз на ${periodLabel}`
+import { formatPlanningPeriodLabel } from '@/entities/budget/lib/periodLabels'
+
+export function planningForecastMetricTitle(periodMonth: string): string {
+  return `Прогноз на ${formatPlanningPeriodLabel(periodMonth)}`
 }
 
 export const PLANNING_METRIC_COPY = {

@@ -11,7 +11,11 @@ export const plannedExpenseCardClassName =
   'border-b border-zinc-200/80 px-4 py-3.5 last:border-b-0'
 
 export const plannedExpenseCardRowClassName =
-  'flex min-w-0 items-center gap-4'
+  'flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:gap-4'
+
+/** Сумма и статус: одна строка на мобилке, на десктопе — части общего flex-ряда. */
+export const plannedExpenseCardMetaClassName =
+  'flex w-full items-center justify-between gap-3 sm:contents'
 
 export const plannedExpenseCardMainClassName = 'flex min-w-0 flex-1 items-center gap-3'
 
@@ -24,7 +28,7 @@ export const plannedExpenseCardDescriptionClassName =
   'truncate text-sm text-zinc-500'
 
 export const plannedExpenseCardFinanceClassName =
-  'flex w-28 shrink-0 flex-col items-end gap-1 sm:w-36'
+  'flex min-w-0 flex-1 shrink-0 flex-col items-start gap-1 sm:w-36 sm:items-end'
 
 export const plannedExpenseCardAmountClassName =
   'text-base font-bold tabular-nums leading-none text-zinc-900'
@@ -35,7 +39,8 @@ export const plannedExpenseCardProgressTextClassName =
 export const plannedExpenseCardDateClassName =
   'hidden shrink-0 text-sm text-zinc-500 md:block md:w-32 lg:w-36'
 
-export const plannedExpenseCardStatusClassName = 'shrink-0'
+export const plannedExpenseCardStatusClassName =
+  'shrink-0 sm:ml-0'
 
 /** Пункт «Зарезервировать» в дропдауне карточки. */
 export const plannedExpenseReserveMenuItemClassName =

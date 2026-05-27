@@ -13,6 +13,10 @@ import {
   liquidityFlowNodeLabels,
   type LiquidityFlowNodeKind,
 } from './liquidityFlowCopy'
+import {
+  liquidityFlowCardMaxHeightClassName,
+  liquidityFlowTrackScrollHeightClassName,
+} from './liquidityFlowDimensions'
 
 export type { LiquidityFlowNodeKind }
 
@@ -24,7 +28,10 @@ export type LiquidityFlowNodeConfig = {
   amountClassName: string
 }
 
-const nodeConfig: Record<LiquidityFlowNodeKind, Omit<LiquidityFlowNodeConfig, 'kind' | 'label'>> = {
+const nodeConfig: Record<
+  LiquidityFlowNodeKind,
+  Omit<LiquidityFlowNodeConfig, 'kind' | 'label'>
+> = {
   income: {
     icon: Plus,
     iconWrapClassName: 'bg-emerald-100 text-emerald-600',
@@ -58,21 +65,47 @@ export function getLiquidityFlowNodeConfig(
   return { kind, label: liquidityFlowNodeLabels[kind], ...nodeConfig[kind] }
 }
 
-export const liquidityFlowCardClassName =
-  'rounded-xl border border-zinc-200/80 bg-white p-4 shadow-sm'
+export const liquidityFlowCardClassName = cn(
+  'relative flex shrink-0 flex-col overflow-hidden rounded-xl border border-zinc-200/80 bg-white p-3 shadow-sm sm:p-4',
+  liquidityFlowCardMaxHeightClassName,
+)
 
-/** Как на макете: лёгкий фон, тонкая рамка, компактный chevron. */
+export const liquidityFlowHeaderClassName =
+  'flex shrink-0 items-start justify-between gap-2 pb-2'
+
+export const liquidityFlowTitleClassName =
+  'min-w-0 text-sm font-medium text-zinc-900 sm:text-base'
+
+export const liquidityFlowTrackScrollClassName = cn(
+  'coffer-scroll-list overflow-y-auto overscroll-y-auto py-2 pe-2',
+  liquidityFlowTrackScrollHeightClassName,
+  'sm:overflow-x-auto sm:overflow-y-hidden sm:pb-2 sm:pe-0 sm:pt-1',
+)
+
+export const liquidityFlowScrollInnerClassName = 'flex flex-col gap-3'
+
+export const liquidityFlowDetailsRowClassName =
+  'hidden shrink-0 justify-end sm:flex'
+
+export const liquidityFlowTrackClassName =
+  'flex w-full min-w-0 flex-col items-center gap-2 sm:w-max sm:flex-row sm:flex-nowrap sm:items-center sm:gap-3 lg:gap-4'
+
+export const liquidityFlowNodeClassName =
+  'flex w-full items-center justify-center gap-2.5 sm:w-auto sm:shrink-0 sm:justify-start'
+
+export const liquidityFlowDetailsPopoverContentClassName =
+  'w-[min(20rem,calc(100vw-2rem))] sm:w-80'
+
+export const liquidityFlowDetailsIconButtonClassName =
+  'size-6 shrink-0 gap-0 rounded-full border-0 bg-transparent p-0 font-normal text-green/50 shadow-none hover:bg-transparent hover:text-green/70 aria-expanded:bg-transparent aria-expanded:text-green/70'
+
 export const liquidityFlowDetailsButtonClassName =
   'group h-7 gap-1 border-zinc-200 bg-zinc-50 px-2.5 font-normal text-zinc-600 shadow-none hover:bg-zinc-100 hover:text-zinc-700 aria-expanded:bg-zinc-100 aria-expanded:text-zinc-700'
 
+export const liquidityFlowDetailsInfoIconClassName = 'size-3'
+
 export const liquidityFlowDetailsChevronClassName =
   'size-3.5 text-zinc-500 transition-transform duration-200 group-data-[state=open]:rotate-180 group-aria-expanded:rotate-180'
-
-export const liquidityFlowTrackClassName =
-  'flex w-full min-w-0 flex-nowrap items-center gap-2 overflow-x-auto pb-1 sm:gap-3 lg:justify-between lg:gap-4'
-
-export const liquidityFlowNodeClassName =
-  'flex shrink-0 items-center gap-2.5'
 
 export const liquidityFlowIconWrapClassName =
   'flex size-9 shrink-0 items-center justify-center rounded-full'
@@ -83,9 +116,10 @@ export const liquidityFlowAmountBaseClassName =
 export const liquidityFlowLabelClassName = 'text-xs leading-tight text-zinc-500'
 
 export const liquidityFlowArrowWrapClassName =
-  'flex shrink-0 items-center justify-center self-center px-0.5 sm:px-1'
+  'flex w-full items-center justify-center py-0.5 sm:w-auto sm:shrink-0 sm:px-1 sm:py-0'
 
-export const liquidityFlowArrowClassName = 'size-4 text-zinc-400'
+export const liquidityFlowArrowClassName =
+  'size-4 rotate-90 text-zinc-400 sm:rotate-0'
 
 export function liquidityFlowAmountClassName(
   kind: LiquidityFlowNodeKind,

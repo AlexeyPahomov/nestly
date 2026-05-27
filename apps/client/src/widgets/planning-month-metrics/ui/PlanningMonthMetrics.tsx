@@ -11,12 +11,12 @@ import { PlanningMetricCard } from './PlanningMetricCard'
 
 export type PlanningMonthMetricsProps = {
   projection: MonthBudgetProjection
-  periodLabel: string
+  periodMonth: string
 }
 
 export function PlanningMonthMetrics({
   projection,
-  periodLabel,
+  periodMonth,
 }: PlanningMonthMetricsProps) {
   const copy = PLANNING_METRIC_COPY
 
@@ -25,7 +25,7 @@ export function PlanningMonthMetrics({
       <div className={planningMonthMetricsGridClassName}>
         <PlanningMetricCard
           accent="forecast"
-          title={planningForecastMetricTitle(periodLabel)}
+          title={planningForecastMetricTitle(periodMonth)}
           hint={copy.forecast.hint}
           tooltip={copy.forecast.tooltip}
           value={projection.projectedFree}

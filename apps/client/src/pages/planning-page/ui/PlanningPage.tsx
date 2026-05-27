@@ -7,8 +7,15 @@ import { EditPlannedExpenseDialog } from '@/features/create-planned-expense/ui/E
 import { PageSection, Spinner } from '@/shared/ui'
 import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
 import { PlanningMonthMetrics } from '@/widgets/planning-month-metrics'
-import { PlanningPageToolbar } from '@/widgets/planning-page-toolbar/ui/PlanningPageToolbar'
+import { PlanningPageToolbar } from '@/widgets/planning-page-toolbar'
 
+import { planningPlansListTitle } from '../lib/planningPageCopy'
+import {
+  planningPageContentClassName,
+  planningPagePlannedListScrollClassName,
+  planningPagePlansSectionClassName,
+  planningPageSectionClassName,
+} from '../lib/planningPageLayout'
 import { usePlanningPage } from '../model/usePlanningPage'
 
 export function PlanningPage() {
@@ -19,7 +26,7 @@ export function PlanningPage() {
 
   return (
     <PageSection
-      className="gap-6"
+      className={planningPageSectionClassName}
       header={
         <PlanningPageToolbar
           periodMonth={page.periodMonth}
@@ -29,7 +36,7 @@ export function PlanningPage() {
         />
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <div className={planningPageContentClassName}>
         {page.isLoading ? (
           <div className="flex justify-center py-12">
             <Spinner className="size-8 text-zinc-500" />
@@ -38,23 +45,24 @@ export function PlanningPage() {
           <>
             <PlanningMonthMetrics
               projection={page.projection}
-              periodLabel={page.periodLabel}
+              periodMonth={page.periodMonth}
             />
 
             <MonthLiquidityFlow
-              periodLabel={page.periodLabel}
               projection={page.projection}
               incomeTotal={page.incomeTotal}
             />
 
-            <div className="flex min-h-0 flex-1 flex-col">
+            <div className={planningPagePlansSectionClassName}>
               {page.periodPlanned.length === 0 ? (
                 <p className="text-sm text-zinc-500">
                   Нет запланированных трат на этот месяц.
                 </p>
               ) : (
-                <PlannedExpensesList title={`Планы на ${page.periodLabel}`}>
-                  <div className="coffer-scroll-list max-h-[min(28rem,50vh)] overflow-y-auto">
+                <PlannedExpensesList
+                  title={planningPlansListTitle(page.periodMonth)}
+                >
+                  <div className={planningPagePlannedListScrollClassName}>
                     {page.periodPlanned.map((item) => (
                       <PlannedExpenseCard
                         key={item.id}
