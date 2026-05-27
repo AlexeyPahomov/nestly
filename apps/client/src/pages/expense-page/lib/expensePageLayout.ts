@@ -1,14 +1,21 @@
 import { cn } from '@/shared/lib/utils'
 import { scrollAreaClassName } from '@/shared/lib/scrollLayout'
+import {
+  fabDesktopAddButtonClassName,
+  mobileFabScrollReserveClassName,
+} from '@/shared/ui/fab'
 
 /** Отступы скролла страницы расходов (ps сохранён на md — ring карточек не обрезается). */
 const expensePageScrollPaddingClassName =
   'pb-8 pe-2 ps-0.5 md:pb-0 md:pe-0 md:ps-0.5'
 
+export const expensePageAddButtonDesktopClassName = fabDesktopAddButtonClassName
+
 /** Оболочка страницы: казна + категории по контенту + история на остаток высоты. */
 export const expensePageShellClassName = [
   scrollAreaClassName,
   expensePageScrollPaddingClassName,
+  mobileFabScrollReserveClassName,
   'flex min-h-0 flex-1 flex-col gap-4',
 ].join(' ')
 

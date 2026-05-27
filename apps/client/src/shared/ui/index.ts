@@ -1,5 +1,7 @@
 export { AddButton } from './add-button'
 export type { AddButtonProps } from './add-button'
+export { Fab, fabDesktopAddButtonClassName, mobileFabScrollReserveClassName } from './fab'
+export type { FabProps } from './fab'
 export { Badge } from './badge/Badge'
 export { badgeVariants } from './badge/variants'
 export { Button, buttonVariants, primaryActionButtonClassName } from './button'

@@ -1,13 +1,11 @@
 import { useState } from 'react'
 
 import { CreatePlannedExpenseDialog } from '@/features/create-planned-expense/ui/CreatePlannedExpenseDialog'
-import { AddButton, PageSectionTitleRow } from '@/shared/ui'
+import { AddButton, Fab, PageSectionTitleRow } from '@/shared/ui'
 import { PlanningMonthTimeline } from '@/widgets/planning-month-timeline/ui/PlanningMonthTimeline'
 
 import {
   planningPageAddButtonDesktopClassName,
-  planningPageAddButtonMobileStickyClassName,
-  planningPageAddButtonMobileStickyWrapClassName,
   planningPageToolbarClassName,
   planningPageToolbarRowClassName,
 } from '../lib/planningPageToolbarLayout'
@@ -49,14 +47,7 @@ export function PlanningPageToolbar({
         </div>
       </div>
 
-      <div className={planningPageAddButtonMobileStickyWrapClassName}>
-        <AddButton
-          className={planningPageAddButtonMobileStickyClassName}
-          onClick={() => setCreateOpen(true)}
-        >
-          Новый план
-        </AddButton>
-      </div>
+      <Fab label="Новый план" onClick={() => setCreateOpen(true)} />
 
       <CreatePlannedExpenseDialog
         open={createOpen}

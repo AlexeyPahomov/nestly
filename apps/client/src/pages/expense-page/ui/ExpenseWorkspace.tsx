@@ -5,12 +5,13 @@ import type { Income } from '@/entities/income/model/types';
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget';
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog';
 import { cn } from '@/shared/lib/utils';
-import { AddButton } from '@/shared/ui';
+import { AddButton, Fab } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 import type { CategoryBudgetItem } from '@/entities/budget/model/types';
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
 import { CategoryBudgetList } from '@/widgets/category-budget-list';
 
+import { expensePageAddButtonDesktopClassName } from '../lib/expensePageLayout';
 import { useExpenseFormDialog } from '../model/useExpenseFormDialog';
 
 type ExpenseWorkspaceProps = {
@@ -54,36 +55,45 @@ export function ExpenseWorkspace({
   const categoriesCompact = listLayout === 'fill';
 
   return (
-    <div
-      className={cn(
-        'flex w-full flex-col',
-        listLayout === 'fill' ? 'min-h-0 overflow-hidden' : 'overflow-visible',
-        categoriesCompact
-          ? categoryBudgetListCompactShellClassName
-          : listLayout === 'fill'
-            ? 'min-h-0 flex-1'
-            : '',
-      )}
-    >
-      <CategoryBudgetList
+    <>
+      <div
         className={cn(
-          'w-full',
-          listLayout === 'fill' ? 'min-h-0 flex-1 overflow-hidden' : '',
+          'flex w-full flex-col',
+          listLayout === 'fill' ? 'min-h-0 overflow-hidden' : 'overflow-visible',
+          categoriesCompact
+            ? categoryBudgetListCompactShellClassName
+            : listLayout === 'fill'
+              ? 'min-h-0 flex-1'
+              : '',
         )}
-        layout={listLayout}
-        limitToTwoRows={categoriesCompact}
-        budgetItems={budgetItems}
-        isPending={isBudgetPending}
-        isError={isBudgetError}
-        error={budgetError}
-        isFetching={isBudgetFetching}
-        selectedCategoryId={selectedCategoryId}
-        stressCategoryId={stressCategoryId}
-        onCategorySelect={onCategorySelect}
-        headerEnd={
-          <AddButton onClick={dialog.openForAdd}>Добавить расход</AddButton>
-        }
-      />
+      >
+        <CategoryBudgetList
+          className={cn(
+            'w-full',
+            listLayout === 'fill' ? 'min-h-0 flex-1 overflow-hidden' : '',
+          )}
+          layout={listLayout}
+          limitToTwoRows={categoriesCompact}
+          budgetItems={budgetItems}
+          isPending={isBudgetPending}
+          isError={isBudgetError}
+          error={budgetError}
+          isFetching={isBudgetFetching}
+          selectedCategoryId={selectedCategoryId}
+          stressCategoryId={stressCategoryId}
+          onCategorySelect={onCategorySelect}
+          headerEnd={
+            <AddButton
+              className={expensePageAddButtonDesktopClassName}
+              onClick={dialog.openForAdd}
+            >
+              Добавить расход
+            </AddButton>
+          }
+        />
+      </div>
+
+      <Fab label="Добавить расход" onClick={dialog.openForAdd} />
 
       <ExpenseFormDialog
         open={dialog.isOpen}
@@ -98,6 +108,6 @@ export function ExpenseWorkspace({
         editingExpense={editingExpense}
         onStressCategoryChange={onStressCategoryChange}
       />
-    </div>
+    </>
   );
 }
