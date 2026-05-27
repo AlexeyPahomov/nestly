@@ -1,21 +1,16 @@
-import { InfoIcon } from 'lucide-react'
-
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
 import type { CurrentBudgetSummaryView } from '@/entities/budget/model/currentBudgetSummaryView'
 import type { ReserveCategorySummary } from '@/entities/budget/model/types'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/shared/ui'
-
-import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
 import { SummaryMetricCard } from '@/shared/ui/summary-metric-card'
 
-const RESERVE_TOOLTIP =
-  'Резервные средства. Используйте только для целей накопления.'
+import {
+  CURRENT_BUDGET_AVAILABLE_INFO,
+  CURRENT_BUDGET_RESERVE_INFO,
+  CURRENT_BUDGET_RESERVE_LABEL,
+} from '../lib/currentBudgetSummaryCopy'
+
+import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
 
 /** Reporting: что произошло / текущее состояние пула (факт). */
 export type CurrentBudgetSummaryProps = CurrentBudgetSummaryView
@@ -51,76 +46,45 @@ export function CurrentBudgetSummary({
         ? 'text-destructive'
         : undefined
 
+  const reserveLabel = reserveCategory?.name ?? CURRENT_BUDGET_RESERVE_LABEL
+
   return (
-    <TooltipProvider delayDuration={300}>
-      <div className="space-y-3">
-        {carryForwardTotal !== 0 && previousPeriodLabel ? (
-          <div className="flex justify-end">
-            <BudgetSummaryCarryForward
-              total={carryForwardTotal}
-              previousPeriodLabel={previousPeriodLabel}
-            />
-          </div>
-        ) : null}
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <SummaryMetricCard
-            label="Доступно"
-            value={available}
-            valueClassName={availableTone}
-            trailing={
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
-                    aria-label="Что значит «Доступно»"
-                  >
-                    <InfoIcon className="size-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-xs text-sm">
-                  Доходы за месяц за вычетом уже распределённых по категориям
-                  сумм. При перерасходе конверта свободный остаток уменьшается.
-                </TooltipContent>
-              </Tooltip>
-            }
-          />
-
-          <SummaryMetricCard
-            label={reserveCategory?.name ?? 'В резерве'}
-            headerEnd={
-              reserveCategory ? (
-                <ReserveCategoryIcon reserveCategory={reserveCategory} />
-              ) : undefined
-            }
-            value={inReserve}
-            valueClassName={inReserve > 0 ? 'text-green' : undefined}
-            trailing={
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
-                    aria-label={RESERVE_TOOLTIP}
-                  >
-                    <InfoIcon className="size-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-xs text-sm">
-                  {RESERVE_TOOLTIP}
-                </TooltipContent>
-              </Tooltip>
-            }
-          />
-
-          <SummaryMetricCard
-            label="Потрачено в месяце"
-            value={spentThisMonth}
-            valueClassName="text-slate"
+    <div className="space-y-3">
+      {carryForwardTotal !== 0 && previousPeriodLabel ? (
+        <div className="flex justify-end">
+          <BudgetSummaryCarryForward
+            total={carryForwardTotal}
+            previousPeriodLabel={previousPeriodLabel}
           />
         </div>
+      ) : null}
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <SummaryMetricCard
+          label="Доступно"
+          infoText={CURRENT_BUDGET_AVAILABLE_INFO}
+          value={available}
+          valueClassName={availableTone}
+        />
+
+        <SummaryMetricCard
+          label={reserveLabel}
+          infoText={CURRENT_BUDGET_RESERVE_INFO}
+          headerEnd={
+            reserveCategory ? (
+              <ReserveCategoryIcon reserveCategory={reserveCategory} />
+            ) : undefined
+          }
+          value={inReserve}
+          valueClassName={inReserve > 0 ? 'text-green' : undefined}
+        />
+
+        <SummaryMetricCard
+          label="Потрачено в месяце"
+          value={spentThisMonth}
+          valueClassName="text-slate"
+        />
       </div>
-    </TooltipProvider>
+    </div>
   )
 }

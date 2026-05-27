@@ -1,5 +1,5 @@
 export const plannedExpenseListClassName =
-  'overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10'
+  'overflow-hidden rounded-xl border border-zinc-200/80 bg-card'
 
 export const plannedExpenseListHeaderClassName =
   'border-b border-zinc-200/80 px-4 py-3'

@@ -71,7 +71,7 @@ export const liquidityFlowCardClassName = cn(
 )
 
 export const liquidityFlowHeaderClassName =
-  'flex shrink-0 items-start justify-between gap-2 pb-2'
+  'flex shrink-0 items-center gap-1.5 pb-2'
 
 export const liquidityFlowTitleClassName =
   'min-w-0 text-sm font-medium text-zinc-900 sm:text-base'
@@ -82,30 +82,11 @@ export const liquidityFlowTrackScrollClassName = cn(
   'sm:overflow-x-auto sm:overflow-y-hidden sm:pb-2 sm:pe-0 sm:pt-1',
 )
 
-export const liquidityFlowScrollInnerClassName = 'flex flex-col gap-3'
-
-export const liquidityFlowDetailsRowClassName =
-  'hidden shrink-0 justify-end sm:flex'
-
 export const liquidityFlowTrackClassName =
   'flex w-full min-w-0 flex-col items-center gap-2 sm:w-max sm:flex-row sm:flex-nowrap sm:items-center sm:gap-3 lg:gap-4'
 
 export const liquidityFlowNodeClassName =
   'flex w-full items-center justify-center gap-2.5 sm:w-auto sm:shrink-0 sm:justify-start'
-
-export const liquidityFlowDetailsPopoverContentClassName =
-  'w-[min(20rem,calc(100vw-2rem))] sm:w-80'
-
-export const liquidityFlowDetailsIconButtonClassName =
-  'size-6 shrink-0 gap-0 rounded-full border-0 bg-transparent p-0 font-normal text-green/50 shadow-none hover:bg-transparent hover:text-green/70 aria-expanded:bg-transparent aria-expanded:text-green/70'
-
-export const liquidityFlowDetailsButtonClassName =
-  'group h-7 gap-1 border-zinc-200 bg-zinc-50 px-2.5 font-normal text-zinc-600 shadow-none hover:bg-zinc-100 hover:text-zinc-700 aria-expanded:bg-zinc-100 aria-expanded:text-zinc-700'
-
-export const liquidityFlowDetailsInfoIconClassName = 'size-3'
-
-export const liquidityFlowDetailsChevronClassName =
-  'size-3.5 text-zinc-500 transition-transform duration-200 group-data-[state=open]:rotate-180 group-aria-expanded:rotate-180'
 
 export const liquidityFlowIconWrapClassName =
   'flex size-9 shrink-0 items-center justify-center rounded-full'

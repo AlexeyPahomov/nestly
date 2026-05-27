@@ -6,6 +6,8 @@ export { Button, buttonVariants, primaryActionButtonClassName } from './button'
 export { Calendar, CalendarDayButton } from './calendar/Calendar'
 export { IconPicker } from './icon-picker'
 export { IconColorAvatar } from './icon-color-avatar'
+export { InfoHint, getInfoHintLabel } from './info-hint'
+export type { InfoHintProps } from './info-hint'
 export type {
   IconPickerColorOption,
   IconPickerIconOption,
