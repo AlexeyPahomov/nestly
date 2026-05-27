@@ -59,12 +59,12 @@ export function ExpenseWorkspace({
       <div
         className={cn(
           'flex w-full flex-col',
-          listLayout === 'fill' ? 'min-h-0 overflow-hidden' : 'overflow-visible',
-          categoriesCompact
-            ? categoryBudgetListCompactShellClassName
-            : listLayout === 'fill'
-              ? 'min-h-0 flex-1'
-              : '',
+          listLayout === 'fill'
+            ? cn(
+                'min-h-0 flex-1 overflow-hidden',
+                categoryBudgetListCompactShellClassName,
+              )
+            : 'overflow-visible',
         )}
       >
         <CategoryBudgetList

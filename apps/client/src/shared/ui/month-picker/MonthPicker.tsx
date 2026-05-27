@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { ru } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
 
 import { formLabelClassName } from '@/shared/config/formUi';
-import {
-  monthInputToPeriodMonth,
-  monthValueFromDate,
-  parseMonthStringToDate,
-} from '@/shared/lib/date';
-import { formatMonthLabel } from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
 
-import { buttonVariants } from '../button/variants'
-import { Calendar } from '../calendar/Calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover/Popover';
+import {
+  SelectContent,
+  SelectItem,
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+} from '../select/SelectPrimitives';
+
+import { buildPeriodMonthSelectOptions } from './lib/monthSelectOptions';
+import { monthPickerTriggerClassName, monthPickerSelectMenuClassName } from './lib/monthPickerLayout';
 
 type MonthPickerProps = {
   id?: string;
@@ -22,6 +21,7 @@ type MonthPickerProps = {
   onChange: (value: string) => void;
   disabled?: boolean;
   containerClassName?: string;
+  triggerClassName?: string;
 };
 
 export function MonthPicker({
@@ -31,51 +31,43 @@ export function MonthPicker({
   onChange,
   disabled,
   containerClassName,
+  triggerClassName,
 }: MonthPickerProps) {
   const generatedId = React.useId();
   const inputId =
     idProp ?? (label != null && label !== '' ? generatedId : undefined);
-  const [open, setOpen] = React.useState(false);
 
-  const selected = parseMonthStringToDate(value);
-  const display =
-    value && selected
-      ? formatMonthLabel(monthInputToPeriodMonth(value))
-      : 'Выберите месяц';
+  const options = React.useMemo(
+    () => buildPeriodMonthSelectOptions(value),
+    [value],
+  );
 
   const control = (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          id={inputId}
-          disabled={disabled}
-          className={cn(
-            buttonVariants({ variant: 'outline', size: 'default' }),
-            'max-w-xs justify-start gap-2 text-left font-normal',
-          )}
-        >
-          <CalendarIcon className="size-4 shrink-0 opacity-60" />
-          <span className="truncate">{display}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          locale={ru}
-          mode="single"
-          captionLayout="dropdown"
-          defaultMonth={selected ?? new Date()}
-          selected={selected}
-          onSelect={(date) => {
-            if (date) {
-              onChange(monthValueFromDate(date));
-              setOpen(false);
-            }
-          }}
-          autoFocus
-        />
-      </PopoverContent>
-    </Popover>
+    <SelectRoot value={value} onValueChange={onChange} disabled={disabled}>
+      <SelectTrigger
+        id={inputId}
+        showIcon={false}
+        className={cn('max-w-xs min-w-0', monthPickerTriggerClassName, triggerClassName)}
+      >
+        <SelectValue placeholder="Выберите месяц" />
+      </SelectTrigger>
+      <SelectContent
+        position="item-aligned"
+        hideScrollButtons
+        className={monthPickerSelectMenuClassName}
+        viewportClassName={monthPickerSelectMenuClassName}
+      >
+        {options.map((option) => (
+          <SelectItem
+            key={option.value}
+            value={option.value}
+            className="min-h-9 py-0"
+          >
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
   );
 
   if (label == null || label === '') {

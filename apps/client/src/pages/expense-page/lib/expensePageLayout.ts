@@ -15,7 +15,7 @@ export const expensePageAddButtonDesktopClassName = fabDesktopAddButtonClassName
 
 /** MonthPicker в шапке страницы / блока казны. */
 export const expensePageMonthPickerClassName =
-  'w-auto [&_button]:h-9 [&_button]:rounded-lg [&_button]:border-0 [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:text-base [&_button]:font-semibold [&_button]:shadow-none hover:[&_button]:bg-zinc-100'
+  'w-auto [&_[data-slot=select-trigger]]:h-9 [&_[data-slot=select-trigger]]:rounded-lg [&_[data-slot=select-trigger]]:bg-transparent [&_[data-slot=select-trigger]]:px-2.5 [&_[data-slot=select-trigger]]:text-base [&_[data-slot=select-trigger]]:font-semibold hover:[&_[data-slot=select-trigger]]:bg-zinc-100'
 
 export const expensePageMonthPickerPageHeaderClassName = 'hidden md:block'
 

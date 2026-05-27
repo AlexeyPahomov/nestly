@@ -5,6 +5,7 @@ import type { Income } from '@/entities/income/model/types'
 import type { CategoryBudgetItem } from '@/entities/budget/model/types'
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget'
 import { cn } from '@/shared/lib/utils'
+import type { ExpenseListItem } from '@/widgets/expense-list'
 import { ExpenseList } from '@/widgets/expense-list'
 
 import {
@@ -34,7 +35,7 @@ export type ExpensePageWorkAreaProps = {
   isBudgetError: boolean
   budgetError: unknown
   isBudgetFetching: boolean
-  sortedExpenses: Expense[]
+  sortedExpenses: ExpenseListItem[]
   expenseCategoryFilter: string
   expensesQuery: {
     isPending: boolean
@@ -44,7 +45,7 @@ export type ExpensePageWorkAreaProps = {
   }
   editingExpenseId: string | null
   deletingExpenseId: string | null
-  onEditExpense: (item: Expense) => void
+  onEditExpense: (item: ExpenseListItem) => void
   onDeleteExpense: (id: string) => void
 }
 

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useDeleteExpenseMutation } from '@/entities/expense/api/useDeleteExpenseMutation';
 import type { Expense } from '@/entities/expense/model/types';
+import type { ExpenseListItem } from '@/widgets/expense-list';
 import { PageSection } from '@/shared/ui';
 
 import { expensePageSectionClassName, getExpensePageShellClassName } from '../lib/expensePageLayout';
@@ -65,7 +66,7 @@ export function ExpensePage() {
   );
 
   const handleEditExpense = useCallback(
-    (item: Expense) => {
+    (item: ExpenseListItem) => {
       setEditingExpense(item);
       setSelectedCategoryId(item.category_id);
     },
