@@ -2,6 +2,12 @@
 export const scrollAreaClassName =
   'coffer-scroll-list overflow-y-auto overscroll-y-auto [overflow-anchor:none]'
 
-/** Отступы прокручиваемой области страницы на мобилке (скроллбар + левый бордер карточек). */
-export const mobilePageScrollPaddingClassName =
-  'pb-8 pe-2 ps-px md:pb-0 md:pe-0 md:ps-0'
+/** pt/ps — ring карточек не обрезается у краёв scrollport. */
+export const pageScrollRingInsetClassName =
+  'pt-px ps-px md:pt-0.5 md:ps-px'
+
+/** Отступы прокручиваемой области страницы на мобилке (скроллбар + ring карточек). */
+export const mobilePageScrollPaddingClassName = [
+  pageScrollRingInsetClassName,
+  'pb-8 pe-2 md:pb-0 md:pe-0',
+].join(' ')

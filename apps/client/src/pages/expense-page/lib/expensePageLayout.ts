@@ -1,20 +1,37 @@
 import { cn } from '@/shared/lib/utils'
-import { scrollAreaClassName } from '@/shared/lib/scrollLayout'
+import {
+  mobilePageScrollPaddingClassName,
+  scrollAreaClassName,
+} from '@/shared/lib/scrollLayout'
 import {
   fabDesktopAddButtonClassName,
   mobileFabScrollReserveClassName,
 } from '@/shared/ui/fab'
 
-/** Отступы скролла страницы расходов (ps сохранён на md — ring карточек не обрезается). */
-const expensePageScrollPaddingClassName =
-  'pb-8 pe-2 ps-0.5 md:pb-0 md:pe-0 md:ps-0.5'
+/** Зазор между шапкой страницы и прокручиваемым контентом. */
+export const expensePageSectionClassName = 'min-h-0 gap-3 md:gap-4'
 
 export const expensePageAddButtonDesktopClassName = fabDesktopAddButtonClassName
+
+/** MonthPicker в шапке страницы / блока казны. */
+export const expensePageMonthPickerClassName =
+  'w-auto [&_button]:h-9 [&_button]:rounded-lg [&_button]:border-0 [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:text-base [&_button]:font-semibold [&_button]:shadow-none hover:[&_button]:bg-zinc-100'
+
+export const expensePageMonthPickerPageHeaderClassName = 'hidden md:block'
+
+export const expensePageMonthPickerBudgetHeaderClassName = 'md:hidden'
+
+/** Строка MonthPicker над блоком казны (мобилка). */
+export const expensePageBudgetHeaderClassName =
+  'flex justify-end md:hidden'
+
+export const expensePageToolbarClassName =
+  'flex w-full shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4'
 
 /** Оболочка страницы: казна + категории по контенту + история на остаток высоты. */
 export const expensePageShellClassName = [
   scrollAreaClassName,
-  expensePageScrollPaddingClassName,
+  mobilePageScrollPaddingClassName,
   mobileFabScrollReserveClassName,
   'flex min-h-0 flex-1 flex-col gap-4',
 ].join(' ')
@@ -25,35 +42,21 @@ export const expensePageWorkAreaClassName =
 
 const expensePagePaneClassName = 'flex min-h-0 min-w-0 flex-col'
 
-/** Категории: высота по сетке карточек (до двух рядов), при переполнении — скролл внутри списка. */
-const expensePageCategoriesPaneDesktopClassName =
-  'max-h-full shrink-0 grow-0 basis-auto overflow-hidden'
+export const expensePageCategoriesPaneClassName = cn(
+  expensePagePaneClassName,
+  'max-md:shrink-0 max-md:grow-0 max-md:basis-auto',
+  'md:max-h-full md:shrink-0 md:grow-0 md:basis-auto md:overflow-hidden',
+)
 
-/** История расходов занимает оставшуюся высоту рабочей области. */
-const expensePageExpensesPaneDesktopClassName = 'min-h-0 flex-1 overflow-hidden'
+export const expensePageExpensesPaneClassName = cn(
+  expensePagePaneClassName,
+  'max-md:shrink-0 max-md:grow-0 max-md:basis-auto max-md:overflow-visible',
+  'md:min-h-0 md:flex-1 md:overflow-hidden',
+)
 
-const expensePagePaneMobileClassName = 'shrink-0 grow-0 basis-auto'
+export const expensePageExpensesListClassName =
+  'max-md:overflow-visible md:min-h-0 md:flex-1'
 
 export function getExpensePageShellClassName(className?: string) {
   return cn(expensePageShellClassName, className)
-}
-
-export function getExpensePagePaneClassNames(isMobile: boolean) {
-  if (isMobile) {
-    return {
-      categories: cn(expensePagePaneClassName, expensePagePaneMobileClassName),
-      expenses: cn(expensePagePaneClassName, expensePagePaneMobileClassName),
-    }
-  }
-
-  return {
-    categories: cn(
-      expensePagePaneClassName,
-      expensePageCategoriesPaneDesktopClassName,
-    ),
-    expenses: cn(
-      expensePagePaneClassName,
-      expensePageExpensesPaneDesktopClassName,
-    ),
-  }
 }

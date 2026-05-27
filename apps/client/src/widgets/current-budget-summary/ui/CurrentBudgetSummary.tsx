@@ -5,12 +5,10 @@ import type { ReserveCategorySummary } from '@/entities/budget/model/types'
 import { SummaryMetricCard } from '@/shared/ui/summary-metric-card'
 
 import {
-  CURRENT_BUDGET_AVAILABLE_INFO,
+  buildCurrentBudgetAvailableInfo,
   CURRENT_BUDGET_RESERVE_INFO,
   CURRENT_BUDGET_RESERVE_LABEL,
 } from '../lib/currentBudgetSummaryCopy'
-
-import { BudgetSummaryCarryForward } from './BudgetSummaryCarryForward'
 
 /** Reporting: что произошло / текущее состояние пула (факт). */
 export type CurrentBudgetSummaryProps = CurrentBudgetSummaryView
@@ -47,45 +45,38 @@ export function CurrentBudgetSummary({
         : undefined
 
   const reserveLabel = reserveCategory?.name ?? CURRENT_BUDGET_RESERVE_LABEL
+  const availableInfoText = buildCurrentBudgetAvailableInfo(
+    carryForwardTotal,
+    previousPeriodLabel,
+  )
 
   return (
-    <div className="space-y-3">
-      {carryForwardTotal !== 0 && previousPeriodLabel ? (
-        <div className="flex justify-end">
-          <BudgetSummaryCarryForward
-            total={carryForwardTotal}
-            previousPeriodLabel={previousPeriodLabel}
-          />
-        </div>
-      ) : null}
+    <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
+      <SummaryMetricCard
+        label="Доступно"
+        infoText={availableInfoText}
+        value={available}
+        valueClassName={availableTone}
+      />
 
-      <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
-        <SummaryMetricCard
-          label="Доступно"
-          infoText={CURRENT_BUDGET_AVAILABLE_INFO}
-          value={available}
-          valueClassName={availableTone}
-        />
+      <SummaryMetricCard
+        label={reserveLabel}
+        labelStart={
+          reserveCategory ? (
+            <ReserveCategoryIcon reserveCategory={reserveCategory} />
+          ) : undefined
+        }
+        infoText={CURRENT_BUDGET_RESERVE_INFO}
+        infoBottomOnMax240
+        value={inReserve}
+        valueClassName={inReserve > 0 ? 'text-green' : undefined}
+      />
 
-        <SummaryMetricCard
-          label={reserveLabel}
-          labelStart={
-            reserveCategory ? (
-              <ReserveCategoryIcon reserveCategory={reserveCategory} />
-            ) : undefined
-          }
-          infoText={CURRENT_BUDGET_RESERVE_INFO}
-          infoBottomOnMax240
-          value={inReserve}
-          valueClassName={inReserve > 0 ? 'text-green' : undefined}
-        />
-
-        <SummaryMetricCard
-          label="Потрачено в месяце"
-          value={spentThisMonth}
-          valueClassName="text-slate"
-        />
-      </div>
+      <SummaryMetricCard
+        label="Потрачено в месяце"
+        value={spentThisMonth}
+        valueClassName="text-slate"
+      />
     </div>
   )
 }
