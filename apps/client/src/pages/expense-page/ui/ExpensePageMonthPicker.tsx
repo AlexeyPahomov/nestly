@@ -1,6 +1,11 @@
+import { CalendarIcon } from 'lucide-react'
+
 import { MonthPicker } from '@/shared/ui'
 
-import { expensePageMonthPickerClassName } from '../lib/expensePageLayout'
+import {
+  expensePageMonthPickerClassName,
+  expensePageMonthPickerIconClassName,
+} from '../lib/expensePageLayout'
 
 type ExpensePageMonthPickerProps = {
   value: string
@@ -16,6 +21,12 @@ export function ExpensePageMonthPicker({
       value={value}
       onChange={onChange}
       containerClassName={expensePageMonthPickerClassName}
+      leadingIcon={
+        <CalendarIcon
+          className={expensePageMonthPickerIconClassName}
+          aria-hidden
+        />
+      }
     />
   )
 }

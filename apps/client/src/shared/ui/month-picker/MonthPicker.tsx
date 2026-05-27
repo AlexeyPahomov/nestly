@@ -22,6 +22,8 @@ type MonthPickerProps = {
   disabled?: boolean;
   containerClassName?: string;
   triggerClassName?: string;
+  /** Иконка слева от значения (например, календарь в шапке страницы). */
+  leadingIcon?: React.ReactNode;
 };
 
 export function MonthPicker({
@@ -32,6 +34,7 @@ export function MonthPicker({
   disabled,
   containerClassName,
   triggerClassName,
+  leadingIcon,
 }: MonthPickerProps) {
   const generatedId = React.useId();
   const inputId =
@@ -55,8 +58,14 @@ export function MonthPicker({
       <SelectTrigger
         id={inputId}
         showIcon={false}
-        className={cn('max-w-xs min-w-0', monthPickerTriggerClassName, triggerClassName)}
+        className={cn(
+          'max-w-xs min-w-0',
+          monthPickerTriggerClassName,
+          leadingIcon && 'gap-1.5',
+          triggerClassName,
+        )}
       >
+        {leadingIcon}
         <SelectValue placeholder="Выберите месяц" />
       </SelectTrigger>
       <SelectContent

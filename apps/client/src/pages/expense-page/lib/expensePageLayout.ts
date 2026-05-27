@@ -5,6 +5,9 @@ import { mobilePageScrollShellClassName } from '@/shared/lib/mobilePageScrollShe
 export const expensePageMonthPickerClassName =
   'w-auto [&_[data-slot=select-trigger]]:h-9 [&_[data-slot=select-trigger]]:rounded-lg [&_[data-slot=select-trigger]]:bg-transparent [&_[data-slot=select-trigger]]:px-2.5 [&_[data-slot=select-trigger]]:text-base [&_[data-slot=select-trigger]]:font-semibold hover:[&_[data-slot=select-trigger]]:bg-zinc-100'
 
+export const expensePageMonthPickerIconClassName =
+  'size-4 shrink-0 text-zinc-500 opacity-60'
+
 export const expensePageToolbarTitleEndClassName =
   'flex shrink-0 items-center gap-2'
 
