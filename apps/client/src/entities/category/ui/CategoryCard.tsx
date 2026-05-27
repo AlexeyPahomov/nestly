@@ -1,12 +1,17 @@
-import { Pencil } from 'lucide-react'
+import { useCallback } from 'react'
 
 import { CATEGORY_TYPE_LABELS } from '@coffer/shared'
 
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
+import {
+  categoryCardPressableClassName,
+  categoryCardPressingClassName,
+} from '@/entities/category/lib/categoryCardLayout'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
 import type { Category } from '@/entities/category/model/types'
+import { useLongPress } from '@/shared/hooks/use-long-press'
 import { cn } from '@/shared/lib/utils'
-import { Button, Card, IconColorAvatar } from '@/shared/ui'
+import { Card, IconColorAvatar } from '@/shared/ui'
 
 type CategoryCardProps = {
   category: Category
@@ -14,27 +19,53 @@ type CategoryCardProps = {
 }
 
 export function CategoryCard({ category, onEdit }: CategoryCardProps) {
+  const handleEdit = useCallback(() => {
+    onEdit?.(category)
+  }, [category, onEdit])
+
+  const { isPressing, longPressHandlers } = useLongPress({
+    onLongPress: handleEdit,
+    disabled: !onEdit,
+  })
+
+  const isEditable = onEdit != null
+
   return (
     <Card
       size="sm"
       className={cn(
-        'group relative h-full gap-0 py-0 transition-colors hover:bg-zinc-50/60',
+        'relative h-full gap-0 py-0 transition-[transform,background-color,box-shadow] duration-150',
+        isEditable && categoryCardPressableClassName,
+        isPressing && categoryCardPressingClassName,
       )}
+      tabIndex={isEditable ? 0 : undefined}
+      role={isEditable ? 'button' : undefined}
+      aria-label={
+        isEditable
+          ? `${category.name}, ${CATEGORY_TYPE_LABELS[category.type]}. Удерживайте для редактирования.`
+          : undefined
+      }
+      onContextMenu={
+        isEditable
+          ? (event) => {
+              event.preventDefault()
+              handleEdit()
+            }
+          : undefined
+      }
+      onKeyDown={
+        isEditable
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                handleEdit()
+              }
+            }
+          : undefined
+      }
+      {...longPressHandlers}
     >
       <div className="flex flex-col items-center gap-2.5 px-3 py-4 text-center">
-        {onEdit ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="absolute top-1.5 right-1.5 text-zinc-400 opacity-100 transition-opacity group-hover:text-zinc-700 sm:opacity-0 sm:group-hover:opacity-100"
-            aria-label={`Редактировать «${category.name}»`}
-            onClick={() => onEdit(category)}
-          >
-            <Pencil />
-          </Button>
-        ) : null}
-
         <IconColorAvatar iconColor={category.icon_color} className="size-12">
           {(iconClassName) => (
             <CategoryLucideIcon

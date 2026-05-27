@@ -13,6 +13,11 @@ import {
 } from '@/shared/ui'
 
 import { categoryFormDialogTitle } from '../lib/categoryFormDialogCopy'
+import {
+  categoryFormActionsClassName,
+  categoryFormCancelButtonClassName,
+  categoryFormPrimaryButtonClassName,
+} from '../lib/categoryFormDialogLayout'
 import { useCategoryForm } from '../model/useCategoryForm'
 
 import { CategoryIconPicker } from './CategoryIconPicker'
@@ -29,6 +34,8 @@ export type CreateCategoryFormProps = {
   onCancel?: () => void
   onComplete?: () => void
   variant?: CreateCategoryFormVariant
+  /** Полноширинные кнопки в колонку — для bottom sheet на мобилках. */
+  stackActions?: boolean
   className?: string
 }
 
@@ -37,6 +44,7 @@ export function CreateCategoryForm({
   onCancel,
   onComplete,
   variant = 'card',
+  stackActions = false,
   className,
 }: CreateCategoryFormProps) {
   const form = useCategoryForm({ editingCategory, onComplete })
@@ -85,12 +93,20 @@ export function CreateCategoryForm({
         <p className="text-sm text-red-600">{form.serverError}</p>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div
+        className={cn(
+          'flex flex-wrap items-center gap-2',
+          stackActions && categoryFormActionsClassName,
+        )}
+      >
         <Button
           type="submit"
           isLoading={form.submitting}
           size="lg"
-          className="min-w-40"
+          className={cn(
+            'min-w-40',
+            stackActions && categoryFormPrimaryButtonClassName,
+          )}
         >
           {form.isEditing ? 'Сохранить' : 'Добавить категорию'}
         </Button>
@@ -100,6 +116,7 @@ export function CreateCategoryForm({
             variant="ghost"
             size="lg"
             disabled={form.submitting}
+            className={stackActions ? categoryFormCancelButtonClassName : undefined}
             onClick={onCancel}
           >
             Отмена

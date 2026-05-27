@@ -1,4 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+/** Длительность exit-анимации sheet/dialog (см. `Sheet` — `duration-200`). */
+const FORM_DIALOG_EXIT_MS = 220
 
 type UseFormDialogOptions = {
   onClearEditing?: () => void
@@ -12,12 +15,49 @@ export function useFormDialog(
 ) {
   const { onClearEditing, clearEditingOnOpenAdd = false } = options
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const isOpen = isAddOpen || isEditing
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const clearEditingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  )
+
+  const cancelScheduledClearEditing = useCallback(() => {
+    if (clearEditingTimerRef.current) {
+      clearTimeout(clearEditingTimerRef.current)
+      clearEditingTimerRef.current = null
+    }
+  }, [])
+
+  const scheduleClearEditing = useCallback(() => {
+    cancelScheduledClearEditing()
+    clearEditingTimerRef.current = setTimeout(() => {
+      clearEditingTimerRef.current = null
+      onClearEditing?.()
+    }, FORM_DIALOG_EXIT_MS)
+  }, [cancelScheduledClearEditing, onClearEditing])
+
+  useEffect(() => {
+    if (isEditing || isAddOpen) {
+      cancelScheduledClearEditing()
+      setIsDialogOpen(true)
+    }
+  }, [cancelScheduledClearEditing, isAddOpen, isEditing])
+
+  useEffect(
+    () => () => cancelScheduledClearEditing(),
+    [cancelScheduledClearEditing],
+  )
 
   const close = useCallback(() => {
+    setIsDialogOpen(false)
     setIsAddOpen(false)
+
+    if (isEditing) {
+      scheduleClearEditing()
+      return
+    }
+
     onClearEditing?.()
-  }, [onClearEditing])
+  }, [isEditing, onClearEditing, scheduleClearEditing])
 
   const onOpenChange = useCallback(
     (open: boolean) => {
@@ -29,14 +69,18 @@ export function useFormDialog(
   )
 
   const openForAdd = useCallback(() => {
+    cancelScheduledClearEditing()
+
     if (clearEditingOnOpenAdd) {
       onClearEditing?.()
     }
+
     setIsAddOpen(true)
-  }, [clearEditingOnOpenAdd, onClearEditing])
+    setIsDialogOpen(true)
+  }, [cancelScheduledClearEditing, clearEditingOnOpenAdd, onClearEditing])
 
   return {
-    isOpen,
+    isOpen: isDialogOpen,
     isEditing,
     close,
     onOpenChange,
