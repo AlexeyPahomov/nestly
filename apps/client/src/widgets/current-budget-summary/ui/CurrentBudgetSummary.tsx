@@ -59,7 +59,7 @@ export function CurrentBudgetSummary({
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
         <SummaryMetricCard
           label="Доступно"
           infoText={CURRENT_BUDGET_AVAILABLE_INFO}

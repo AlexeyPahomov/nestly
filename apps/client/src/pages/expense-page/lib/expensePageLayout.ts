@@ -1,107 +1,52 @@
 import { cn } from '@/shared/lib/utils'
+import { scrollAreaClassName } from '@/shared/lib/scrollLayout'
 
-export type ExpensePagePaneBoost = 'none' | 'categories' | 'expenses'
-
-export type ExpensePagePaneLayoutState = {
-  paneBoost: ExpensePagePaneBoost
-  expensesCollapsed: boolean
-}
+/** Отступы скролла страницы расходов (ps сохранён на md — ring карточек не обрезается). */
+const expensePageScrollPaddingClassName =
+  'pb-8 pe-2 ps-0.5 md:pb-0 md:pe-0 md:ps-0.5'
 
 /** Оболочка страницы: казна + категории по контенту + история на остаток высоты. */
-export const expensePageShellClassName =
-  'flex min-h-0 flex-1 flex-col gap-4 px-0.5'
+export const expensePageShellClassName = [
+  scrollAreaClassName,
+  expensePageScrollPaddingClassName,
+  'flex min-h-0 flex-1 flex-col gap-4',
+].join(' ')
 
 /** Категории + история — на оставшуюся высоту экрана. */
 export const expensePageWorkAreaClassName =
-  'flex min-h-0 flex-1 flex-col gap-4'
+  'flex min-h-0 flex-1 flex-col gap-4 max-md:shrink-0 max-md:flex-none'
 
-const paneTransitionClassName =
-  'transition-[flex-grow] duration-300 ease-in-out motion-reduce:transition-none'
+const expensePagePaneClassName = 'flex min-h-0 min-w-0 flex-col'
 
-/** Категории: высота по сетке карточек, при переполнении — скролл внутри панели. */
-const categoriesPaneContentSizedClassName =
+/** Категории: высота по сетке карточек (до двух рядов), при переполнении — скролл внутри списка. */
+const expensePageCategoriesPaneDesktopClassName =
   'max-h-full shrink-0 grow-0 basis-auto overflow-hidden'
 
-/** Категории на всю высоту, когда история свёрнута. */
-const categoriesPaneExpandedClassName = 'min-h-0 flex-1'
+/** История расходов занимает оставшуюся высоту рабочей области. */
+const expensePageExpensesPaneDesktopClassName = 'min-h-0 flex-1 overflow-hidden'
 
-/** Доли высоты (3:2 · 3.6:1.4 · 2:3) при скролле или клике по заголовку. */
-const categoriesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
-  none: categoriesPaneContentSizedClassName,
-  categories: 'min-h-0 flex-[3.6] overflow-hidden',
-  expenses: 'min-h-0 flex-[2] overflow-hidden',
-}
-
-const expensesPaneDefaultClassName = 'min-h-0 flex-1'
-
-const expensesPaneFlexByBoost: Record<ExpensePagePaneBoost, string> = {
-  none: expensesPaneDefaultClassName,
-  categories: 'min-h-0 flex-[1.4] overflow-hidden',
-  expenses: 'min-h-0 flex-[3] overflow-hidden',
-}
-
-const expensesPaneCollapsedClassName =
-  'shrink-0 grow-0 basis-auto'
-
-export const expensePagePaneClassName =
-  'flex min-h-0 min-w-0 flex-col'
-
-export const expensePageScrollPaneClassName = cn(
-  expensePagePaneClassName,
-  paneTransitionClassName,
-)
+const expensePagePaneMobileClassName = 'shrink-0 grow-0 basis-auto'
 
 export function getExpensePageShellClassName(className?: string) {
   return cn(expensePageShellClassName, className)
 }
 
-function getPaneClassName(flexClassName: string, className?: string) {
-  return cn(expensePagePaneClassName, flexClassName, className)
-}
-
-function resolveCategoriesPaneFlex({
-  paneBoost,
-  expensesCollapsed,
-}: ExpensePagePaneLayoutState): string {
-  if (expensesCollapsed) {
-    return categoriesPaneExpandedClassName
+export function getExpensePagePaneClassNames(isMobile: boolean) {
+  if (isMobile) {
+    return {
+      categories: cn(expensePagePaneClassName, expensePagePaneMobileClassName),
+      expenses: cn(expensePagePaneClassName, expensePagePaneMobileClassName),
+    }
   }
-
-  return categoriesPaneFlexByBoost[paneBoost]
-}
-
-function resolveExpensesPaneFlex({
-  paneBoost,
-  expensesCollapsed,
-}: ExpensePagePaneLayoutState): string {
-  if (expensesCollapsed) {
-    return expensesPaneCollapsedClassName
-  }
-
-  return expensesPaneFlexByBoost[paneBoost]
-}
-
-function shouldAnimatePaneFlex(): boolean {
-  return true
-}
-
-export function getExpensePagePaneClassNames(
-  layout: ExpensePagePaneLayoutState,
-  classNames?: { categories?: string; expenses?: string },
-) {
-  const animatePaneFlex = shouldAnimatePaneFlex()
 
   return {
     categories: cn(
-      getPaneClassName(
-        resolveCategoriesPaneFlex(layout),
-        classNames?.categories,
-      ),
-      animatePaneFlex && paneTransitionClassName,
+      expensePagePaneClassName,
+      expensePageCategoriesPaneDesktopClassName,
     ),
     expenses: cn(
-      getPaneClassName(resolveExpensesPaneFlex(layout), classNames?.expenses),
-      animatePaneFlex && paneTransitionClassName,
+      expensePagePaneClassName,
+      expensePageExpensesPaneDesktopClassName,
     ),
   }
 }

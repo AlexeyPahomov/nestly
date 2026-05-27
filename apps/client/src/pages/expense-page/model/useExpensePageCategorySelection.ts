@@ -1,17 +1,13 @@
 import { useCallback } from 'react'
 
-import type { ExpensePagePaneBoostActive } from './useExpensePagePaneBoost'
-
 type UseExpensePageCategorySelectionOptions = {
   selectedCategoryId: string | null
   setSelectedCategoryId: (categoryId: string | null) => void
-  boostPane: (boost: ExpensePagePaneBoostActive) => void
 }
 
 export function useExpensePageCategorySelection({
   selectedCategoryId,
   setSelectedCategoryId,
-  boostPane,
 }: UseExpensePageCategorySelectionOptions) {
   const clearSelectedCategory = useCallback(() => {
     setSelectedCategoryId(null)
@@ -25,14 +21,8 @@ export function useExpensePageCategorySelection({
       }
 
       setSelectedCategoryId(categoryId)
-      boostPane('categories')
     },
-    [
-      selectedCategoryId,
-      clearSelectedCategory,
-      setSelectedCategoryId,
-      boostPane,
-    ],
+    [selectedCategoryId, clearSelectedCategory, setSelectedCategoryId],
   )
 
   const expenseCategoryFilter =

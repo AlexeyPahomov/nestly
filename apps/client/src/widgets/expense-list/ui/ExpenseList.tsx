@@ -7,6 +7,7 @@ import {
 } from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
+import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 
 import { filterExpensesByCategoryAndMonth } from '../lib/filterExpenses';
 import { EXPENSE_LIST_PAGE_SIZE } from '../lib/expenseListPageSize';
@@ -34,6 +35,7 @@ export interface ExpenseListProps {
   bodyCollapsed?: boolean;
   /** `all` или id категории (задаётся снаружи, например кликом по карточке). */
   categoryFilter?: string;
+  layout?: ItemsListLayout;
 }
 
 export function ExpenseList({
@@ -52,6 +54,7 @@ export function ExpenseList({
   onTitleClick,
   bodyCollapsed = false,
   categoryFilter = 'all',
+  layout = 'fill',
 }: ExpenseListProps) {
   const [viewMode, setViewMode] = useState<ExpenseListViewMode>('list');
 
@@ -72,7 +75,11 @@ export function ExpenseList({
 
   return (
     <ItemsList
-      className={cn('min-h-0 overflow-hidden', className)}
+      className={cn(
+        layout === 'fill' ? 'min-h-0 overflow-hidden' : 'overflow-visible',
+        className,
+      )}
+      layout={layout}
       bodyCollapsed={bodyCollapsed}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}

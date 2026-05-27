@@ -1,5 +1,3 @@
-import type { UIEventHandler } from 'react';
-
 import type { Allocation } from '@/entities/allocation/model/types';
 import type { Category } from '@/entities/category/model/types';
 import type { Expense } from '@/entities/expense/model/types';
@@ -8,11 +6,11 @@ import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/bud
 import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog';
 import { cn } from '@/shared/lib/utils';
 import { AddButton } from '@/shared/ui';
+import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 import type { CategoryBudgetItem } from '@/entities/budget/model/types';
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
 import { CategoryBudgetList } from '@/widgets/category-budget-list';
 
-import type { ExpensePagePaneBoost } from '../lib/expensePageLayout';
 import { useExpenseFormDialog } from '../model/useExpenseFormDialog';
 
 type ExpenseWorkspaceProps = {
@@ -31,10 +29,7 @@ type ExpenseWorkspaceProps = {
   isBudgetError: boolean;
   budgetError: unknown;
   isBudgetFetching: boolean;
-  onBudgetListScroll?: UIEventHandler<HTMLUListElement>;
-  onTitleClick?: () => void;
-  expensesHistoryCollapsed?: boolean;
-  paneBoost?: ExpensePagePaneBoost;
+  listLayout?: ItemsListLayout;
 };
 
 export function ExpenseWorkspace({
@@ -53,28 +48,30 @@ export function ExpenseWorkspace({
   isBudgetError,
   budgetError,
   isBudgetFetching,
-  onBudgetListScroll,
-  onTitleClick,
-  expensesHistoryCollapsed = false,
-  paneBoost = 'none',
+  listLayout = 'fill',
 }: ExpenseWorkspaceProps) {
   const dialog = useExpenseFormDialog(editingExpense, onCancelEdit);
-  const categoriesCompact = !expensesHistoryCollapsed && paneBoost === 'none';
+  const categoriesCompact = listLayout === 'fill';
 
   return (
     <div
       className={cn(
-        'flex min-h-0 w-full flex-col overflow-hidden',
+        'flex w-full flex-col',
+        listLayout === 'fill' ? 'min-h-0 overflow-hidden' : 'overflow-visible',
         categoriesCompact
           ? categoryBudgetListCompactShellClassName
-          : 'min-h-0 flex-1',
+          : listLayout === 'fill'
+            ? 'min-h-0 flex-1'
+            : '',
       )}
     >
       <CategoryBudgetList
-        className="min-h-0 w-full flex-1 overflow-hidden"
-        limitToTwoRows={categoriesCompact || paneBoost === 'expenses'}
-        onTitleClick={onTitleClick}
-        onListScroll={onBudgetListScroll}
+        className={cn(
+          'w-full',
+          listLayout === 'fill' ? 'min-h-0 flex-1 overflow-hidden' : '',
+        )}
+        layout={listLayout}
+        limitToTwoRows={categoriesCompact}
         budgetItems={budgetItems}
         isPending={isBudgetPending}
         isError={isBudgetError}

@@ -1,52 +1,27 @@
 import { useEffect } from 'react'
 
-import { isItemsListPointerTarget } from '@/shared/ui/items-list/itemsListLayout'
 import { isCategoryBudgetCardPointerTarget } from '@/widgets/category-budget-list/lib/categoryBudgetCardTarget'
 
-import type { ExpensePagePaneLayoutState } from '../lib/expensePageLayout'
-
 type UseExpensePageOutsideInteractionOptions = {
-  layout: ExpensePagePaneLayoutState
   selectedCategoryId: string | null
-  onResetPaneLayout: () => void
   onClearSelectedCategory: () => void
 }
 
-/**
- * Сброс фильтра категории — клик вне карточки (в т.ч. пустая зона списка «По категориям»).
- * Сброс раскладки панелей — клик вне любого ItemsList.
- */
+/** Сброс фильтра категории — клик вне карточки (в т.ч. пустая зона списка «По категориям»). */
 export function useExpensePageOutsideInteraction({
-  layout,
   selectedCategoryId,
-  onResetPaneLayout,
   onClearSelectedCategory,
 }: UseExpensePageOutsideInteractionOptions) {
-  const { paneBoost, expensesCollapsed } = layout
-  const shouldResetPaneLayout =
-    paneBoost !== 'none' || expensesCollapsed
   const shouldClearCategory = selectedCategoryId != null
 
   useEffect(() => {
-    if (!shouldResetPaneLayout && !shouldClearCategory) {
+    if (!shouldClearCategory) {
       return
     }
 
     const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target
-
-      if (
-        shouldClearCategory &&
-        !isCategoryBudgetCardPointerTarget(target)
-      ) {
+      if (!isCategoryBudgetCardPointerTarget(event.target)) {
         onClearSelectedCategory()
-      }
-
-      if (
-        shouldResetPaneLayout &&
-        !isItemsListPointerTarget(target)
-      ) {
-        onResetPaneLayout()
       }
     }
 
@@ -55,10 +30,5 @@ export function useExpensePageOutsideInteraction({
     return () => {
       document.removeEventListener('pointerdown', handlePointerDown, true)
     }
-  }, [
-    shouldResetPaneLayout,
-    shouldClearCategory,
-    onResetPaneLayout,
-    onClearSelectedCategory,
-  ])
+  }, [shouldClearCategory, onClearSelectedCategory])
 }

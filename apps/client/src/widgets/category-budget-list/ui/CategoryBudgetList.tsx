@@ -6,6 +6,7 @@ import {
 } from '@/shared/config/listHighlight';
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
+import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 
 import { getCategoryBudgetListGridClassName } from '../lib/categoryBudgetListLayout';
 
@@ -28,6 +29,7 @@ export type CategoryBudgetListProps = {
   onTitleClick?: () => void;
   /** Ограничить сетку двумя рядами со скроллом (история развёрнута). */
   limitToTwoRows?: boolean;
+  layout?: ItemsListLayout;
 };
 
 export function CategoryBudgetList({
@@ -44,13 +46,14 @@ export function CategoryBudgetList({
   onListScroll,
   onTitleClick,
   limitToTwoRows = false,
+  layout = 'fill',
 }: CategoryBudgetListProps) {
   const listClassName = getCategoryBudgetListGridClassName(limitToTwoRows);
 
   return (
     <ItemsList
       className={className}
-      layout="fill"
+      layout={layout}
       listAnimateEnter={false}
       onTitleClick={onTitleClick}
       onListScroll={onListScroll}
