@@ -5,6 +5,7 @@ export class UpdatePlannedExpenseDto {
   icon_color?: string;
   amount?: number;
   planned_date?: string;
+  planned_date_end?: string | null;
   status?: 'PLANNED' | 'RESERVED' | 'COMPLETED' | 'CANCELLED';
   reserved_amount?: number;
   category_id?: string | null;

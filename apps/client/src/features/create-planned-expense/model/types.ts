@@ -5,4 +5,5 @@ export type CreatePlannedExpenseFormValues = {
   icon_color: string
   amount: string
   planned_date: string
+  planned_date_end: string
 }

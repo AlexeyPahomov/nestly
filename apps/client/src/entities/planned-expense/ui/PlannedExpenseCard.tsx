@@ -2,6 +2,7 @@ import { Lock, LockOpen, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
+import { formatDateRangeLabel } from '@/shared/lib/date'
 import { formatMoneyRange, formatMoneyWithRub } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -43,19 +44,6 @@ const statusBadgeInteractiveClassName =
   'rounded-md bg-zinc-100 text-zinc-600 hover:bg-zinc-200/80 disabled:pointer-events-none disabled:opacity-50'
 
 const statusBadgeStaticClassName = 'rounded-md bg-zinc-100 text-zinc-600'
-
-function formatPlannedDate(isoDate: string): string {
-  const date = new Date(isoDate)
-  if (Number.isNaN(date.getTime())) {
-    return isoDate
-  }
-
-  return date.toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
 
 export type PlannedExpenseCardProps = {
   item: PlannedExpense
@@ -253,7 +241,7 @@ export function PlannedExpenseCard({
         </div>
 
         <p className={plannedExpenseCardDateClassName}>
-          {formatPlannedDate(item.planned_date)}
+          {formatDateRangeLabel(item.planned_date, item.planned_date_end)}
         </p>
       </div>
     </article>

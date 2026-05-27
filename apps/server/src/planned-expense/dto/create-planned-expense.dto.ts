@@ -5,5 +5,6 @@ export class CreatePlannedExpenseDto {
   icon_color?: string;
   amount: number;
   planned_date: string;
+  planned_date_end?: string;
   category_id?: string;
 }

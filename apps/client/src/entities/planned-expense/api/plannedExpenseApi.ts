@@ -32,6 +32,7 @@ type PlannedExpenseApiRow = {
   amount: string | number
   reserved_amount: string | number
   planned_date: string
+  planned_date_end?: string | null
   status: PlannedExpenseStatus
   category_id: string | null
   budget_month_id: string
@@ -60,6 +61,7 @@ function mapPlannedExpense(row: PlannedExpenseApiRow): PlannedExpense {
     amount: toMoneyNumber(row.amount),
     reserved_amount: toMoneyNumber(row.reserved_amount),
     planned_date: row.planned_date,
+    planned_date_end: row.planned_date_end ?? null,
     status: row.status,
     category_id: row.category_id,
     budget_month_id: row.budget_month_id,

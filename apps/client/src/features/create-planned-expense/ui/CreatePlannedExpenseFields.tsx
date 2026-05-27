@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, MoneyInput } from '@/shared/ui'
+import { Button, DateRangePicker, Input, MoneyInput } from '@/shared/ui'
 import { bindMoneyAmountField } from '@/shared/lib/moneyInput'
 
 import { createPlannedExpenseInputChangeHandler } from '../lib/plannedExpenseFormFieldHandlers'
@@ -8,6 +8,7 @@ import type { CreatePlannedExpenseFormValues } from '../model/types'
 export type CreatePlannedExpenseFieldsProps = {
   values: CreatePlannedExpenseFormValues
   onChange: (name: keyof CreatePlannedExpenseFormValues, value: string) => void
+  patchValues: (patch: Partial<CreatePlannedExpenseFormValues>) => void
   onSubmit: () => void
   isPending: boolean
   submitLabel?: string
@@ -16,6 +17,7 @@ export type CreatePlannedExpenseFieldsProps = {
 export function CreatePlannedExpenseFields({
   values,
   onChange,
+  patchValues,
   onSubmit,
   isPending,
   submitLabel = 'Добавить план',
@@ -50,10 +52,14 @@ export function CreatePlannedExpenseFields({
           onChange('amount', amount),
         )}
       />
-      <DatePicker
+      <DateRangePicker
         label="Дата"
-        value={values.planned_date}
-        onChange={(value) => onChange('planned_date', value)}
+        from={values.planned_date}
+        to={values.planned_date_end}
+        onChange={(from, to) =>
+          patchValues({ planned_date: from, planned_date_end: to })
+        }
+        disabled={isPending}
       />
       <Button
         type="button"

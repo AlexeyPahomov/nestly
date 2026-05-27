@@ -112,6 +112,7 @@ model PlannedExpense {
   amount          Decimal
   reserved_amount Decimal              @default(0)
   planned_date    DateTime
+  planned_date_end DateTime?
   status          PlannedExpenseStatus @default(PLANNED)
   category_id     String?
   category        Category?            @relation(fields: [category_id], references: [id])

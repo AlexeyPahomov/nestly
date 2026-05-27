@@ -4,7 +4,15 @@ import {
 } from '@coffer/shared'
 
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
-import { dateInputValueFromDate, todayDateInputValue } from '@/shared/lib/date'
+import type {
+  CreatePlannedExpensePayload,
+  UpdatePlannedExpensePayload,
+} from '@/entities/planned-expense/model/types'
+import {
+  isoToDateInputValue,
+  normalizeDateRangeEnd,
+  todayDateInputValue,
+} from '@/shared/lib/date'
 import { moneyAmountToFormValue } from '@/shared/lib/moneyInput'
 
 import type { CreatePlannedExpenseFormValues } from '../model/types'
@@ -17,22 +25,23 @@ export function emptyPlannedExpenseFormValues(): CreatePlannedExpenseFormValues 
     icon_color: DEFAULT_ICON_COLOR_KEY,
     amount: '',
     planned_date: todayDateInputValue(),
+    planned_date_end: '',
   }
 }
 
 export function plannedExpenseToFormValues(
   item: PlannedExpense,
 ): CreatePlannedExpenseFormValues {
-  const date = new Date(item.planned_date)
   return {
     title: item.title,
     description: item.description ?? '',
     icon_name: item.icon_name,
     icon_color: item.icon_color,
     amount: moneyAmountToFormValue(item.amount),
-    planned_date: Number.isNaN(date.getTime())
-      ? item.planned_date.slice(0, 10)
-      : dateInputValueFromDate(date),
+    planned_date: isoToDateInputValue(item.planned_date),
+    planned_date_end: item.planned_date_end
+      ? isoToDateInputValue(item.planned_date_end)
+      : '',
   }
 }
 
@@ -43,4 +52,39 @@ export function resolvePlannedExpenseFormValues(
     return plannedExpenseToFormValues(editingItem)
   }
   return emptyPlannedExpenseFormValues()
+}
+
+export function buildPlannedExpenseDatePayload(
+  start: string,
+  end: string,
+): Pick<CreatePlannedExpensePayload, 'planned_date' | 'planned_date_end'> {
+  const planned_date_end = normalizeDateRangeEnd(start, end)
+  return planned_date_end != null
+    ? { planned_date: start, planned_date_end }
+    : { planned_date: start }
+}
+
+export function buildPlannedExpenseDateUpdatePatch(
+  start: string,
+  end: string,
+  previous: Pick<CreatePlannedExpenseFormValues, 'planned_date' | 'planned_date_end'>,
+): Pick<UpdatePlannedExpensePayload, 'planned_date' | 'planned_date_end'> {
+  const patch: Pick<
+    UpdatePlannedExpensePayload,
+    'planned_date' | 'planned_date_end'
+  > = {}
+  const nextEnd = normalizeDateRangeEnd(start, end)
+  const prevEnd = normalizeDateRangeEnd(
+    previous.planned_date,
+    previous.planned_date_end,
+  )
+
+  if (start !== previous.planned_date) {
+    patch.planned_date = start
+  }
+  if (nextEnd !== prevEnd) {
+    patch.planned_date_end = nextEnd ?? null
+  }
+
+  return patch
 }

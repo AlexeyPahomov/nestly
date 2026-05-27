@@ -68,3 +68,76 @@ export function monthInputToPeriodMonth(value: string): string {
   }
   return `${value}-01`
 }
+
+const dateLongFormatter = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+
+function formatDateLong(d: Date): string {
+  return dateLongFormatter.format(d)
+}
+
+/** ISO или `YYYY-MM-DD` → значение для date-input. */
+export function isoToDateInputValue(isoDate: string): string {
+  const parsed = parseDateInputValue(isoDate.slice(0, 10))
+  if (parsed) {
+    return dateInputValueFromDate(parsed)
+  }
+  const date = new Date(isoDate)
+  if (Number.isNaN(date.getTime())) {
+    return isoDate.slice(0, 10)
+  }
+  return dateInputValueFromDate(date)
+}
+
+function parseToLocalDate(value: string): Date | undefined {
+  if (!value.trim()) {
+    return undefined
+  }
+  const fromInput = parseDateInputValue(value)
+  if (fromInput) {
+    return fromInput
+  }
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? undefined : date
+}
+
+/** Конец интервала для API: `undefined`, если одна дата. */
+export function normalizeDateRangeEnd(
+  start: string,
+  end: string,
+): string | undefined {
+  if (!end || end === start) {
+    return undefined
+  }
+  return end
+}
+
+/** Подпись одной даты или интервала (форма, карточка). */
+export function formatDateRangeLabel(
+  start: string,
+  end?: string | null,
+  emptyLabel = 'Выберите дату',
+): string {
+  if (!start.trim()) {
+    return emptyLabel
+  }
+
+  const startDate = parseToLocalDate(start)
+  if (!startDate) {
+    return start
+  }
+
+  if (!end) {
+    return formatDateLong(startDate)
+  }
+
+  const endDate = parseToLocalDate(end)
+  if (!endDate || dateInputValueFromDate(startDate) === dateInputValueFromDate(endDate)) {
+    return formatDateLong(startDate)
+  }
+
+  return `${formatDateLong(startDate)} — ${formatDateLong(endDate)}`
+}

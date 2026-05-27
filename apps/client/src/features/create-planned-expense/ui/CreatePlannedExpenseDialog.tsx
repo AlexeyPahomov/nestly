@@ -39,6 +39,7 @@ export function CreatePlannedExpenseDialog({
           <CreatePlannedExpenseFields
             values={form.values}
             onChange={form.handleChange}
+            patchValues={form.patchValues}
             onSubmit={form.submit}
             isPending={form.isPending}
           />

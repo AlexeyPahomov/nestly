@@ -10,6 +10,12 @@ import { DEV_USER_ID } from '../lib/dev-user';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePlannedExpenseDto } from './dto/create-planned-expense.dto';
 import { UpdatePlannedExpenseDto } from './dto/update-planned-expense.dto';
+import {
+  assertPlannedDateRange,
+  dateKeyFromUtcDate,
+  parseOptionalIsoDate,
+  didPlannedDateEndChange,
+} from './planned-expense-dates';
 
 const PLANNED_EXPENSE_INCLUDE = {
   category: true,
@@ -78,17 +84,12 @@ export class PlannedExpenseService {
     return row;
   }
 
-  private dateKeyFromStoredDate(d: Date): string {
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(d.getUTCDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-  }
-
   async create(dto: CreatePlannedExpenseDto) {
     await this.assertCategoryExists(dto.category_id);
 
     const plannedDate = new Date(dto.planned_date);
+    const plannedDateEnd = parseOptionalIsoDate(dto.planned_date_end);
+    assertPlannedDateRange(plannedDate, plannedDateEnd);
     const periodMonth = monthValueFromDate(plannedDate);
     const budgetMonthId = await this.resolveBudgetMonthId(
       DEV_USER_ID,
@@ -104,6 +105,7 @@ export class PlannedExpenseService {
         icon_color: dto.icon_color?.trim() || 'purple',
         amount: dto.amount,
         planned_date: plannedDate,
+        planned_date_end: plannedDateEnd,
         category_id: dto.category_id ?? null,
         budget_month_id: budgetMonthId,
       },
@@ -168,10 +170,18 @@ export class PlannedExpenseService {
     const plannedDate = hasPlannedDateInDto
       ? new Date(dto.planned_date!)
       : before.planned_date;
+    const hasPlannedDateEndInDto = dto.planned_date_end !== undefined;
+    const plannedDateEnd = hasPlannedDateEndInDto
+      ? parseOptionalIsoDate(dto.planned_date_end)
+      : before.planned_date_end;
+    assertPlannedDateRange(plannedDate, plannedDateEnd);
+    const plannedDateEndChanged =
+      hasPlannedDateEndInDto &&
+      didPlannedDateEndChange(plannedDateEnd, before.planned_date_end);
     const plannedDateChanged =
       hasPlannedDateInDto &&
       dto.planned_date!.trim().slice(0, 10) !==
-        this.dateKeyFromStoredDate(before.planned_date);
+        dateKeyFromUtcDate(before.planned_date);
     const periodChanged =
       plannedDateChanged &&
       monthValueFromDate(plannedDate) !==
@@ -204,6 +214,7 @@ export class PlannedExpenseService {
         amount: dto.amount,
         reserved_amount: reservedAmount,
         planned_date: plannedDateChanged ? plannedDate : undefined,
+        planned_date_end: plannedDateEndChanged ? plannedDateEnd : undefined,
         status: dto.status,
         category_id:
           dto.category_id === undefined ? undefined : dto.category_id,

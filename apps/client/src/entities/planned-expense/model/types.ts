@@ -14,6 +14,7 @@ export type PlannedExpense = {
   amount: number
   reserved_amount: number
   planned_date: string
+  planned_date_end: string | null
   status: PlannedExpenseStatus
   category_id: string | null
   budget_month_id: string
@@ -30,6 +31,7 @@ export type CreatePlannedExpensePayload = {
   icon_color?: string
   amount: number
   planned_date: string
+  planned_date_end?: string
   category_id?: string
 }
 
@@ -40,6 +42,7 @@ export type UpdatePlannedExpensePayload = {
   icon_color?: string
   amount?: number
   planned_date?: string
+  planned_date_end?: string | null
   status?: PlannedExpenseStatus
   reserved_amount?: number
   category_id?: string | null

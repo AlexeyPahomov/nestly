@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react'
 import { useCreatePlannedExpenseMutation } from '@/entities/planned-expense/api/useCreatePlannedExpenseMutation'
 import { useUpdatePlannedExpenseMutation } from '@/entities/planned-expense/api/useUpdatePlannedExpenseMutation'
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
+import type { UpdatePlannedExpensePayload } from '@/entities/planned-expense/model/types'
 import { currentMonthInputValue } from '@/shared/lib/date'
 
-import type { UpdatePlannedExpensePayload } from '@/entities/planned-expense/model/types'
-
 import {
+  buildPlannedExpenseDatePayload,
+  buildPlannedExpenseDateUpdatePatch,
   emptyPlannedExpenseFormValues,
   plannedExpenseToFormValues,
   resolvePlannedExpenseFormValues,
@@ -39,11 +40,15 @@ export function useCreatePlannedExpenseForm(
     setValues(resolvePlannedExpenseFormValues(editingPlannedExpense))
   }, [editingId, editingPlannedExpense])
 
+  const patchValues = (patch: Partial<CreatePlannedExpenseFormValues>) => {
+    setValues((prev) => ({ ...prev, ...patch }))
+  }
+
   const handleChange = (
     name: keyof CreatePlannedExpenseFormValues,
     value: string,
   ) => {
-    setValues((prev) => ({ ...prev, [name]: value }))
+    patchValues({ [name]: value })
   }
 
   const reset = () => setValues(emptyPlannedExpenseFormValues())
@@ -57,6 +62,10 @@ export function useCreatePlannedExpenseForm(
     const plannedDate =
       values.planned_date ||
       `${anchorPeriodMonth ?? currentMonthInputValue()}-01`
+    const dateFields = buildPlannedExpenseDatePayload(
+      plannedDate,
+      values.planned_date_end,
+    )
 
     if (isEditing && editingPlannedExpense) {
       const payload: UpdatePlannedExpensePayload = {
@@ -65,12 +74,11 @@ export function useCreatePlannedExpenseForm(
         icon_name: values.icon_name,
         icon_color: values.icon_color,
         amount,
-      }
-      const previousDate = plannedExpenseToFormValues(
-        editingPlannedExpense,
-      ).planned_date
-      if (plannedDate !== previousDate) {
-        payload.planned_date = plannedDate
+        ...buildPlannedExpenseDateUpdatePatch(
+          dateFields.planned_date,
+          values.planned_date_end,
+          plannedExpenseToFormValues(editingPlannedExpense),
+        ),
       }
 
       await updateMutation.mutateAsync({
@@ -84,7 +92,7 @@ export function useCreatePlannedExpenseForm(
         icon_name: values.icon_name,
         icon_color: values.icon_color,
         amount,
-        planned_date: plannedDate,
+        ...dateFields,
       })
       reset()
     }
@@ -97,6 +105,7 @@ export function useCreatePlannedExpenseForm(
   return {
     values,
     handleChange,
+    patchValues,
     submit,
     isPending: activeMutation.isPending,
     error: activeMutation.error,

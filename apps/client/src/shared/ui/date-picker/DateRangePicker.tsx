@@ -10,34 +10,38 @@ import {
 import { Calendar } from '../calendar/Calendar'
 import { DatePickerField, useDatePickerFieldId } from './DatePickerField'
 
-type DatePickerProps = {
+type DateRangePickerProps = {
   id?: string
   label?: React.ReactNode
-  value: string
-  onChange: (value: string) => void
+  from: string
+  to: string
+  onChange: (from: string, to: string) => void
   disabled?: boolean
   containerClassName?: string
 }
 
-export function DatePicker({
+export function DateRangePicker({
   id: idProp,
   label,
-  value,
+  from,
+  to,
   onChange,
   disabled,
   containerClassName,
-}: DatePickerProps) {
+}: DateRangePickerProps) {
   const inputId = useDatePickerFieldId(idProp, label)
   const [open, setOpen] = React.useState(false)
 
-  const selected = parseDateInputValue(value)
-  const display = formatDateRangeLabel(value)
+  const fromDate = parseDateInputValue(from)
+  const toDate = parseDateInputValue(to)
+  const selected =
+    fromDate != null ? { from: fromDate, to: toDate } : undefined
 
   return (
     <DatePickerField
       id={inputId}
       label={label}
-      display={display}
+      display={formatDateRangeLabel(from, to)}
       disabled={disabled}
       containerClassName={containerClassName}
       open={open}
@@ -45,13 +49,18 @@ export function DatePicker({
     >
       <Calendar
         locale={ru}
-        mode="single"
+        mode="range"
         captionLayout="dropdown"
-        defaultMonth={selected ?? new Date()}
+        defaultMonth={fromDate ?? new Date()}
         selected={selected}
-        onSelect={(date) => {
-          if (date) {
-            onChange(dateInputValueFromDate(date))
+        onSelect={(range) => {
+          if (!range?.from) {
+            return
+          }
+          const nextFrom = dateInputValueFromDate(range.from)
+          const nextTo = range.to ? dateInputValueFromDate(range.to) : ''
+          onChange(nextFrom, nextTo)
+          if (range.to) {
             setOpen(false)
           }
         }}
