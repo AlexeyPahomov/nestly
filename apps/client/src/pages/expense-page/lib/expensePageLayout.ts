@@ -13,20 +13,16 @@ export const expensePageSectionClassName = 'min-h-0 gap-3 md:gap-4'
 
 export const expensePageAddButtonDesktopClassName = fabDesktopAddButtonClassName
 
-/** MonthPicker в шапке страницы / блока казны. */
+/** MonthPicker в шапке страницы. */
 export const expensePageMonthPickerClassName =
   'w-auto [&_[data-slot=select-trigger]]:h-9 [&_[data-slot=select-trigger]]:rounded-lg [&_[data-slot=select-trigger]]:bg-transparent [&_[data-slot=select-trigger]]:px-2.5 [&_[data-slot=select-trigger]]:text-base [&_[data-slot=select-trigger]]:font-semibold hover:[&_[data-slot=select-trigger]]:bg-zinc-100'
 
-export const expensePageMonthPickerPageHeaderClassName = 'hidden md:block'
-
-export const expensePageMonthPickerBudgetHeaderClassName = 'md:hidden'
-
-/** Строка MonthPicker над блоком казны (мобилка). */
-export const expensePageBudgetHeaderClassName =
-  'flex justify-end md:hidden'
-
+/** Заголовок «Расходы» + выбор месяца (+ сайдбар на мобилке). */
 export const expensePageToolbarClassName =
-  'flex w-full shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4'
+  'flex w-full shrink-0 items-center justify-between gap-3'
+
+export const expensePageToolbarTitleEndClassName =
+  'flex shrink-0 items-center gap-2'
 
 /** Оболочка страницы: казна + категории по контенту + история на остаток высоты. */
 export const expensePageShellClassName = [

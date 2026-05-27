@@ -1,6 +1,10 @@
-import { PageSectionTitleRow } from '@/shared/ui'
+import { PageTitle } from '@/shared/ui'
+import { SidebarTrigger } from '@/shared/ui/sidebar'
 
-import { expensePageToolbarClassName } from '../lib/expensePageLayout'
+import {
+  expensePageToolbarClassName,
+  expensePageToolbarTitleEndClassName,
+} from '../lib/expensePageLayout'
 
 import { ExpensePageMonthPicker } from './ExpensePageMonthPicker'
 
@@ -15,12 +19,14 @@ export function ExpensePageToolbar({
 }: ExpensePageToolbarProps) {
   return (
     <div className={expensePageToolbarClassName}>
-      <PageSectionTitleRow>Расходы</PageSectionTitleRow>
-      <ExpensePageMonthPicker
-        value={periodMonth}
-        onChange={onPeriodMonthChange}
-        placement="page-header"
-      />
+      <PageTitle className="min-w-0 flex-1">Расходы</PageTitle>
+      <div className={expensePageToolbarTitleEndClassName}>
+        <ExpensePageMonthPicker
+          value={periodMonth}
+          onChange={onPeriodMonthChange}
+        />
+        <SidebarTrigger className="shrink-0 md:hidden" />
+      </div>
     </div>
   )
 }

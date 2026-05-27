@@ -4,6 +4,8 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
 import { cn } from '@/shared/lib/utils'
 
+import { useCenterSelectItemInViewport } from './useCenterSelectItemInViewport'
+
 function SelectRoot({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
@@ -66,11 +68,21 @@ function SelectContent({
   align = 'center',
   hideScrollButtons = false,
   viewportClassName,
+  centerSelectedValue,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content> & {
   hideScrollButtons?: boolean
   viewportClassName?: string
+  /** Прокрутить viewport так, чтобы выбранный пункт был по центру (при открытии). */
+  centerSelectedValue?: string
 }) {
+  const viewportRef = React.useRef<HTMLDivElement>(null)
+
+  useCenterSelectItemInViewport(
+    viewportRef,
+    centerSelectedValue && hideScrollButtons ? centerSelectedValue : undefined,
+  )
+
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -89,6 +101,7 @@ function SelectContent({
       >
         {hideScrollButtons ? null : <SelectScrollUpButton />}
         <SelectPrimitive.Viewport
+          ref={viewportRef}
           data-position={position}
           className={cn(
             'p-1',

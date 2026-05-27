@@ -42,8 +42,16 @@ export function MonthPicker({
     [value],
   );
 
+  const [open, setOpen] = React.useState(false);
+
   const control = (
-    <SelectRoot value={value} onValueChange={onChange} disabled={disabled}>
+    <SelectRoot
+      value={value}
+      onValueChange={onChange}
+      disabled={disabled}
+      open={open}
+      onOpenChange={setOpen}
+    >
       <SelectTrigger
         id={inputId}
         showIcon={false}
@@ -54,6 +62,7 @@ export function MonthPicker({
       <SelectContent
         position="item-aligned"
         hideScrollButtons
+        centerSelectedValue={open ? value : undefined}
         className={monthPickerSelectMenuClassName}
         viewportClassName={monthPickerSelectMenuClassName}
       >

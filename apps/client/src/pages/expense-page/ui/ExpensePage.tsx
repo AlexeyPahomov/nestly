@@ -94,11 +94,7 @@ export function ExpensePage() {
       }
     >
       <div className={getExpensePageShellClassName()}>
-        <ExpensePageBudgetSection
-          summary={currentBudgetView}
-          periodMonth={periodMonth}
-          onPeriodMonthChange={setPeriodMonth}
-        />
+        <ExpensePageBudgetSection summary={currentBudgetView} />
 
         <ExpensePageWorkArea
           periodMonth={periodMonth}
