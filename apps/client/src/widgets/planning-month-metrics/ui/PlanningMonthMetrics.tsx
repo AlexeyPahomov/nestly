@@ -1,4 +1,5 @@
 import type { MonthBudgetProjection } from '@/processes/forecasting'
+import { cn } from '@/shared/lib/utils'
 
 import {
   PLANNING_METRIC_COPY,
@@ -11,16 +12,18 @@ import { PlanningMetricCard } from './PlanningMetricCard'
 export type PlanningMonthMetricsProps = {
   projection: MonthBudgetProjection
   periodMonth: string
+  className?: string
 }
 
 export function PlanningMonthMetrics({
   projection,
   periodMonth,
+  className,
 }: PlanningMonthMetricsProps) {
   const copy = PLANNING_METRIC_COPY
 
   return (
-    <div className={planningMonthMetricsGridClassName}>
+    <div className={cn(planningMonthMetricsGridClassName, className)}>
       <PlanningMetricCard
         accent="forecast"
         title={planningForecastMetricTitle(periodMonth)}

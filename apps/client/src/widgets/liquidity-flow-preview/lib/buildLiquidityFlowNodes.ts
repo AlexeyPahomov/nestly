@@ -10,6 +10,8 @@ export type LiquidityFlowNodeData = LiquidityFlowNodeConfig & {
   amount: number
 }
 
+export type LiquidityFlowRailNodeKind = Exclude<LiquidityFlowNodeKind, 'income'>
+
 const flowNodeKinds: LiquidityFlowNodeKind[] = [
   'income',
   'pool',
@@ -18,20 +20,49 @@ const flowNodeKinds: LiquidityFlowNodeKind[] = [
   'forecast',
 ]
 
-export function buildLiquidityFlowNodes(
+const railNodeKinds: LiquidityFlowRailNodeKind[] = [
+  'pool',
+  'planned',
+  'reserved',
+  'forecast',
+]
+
+function liquidityFlowAmounts(
   projection: MonthBudgetProjection,
-  incomeTotal = 0,
-): LiquidityFlowNodeData[] {
-  const amounts: Record<LiquidityFlowNodeKind, number> = {
+  incomeTotal: number,
+): Record<LiquidityFlowNodeKind, number> {
+  return {
     income: incomeTotal,
     pool: projection.available,
     planned: projection.plannedTotal,
     reserved: projection.reservedTotal,
     forecast: projection.projectedFree,
   }
+}
 
-  return flowNodeKinds.map((kind) => ({
+function buildNodes(
+  kinds: readonly LiquidityFlowNodeKind[],
+  amounts: Record<LiquidityFlowNodeKind, number>,
+): LiquidityFlowNodeData[] {
+  return kinds.map((kind) => ({
     ...getLiquidityFlowNodeConfig(kind),
     amount: amounts[kind],
   }))
+}
+
+export function buildLiquidityFlowNodes(
+  projection: MonthBudgetProjection,
+  incomeTotal = 0,
+): LiquidityFlowNodeData[] {
+  return buildNodes(flowNodeKinds, liquidityFlowAmounts(projection, incomeTotal))
+}
+
+export function buildLiquidityFlowRailNodes(
+  projection: MonthBudgetProjection,
+  incomeTotal = 0,
+): LiquidityFlowNodeData[] {
+  return buildNodes(
+    railNodeKinds,
+    liquidityFlowAmounts(projection, incomeTotal),
+  )
 }

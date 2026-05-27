@@ -1,8 +1,11 @@
 export const plannedExpenseListClassName =
-  'overflow-hidden rounded-xl border border-zinc-200/80 bg-card'
+  'flex min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-200/80 bg-card'
 
 export const plannedExpenseListHeaderClassName =
-  'border-b border-zinc-200/80 px-4 py-3'
+  'shrink-0 border-b border-zinc-200/80 bg-card px-4 py-3'
+
+export const plannedExpenseListBodyClassName =
+  'coffer-scroll-list min-h-0 flex-1 overflow-y-auto overscroll-y-contain [overflow-anchor:none] [scrollbar-gutter:auto] pe-0.5'
 
 export const plannedExpenseListHeaderTitleClassName =
   'text-base font-semibold text-zinc-900'
