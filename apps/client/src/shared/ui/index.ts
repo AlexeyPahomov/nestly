@@ -5,6 +5,14 @@ export type { FabProps } from './fab'
 export { Badge } from './badge/Badge'
 export { badgeVariants } from './badge/variants'
 export { Button, buttonVariants, primaryActionButtonClassName } from './button'
+export {
+  ContentTransition,
+  useContentTransition,
+} from './content-transition'
+export type {
+  ContentTransitionPhase,
+  ContentTransitionProps,
+} from './content-transition'
 export { Calendar, CalendarDayButton } from './calendar/Calendar'
 export { IconPicker } from './icon-picker'
 export { IconColorAvatar } from './icon-color-avatar'

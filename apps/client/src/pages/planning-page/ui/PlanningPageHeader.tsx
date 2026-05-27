@@ -1,7 +1,9 @@
-import { PlanningMobileLiquidityHeader } from '@/widgets/liquidity-flow-preview'
 import { PlanningPageToolbar } from '@/widgets/planning-page-toolbar'
 
 import type { usePlanningPage } from '../model/usePlanningPage'
+
+import { PlanningPageMonthMobileHeader } from './PlanningPageMonthViews'
+import { PlanningPageMonthTransition } from './PlanningPageMonthTransition'
 
 type PlanningPageHeaderProps = {
   page: ReturnType<typeof usePlanningPage>
@@ -17,12 +19,9 @@ export function PlanningPageHeader({ page }: PlanningPageHeaderProps) {
         onSelectMonth={page.setPeriodMonth}
       />
 
-      {!page.isLoading ? (
-        <PlanningMobileLiquidityHeader
-          projection={page.projection}
-          incomeTotal={page.incomeTotal}
-        />
-      ) : null}
+      <PlanningPageMonthTransition periodMonth={page.periodMonth}>
+        <PlanningPageMonthMobileHeader page={page} />
+      </PlanningPageMonthTransition>
     </>
   )
 }

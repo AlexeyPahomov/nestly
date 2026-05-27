@@ -2,15 +2,14 @@ import { useState } from 'react'
 
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import { EditPlannedExpenseDialog } from '@/features/create-planned-expense/ui/EditPlannedExpenseDialog'
-import { PageSection, Spinner } from '@/shared/ui'
-import { MonthLiquidityFlow } from '@/widgets/liquidity-flow-preview'
-import { PlanningMonthMetrics } from '@/widgets/planning-month-metrics'
+import { PageSection } from '@/shared/ui'
 
 import { planningPageContentClassName } from '../lib/planningPageLayout'
 import { usePlanningPage } from '../model/usePlanningPage'
 
 import { PlanningPageHeader } from './PlanningPageHeader'
-import { PlanningPagePlansSection } from './PlanningPagePlansSection'
+import { PlanningPageMonthBody } from './PlanningPageMonthViews'
+import { PlanningPageMonthTransition } from './PlanningPageMonthTransition'
 
 export function PlanningPage() {
   const page = usePlanningPage()
@@ -23,32 +22,15 @@ export function PlanningPage() {
       title="Планирование"
       header={<PlanningPageHeader page={page} />}
     >
-      <div className={planningPageContentClassName}>
-        {page.isLoading ? (
-          <div className="flex justify-center py-12">
-            <Spinner className="size-8 text-zinc-500" />
-          </div>
-        ) : (
-          <>
-            <PlanningMonthMetrics
-              className="hidden md:grid"
-              projection={page.projection}
-              periodMonth={page.periodMonth}
-            />
-
-            <MonthLiquidityFlow
-              className="hidden md:flex"
-              projection={page.projection}
-              incomeTotal={page.incomeTotal}
-            />
-
-            <PlanningPagePlansSection
-              page={page}
-              onEditPlanned={setEditingPlanned}
-            />
-          </>
-        )}
-      </div>
+      <PlanningPageMonthTransition
+        periodMonth={page.periodMonth}
+        className={planningPageContentClassName}
+      >
+        <PlanningPageMonthBody
+          page={page}
+          onEditPlanned={setEditingPlanned}
+        />
+      </PlanningPageMonthTransition>
 
       <EditPlannedExpenseDialog
         open={editingPlanned != null}
