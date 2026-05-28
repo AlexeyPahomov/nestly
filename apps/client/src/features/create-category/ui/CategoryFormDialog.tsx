@@ -33,6 +33,7 @@ export function CategoryFormDialog({
       onOpenChange={onOpenChange}
       title={categoryFormDialogTitle(isEditing)}
       description={categoryFormDialogDescription(isEditing)}
+      bodyClassName={isMobile ? 'pt-3' : 'pt-2'}
     >
       <CreateCategoryForm
         key={formKey}

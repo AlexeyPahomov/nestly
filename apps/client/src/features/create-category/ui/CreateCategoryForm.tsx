@@ -48,6 +48,15 @@ export function CreateCategoryForm({
   className,
 }: CreateCategoryFormProps) {
   const form = useCategoryForm({ editingCategory, onComplete })
+  const iconPicker = (
+    <CategoryIconPicker
+      icon={form.values.icon}
+      iconColor={form.values.icon_color}
+      onIconChange={(icon) => form.patchValues({ icon })}
+      onColorChange={(icon_color) => form.patchValues({ icon_color })}
+      disabled={form.submitting}
+    />
+  )
 
   const fields = (
     <form
@@ -59,18 +68,16 @@ export function CreateCategoryForm({
     >
       <Input
         id="category-name"
-        label="Название"
         name="name"
         type="text"
         autoComplete="off"
-        placeholder="Например, Продукты"
+        placeholder="Название (например, продукты)"
         value={form.values.name}
         onChange={form.handleChange}
       />
 
       <Select
         id="category-type"
-        label="Тип"
         value={form.values.type}
         onValueChange={(type) => form.patchValues({ type })}
         options={typeOptions}
@@ -78,13 +85,7 @@ export function CreateCategoryForm({
         disabled={form.submitting}
       />
 
-      <CategoryIconPicker
-        icon={form.values.icon}
-        iconColor={form.values.icon_color}
-        onIconChange={(icon) => form.patchValues({ icon })}
-        onColorChange={(icon_color) => form.patchValues({ icon_color })}
-        disabled={form.submitting}
-      />
+      {iconPicker}
 
       {form.validationError ? (
         <p className="text-sm text-red-600">{form.validationError}</p>

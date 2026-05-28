@@ -18,7 +18,7 @@ export type SelectOption = {
 
 export type SelectProps = {
   id: string
-  label: ReactNode
+  label?: ReactNode
   value: string
   onValueChange: (value: string) => void
   options: SelectOption[]
@@ -39,11 +39,15 @@ export function Select({
   containerClassName,
   contentPosition = 'popper',
 }: SelectProps) {
+  const hasLabel = label != null && label !== ''
+
   return (
     <div data-slot="select-field" className={cn(containerClassName)}>
-      <label htmlFor={id} className={formLabelClassName}>
-        {label}
-      </label>
+      {hasLabel ? (
+        <label htmlFor={id} className={formLabelClassName}>
+          {label}
+        </label>
+      ) : null}
       <SelectRoot value={value} onValueChange={onValueChange} disabled={disabled}>
         <SelectTrigger id={id} size="default" className="w-full min-w-0">
           <SelectValue placeholder={placeholder} />

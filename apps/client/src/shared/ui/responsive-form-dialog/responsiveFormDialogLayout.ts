@@ -1,5 +1,5 @@
 export const responsiveFormDialogBodyClassName =
-  'min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4 max-md:pb-2'
+  'min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4 pt-4 max-md:pb-2'
 
 export const responsiveFormDialogDesktopContentClassName =
   'flex max-h-[min(90vh,40rem)] flex-col gap-4 overflow-hidden p-0 sm:max-w-md'

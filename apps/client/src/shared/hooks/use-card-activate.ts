@@ -10,6 +10,10 @@ export function useCardActivate(
   onActivate: () => void,
   { contextMenu = false, ariaLabel }: UseCardActivateOptions = {},
 ) {
+  const onClick = useCallback(() => {
+    onActivate()
+  }, [onActivate])
+
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key === 'Enter' || event.key === ' ') {
@@ -32,6 +36,7 @@ export function useCardActivate(
     role: 'button' as const,
     tabIndex: 0,
     'aria-label': ariaLabel,
+    onClick,
     onKeyDown,
     ...(contextMenu ? { onContextMenu } : {}),
   }

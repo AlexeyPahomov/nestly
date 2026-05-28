@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { Pencil } from 'lucide-react'
 
 import { CATEGORY_TYPE_LABELS } from '@coffer/shared'
 
@@ -15,6 +16,9 @@ import { useCardActivate } from '@/shared/hooks/use-card-activate'
 import { useLongPress } from '@/shared/hooks/use-long-press'
 import { cn } from '@/shared/lib/utils'
 import { Card, IconColorAvatar } from '@/shared/ui'
+
+const editPencilClassName =
+  'absolute top-2 right-2 hidden cursor-pointer items-center justify-center rounded-md bg-white/90 p-1 text-zinc-500 opacity-0 shadow-sm ring-1 ring-zinc-200/80 transition-opacity duration-150 md:flex md:group-hover/category-card:opacity-100'
 
 type CategoryCardProps = {
   category: Category
@@ -45,12 +49,18 @@ export function CategoryCard({ category, onEdit }: CategoryCardProps) {
       size="sm"
       className={cn(
         categoryTileCardClassName,
+        isEditable && 'group/category-card',
         isEditable && categoryCardPressableClassName,
         isPressing && categoryCardPressingClassName,
       )}
       {...(isEditable ? activateProps : {})}
       {...(isEditable ? longPressHandlers : {})}
     >
+      {isEditable ? (
+        <span className={editPencilClassName} aria-hidden>
+          <Pencil className="size-3.5" />
+        </span>
+      ) : null}
       <CategoryTileShell
         icon={
           <IconColorAvatar iconColor={category.icon_color} className="size-12">

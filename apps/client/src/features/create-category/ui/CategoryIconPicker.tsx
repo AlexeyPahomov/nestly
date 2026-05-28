@@ -31,8 +31,6 @@ export function CategoryIconPicker({
       iconValue={icon}
       colorValue={resolveIconColorKey(iconColor)}
       disabled={disabled}
-      iconLabel="Иконка"
-      colorLabel="Цвет"
       icons={CATEGORY_ICON_KEYS.map((value) => ({
         value,
         label: CATEGORY_ICON_LABELS[value],
