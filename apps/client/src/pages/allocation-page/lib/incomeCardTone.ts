@@ -1,4 +1,4 @@
-import type { IncomeCardTone } from '@/pages/allocation-page/model/useAllocationPage'
+import type { IncomeCardTone } from '@/pages/allocation-page/lib/allocationIncomeCard'
 
 export function getToneGradientClassName(tone: IncomeCardTone): string {
   if (tone === 'full') {

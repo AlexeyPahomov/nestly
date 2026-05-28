@@ -11,7 +11,7 @@ type AllocationListProps = {
   error: unknown
   allocations: Allocation[] | undefined
   isFetching: boolean
-  hasSelectedIncome: boolean
+  hasSelectedMonth: boolean
   incomeAmount?: number | null
   layout?: ItemsListLayout
   onEditAllocation?: (allocation: Allocation) => void
@@ -23,7 +23,7 @@ export function AllocationList({
   error,
   allocations,
   isFetching,
-  hasSelectedIncome,
+  hasSelectedMonth,
   incomeAmount = null,
   layout = 'fill',
   onEditAllocation,
@@ -36,10 +36,10 @@ export function AllocationList({
     [allocations, incomeAmount],
   )
 
-  if (!hasSelectedIncome) {
+  if (!hasSelectedMonth) {
     return (
       <p className="text-sm text-muted-foreground">
-        Выберите доход, чтобы увидеть распределения.
+        Выберите месяц, чтобы увидеть распределения.
       </p>
     )
   }
@@ -51,7 +51,7 @@ export function AllocationList({
       error={error}
       data={sortedAllocations}
       isFetching={isFetching}
-      emptyMessage="Пока нет распределений по этому доходу."
+      emptyMessage="Пока нет распределений за этот месяц."
       errorFallback="Не удалось загрузить распределения"
       layout={layout}
     >

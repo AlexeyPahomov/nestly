@@ -41,8 +41,9 @@ export function AllocationPage() {
   const desktopIncomeScrollRef = useRef<HTMLDivElement | null>(null)
 
   const {
-    selectedIncomeId,
-    setPickedIncomeId,
+    selectedPeriodMonth,
+    setPickedPeriodMonth,
+    selectedAllocationIncomeId,
     allocationCategories,
     incomeAmount,
     allocatedTotal,
@@ -53,7 +54,7 @@ export function AllocationPage() {
   } = useAllocationPage()
 
   const form = useCreateAllocationForm({
-    incomeId: selectedIncomeId,
+    incomeId: selectedAllocationIncomeId,
     remainingBalance,
   })
 
@@ -78,10 +79,10 @@ export function AllocationPage() {
   )
 
   const selectedIncomeTone =
-    incomeCards.find((card) => card.id === selectedIncomeId)?.tone ?? 'empty'
+    incomeCards.find((card) => card.id === selectedPeriodMonth)?.tone ?? 'empty'
 
   useActiveIncomeScroll(
-    selectedIncomeId,
+    selectedPeriodMonth,
     incomeCards,
     incomeCarouselApi,
     desktopIncomeScrollRef,
@@ -101,8 +102,8 @@ export function AllocationPage() {
           <AllocationIncomeSection
             hasIncome={hasIncome}
             incomeCards={incomeCards}
-            selectedIncomeId={selectedIncomeId}
-            onSelectIncome={setPickedIncomeId}
+            selectedPeriodMonth={selectedPeriodMonth}
+            onSelectPeriodMonth={setPickedPeriodMonth}
             desktopIncomeScrollRef={desktopIncomeScrollRef}
             onCarouselApiChange={setIncomeCarouselApi}
           />
@@ -122,7 +123,7 @@ export function AllocationPage() {
         </div>
 
         <ContentTransition
-          contentKey={selectedIncomeId ?? 'none'}
+          contentKey={selectedPeriodMonth ?? 'none'}
           className={allocationPageListClassName}
         >
           <AllocationList
@@ -131,7 +132,7 @@ export function AllocationPage() {
             error={allocationsQuery.error}
             allocations={allocationsQuery.data}
             isFetching={isAllocationListBackgroundFetch(allocationsQuery)}
-            hasSelectedIncome={selectedIncomeId !== null}
+            hasSelectedMonth={selectedPeriodMonth !== null}
             incomeAmount={incomeAmount}
             layout={isMobile ? 'fit' : 'fill'}
             onEditAllocation={setEditingAllocation}

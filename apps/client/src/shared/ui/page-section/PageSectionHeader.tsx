@@ -9,7 +9,7 @@ type PageSectionHeaderProps = {
   titleLoading?: boolean
   header?: ReactNode
   headerAction?: ReactNode
-  /** Кнопка сайдбара рядом с `header`, если нет `title` (по умолчанию включена). */
+  /** Обёртка шапки с flex-раскладкой; `false` — только `shrink-0` (тулбар страницы). */
   mobileSidebarOnHeader?: boolean
 }
 

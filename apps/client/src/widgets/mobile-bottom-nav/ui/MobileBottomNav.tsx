@@ -2,7 +2,12 @@ import { CalendarDays, CreditCard, DollarSign, PieChart, Tag } from 'lucide-reac
 import { NavLink, useLocation } from 'react-router-dom'
 import type { ReactNode } from 'react'
 
-import { APP_ROUTES, appRouteHref, type AppRouteId } from '@/app/config/routes'
+import {
+  APP_ROUTES,
+  appRouteHref,
+  appRouteMobileNavLabel,
+  type AppRouteId,
+} from '@/app/config/routes'
 import { cn } from '@/shared/lib/utils'
 
 type IconFn = (props: { className?: string }) => ReactNode
@@ -38,7 +43,9 @@ export function MobileBottomNav() {
                 )}
               >
                 <Icon className={cn('size-4', isActive && 'text-slate-hover')} />
-                <span className="truncate">{route.label}</span>
+                <span className="truncate">
+                  {appRouteMobileNavLabel(route)}
+                </span>
               </NavLink>
             </li>
           )

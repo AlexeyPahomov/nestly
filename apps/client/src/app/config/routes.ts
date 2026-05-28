@@ -3,7 +3,7 @@ export const APP_ROUTES = [
   { id: 'income', label: 'Доходы', segment: 'income' },
   { id: 'allocation', label: 'Бюджет', segment: 'allocation' },
   { id: 'expenses', label: 'Расходы', segment: 'expenses' },
-  { id: 'planning', label: 'Планирование', segment: 'planning' },
+  { id: 'planning', label: 'Планирование', mobileLabel: 'План', segment: 'planning' },
   { id: 'categories', label: 'Категории', segment: 'categories' },
 ] as const
 
@@ -20,6 +20,15 @@ export function appRouteLabel(id: AppRouteId): string {
     throw new Error(`Unknown route id: ${id}`)
   }
   return route.label
+}
+
+/** Короткая подпись пункта меню для мобильной навигации. */
+export function appRouteMobileNavLabel(
+  route: (typeof APP_ROUTES)[number],
+): string {
+  return 'mobileLabel' in route && route.mobileLabel
+    ? route.mobileLabel
+    : route.label
 }
 
 /** Полный путь: `/income`, `/allocation`, … */

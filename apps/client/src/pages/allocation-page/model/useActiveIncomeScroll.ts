@@ -1,21 +1,21 @@
 import { useEffect, type RefObject } from 'react'
 
-import type { IncomeCardView } from '@/pages/allocation-page/model/useAllocationPage'
+import type { IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
 import type { CarouselApi } from '@/shared/ui'
 
 export function useActiveIncomeScroll(
-  selectedIncomeId: string | null,
+  selectedPeriodMonth: string | null,
   incomeCards: IncomeCardView[],
   incomeCarouselApi: CarouselApi | undefined,
   desktopIncomeScrollRef: RefObject<HTMLDivElement | null>,
 ) {
   useEffect(() => {
-    if (!selectedIncomeId) {
+    if (!selectedPeriodMonth) {
       return
     }
 
     const activeIndex = incomeCards.findIndex(
-      (card) => card.id === selectedIncomeId,
+      (card) => card.id === selectedPeriodMonth,
     )
     if (activeIndex < 0) {
       return
@@ -25,12 +25,12 @@ export function useActiveIncomeScroll(
 
     const activeDesktopCard =
       desktopIncomeScrollRef.current?.querySelector<HTMLElement>(
-        `[data-income-card-id="${selectedIncomeId}"]`,
+        `[data-income-card-id="${selectedPeriodMonth}"]`,
       )
     activeDesktopCard?.scrollIntoView({
       behavior: 'smooth',
       inline: 'center',
       block: 'nearest',
     })
-  }, [desktopIncomeScrollRef, incomeCards, incomeCarouselApi, selectedIncomeId])
+  }, [desktopIncomeScrollRef, incomeCards, incomeCarouselApi, selectedPeriodMonth])
 }

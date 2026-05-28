@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react'
 
-import { SidebarTrigger } from '@/shared/ui/sidebar'
-
 import {
   pageSectionHeaderClassName,
   pageSectionHeaderMainClassName,
@@ -11,14 +9,13 @@ type PageSectionMobileHeaderProps = {
   children: ReactNode
 }
 
-/** Оболочка шапки: контент страницы + кнопка сайдбара у правого края на мобилке. */
+/** Оболочка шапки на мобилке (без бокового меню — навигация в нижней панели). */
 export function PageSectionMobileHeader({
   children,
 }: PageSectionMobileHeaderProps) {
   return (
     <div className={pageSectionHeaderClassName}>
       <div className={pageSectionHeaderMainClassName}>{children}</div>
-      <SidebarTrigger className="shrink-0 md:hidden" />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 
-import type { IncomeCardView } from '@/pages/allocation-page/model/useAllocationPage';
+import type { IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard';
 import { IncomeMonthCard } from '@/pages/allocation-page/ui/IncomeMonthCard';
 import {
   Card,
@@ -14,8 +14,8 @@ import {
 type AllocationIncomeSectionProps = {
   hasIncome: boolean;
   incomeCards: IncomeCardView[];
-  selectedIncomeId: string | null;
-  onSelectIncome: (incomeId: string | null) => void;
+  selectedPeriodMonth: string | null;
+  onSelectPeriodMonth: (periodMonth: string | null) => void;
   desktopIncomeScrollRef: RefObject<HTMLDivElement | null>;
   onCarouselApiChange: (api: CarouselApi) => void;
 };
@@ -23,8 +23,8 @@ type AllocationIncomeSectionProps = {
 export function AllocationIncomeSection({
   hasIncome,
   incomeCards,
-  selectedIncomeId,
-  onSelectIncome,
+  selectedPeriodMonth,
+  onSelectPeriodMonth,
   desktopIncomeScrollRef,
   onCarouselApiChange,
 }: AllocationIncomeSectionProps) {
@@ -45,8 +45,8 @@ export function AllocationIncomeSection({
                   key={incomeCard.id}
                   cardId={incomeCard.id}
                   incomeCard={incomeCard}
-                  isActive={incomeCard.id === selectedIncomeId}
-                  onSelect={onSelectIncome}
+                  isActive={incomeCard.id === selectedPeriodMonth}
+                  onSelect={onSelectPeriodMonth}
                 />
               ))}
             </div>
@@ -63,8 +63,8 @@ export function AllocationIncomeSection({
                   <IncomeMonthCard
                     cardId={incomeCard.id}
                     incomeCard={incomeCard}
-                    isActive={incomeCard.id === selectedIncomeId}
-                    onSelect={onSelectIncome}
+                    isActive={incomeCard.id === selectedPeriodMonth}
+                    onSelect={onSelectPeriodMonth}
                   />
                 </CarouselItem>
               ))}

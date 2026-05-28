@@ -10,7 +10,7 @@ export const pageSectionClassName =
 export const pageSectionHeaderStackClassName =
   'flex shrink-0 flex-col gap-4'
 
-/** Шапка страницы: контент слева, сайдбар справа (мобилка). */
+/** Шапка страницы. */
 export const pageSectionHeaderClassName =
   'flex w-full shrink-0 items-center gap-3'
 

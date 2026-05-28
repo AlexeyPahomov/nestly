@@ -13,7 +13,7 @@ type PageSectionTitleRowProps = {
   isLoading?: boolean
 }
 
-/** Заголовок страницы (сайдбар — в {@link PageSectionMobileHeader}). */
+/** Заголовок страницы. */
 export function PageSectionTitleRow({
   children,
   className,

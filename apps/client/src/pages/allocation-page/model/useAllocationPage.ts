@@ -1,93 +1,91 @@
 import { useMemo, useState } from 'react'
-import { getMonthKeyFromIso } from '@coffer/shared'
+import { sumMoneyAmounts } from '@coffer/shared'
 
 import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
-import { useAllocationsQuery } from '@/entities/allocation/api/useAllocationsQuery'
+import { filterAllocationsForIncomes } from '@/entities/allocation/lib/filterAllocationsForIncomes'
+import { pickIncomeWithMaxRemaining } from '@/entities/allocation/lib/pickIncomeWithMaxRemaining'
+import { sumAllocatedByIncome } from '@/entities/allocation/lib/sumAllocatedByIncome'
 import { sumAllocationAmounts } from '@/entities/allocation/model/calculations'
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import type { Category } from '@/entities/category/model/types'
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
-import type { Income } from '@/entities/income/model/types'
+import { buildAllocationIncomeCards } from '@/pages/allocation-page/lib/buildAllocationIncomeCards'
+import {
+  filterIncomesByPeriodMonth,
+  resolveSelectedAllocationPeriodMonth,
+} from '@/pages/allocation-page/lib/allocationPeriodMonth'
+import { combineAllocationListQuery } from '@/pages/allocation-page/lib/combineAllocationListQuery'
 import { formatMonthLabel } from '@/shared/lib/format'
-import { toMoneyNumber } from '@/shared/lib/money'
 
-export type IncomeCardTone = 'empty' | 'partial' | 'full'
-
-export type IncomeCardView = {
-  id: string
-  periodMonth: string
-  periodLabel: string
-  amount: number
-  allocated: number
-  percent: number
-  tone: IncomeCardTone
-}
-
-function resolveSelectedIncomeId(
-  incomes: Income[] | undefined,
-  pickedIncomeId: string | null,
-): string | null {
-  if (incomes === undefined || incomes.length === 0) {
-    return null
-  }
-  if (
-    pickedIncomeId !== null &&
-    incomes.some((income) => income.id === pickedIncomeId)
-  ) {
-    return pickedIncomeId
-  }
-  return incomes[0].id
-}
+export type { IncomeCardTone, IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
 
 function filterAllocationCategories(categories: Category[]): Category[] {
   return categories.filter((category) => category.type !== 'income')
 }
 
-function resolveIncomeTone(allocated: number, percent: number): IncomeCardTone {
-  if (allocated <= 0) {
-    return 'empty'
-  }
-
-  return percent >= 98 ? 'full' : 'partial'
-}
-
 export function useAllocationPage() {
-  const [pickedIncomeId, setPickedIncomeId] = useState<string | null>(null)
+  const [pickedPeriodMonth, setPickedPeriodMonth] = useState<string | null>(null)
 
   const incomesQuery = useIncomesQuery()
   const allAllocationsQuery = useAllAllocationsQuery()
   const categoriesQuery = useCategoriesQuery()
 
-  const incomes = incomesQuery.data
+  const incomes = incomesQuery.data ?? []
 
-  const selectedIncomeId = useMemo(
-    () => resolveSelectedIncomeId(incomes, pickedIncomeId),
-    [incomes, pickedIncomeId],
+  const allocatedByIncome = useMemo(
+    () => sumAllocatedByIncome(allAllocationsQuery.data ?? []),
+    [allAllocationsQuery.data],
   )
 
-  const allocationsQuery = useAllocationsQuery(selectedIncomeId)
+  const incomeCards = useMemo(
+    () => buildAllocationIncomeCards(incomes, allocatedByIncome),
+    [allocatedByIncome, incomes],
+  )
+
+  const selectedPeriodMonth = useMemo(
+    () => resolveSelectedAllocationPeriodMonth(incomeCards, pickedPeriodMonth),
+    [incomeCards, pickedPeriodMonth],
+  )
+
+  const incomesInSelectedMonth = useMemo(
+    () => filterIncomesByPeriodMonth(incomes, selectedPeriodMonth),
+    [incomes, selectedPeriodMonth],
+  )
+
+  const selectedAllocationIncomeId = useMemo(
+    () => pickIncomeWithMaxRemaining(incomesInSelectedMonth, allocatedByIncome),
+    [allocatedByIncome, incomesInSelectedMonth],
+  )
+
+  const monthAllocations = useMemo(
+    () =>
+      filterAllocationsForIncomes(
+        allAllocationsQuery.data ?? [],
+        incomesInSelectedMonth,
+      ),
+    [allAllocationsQuery.data, incomesInSelectedMonth],
+  )
 
   const allocationCategories = useMemo(
     () => filterAllocationCategories(categoriesQuery.data ?? []),
     [categoriesQuery.data],
   )
 
-  const selectedIncome = useMemo(
-    () => incomes?.find((income) => income.id === selectedIncomeId) ?? null,
-    [incomes, selectedIncomeId],
-  )
+  const incomeAmount = useMemo(() => {
+    if (incomesInSelectedMonth.length === 0) {
+      return null
+    }
+    return sumMoneyAmounts(incomesInSelectedMonth.map((income) => income.amount))
+  }, [incomesInSelectedMonth])
+
+  const selectedPeriodMonthLabel = selectedPeriodMonth
+    ? formatMonthLabel(`${selectedPeriodMonth}-01`)
+    : 'Месяц'
 
   const allocatedTotal = useMemo(
-    () => sumAllocationAmounts(allocationsQuery.data ?? []),
-    [allocationsQuery.data],
+    () => sumAllocationAmounts(monthAllocations),
+    [monthAllocations],
   )
-
-  const incomeAmount = selectedIncome
-    ? toMoneyNumber(selectedIncome.amount)
-    : null
-  const selectedIncomeMonthLabel = selectedIncome
-    ? formatMonthLabel(selectedIncome.period_month)
-    : 'Месяц'
 
   const remainingBalance = useMemo(() => {
     if (incomeAmount === null) {
@@ -96,54 +94,23 @@ export function useAllocationPage() {
     return incomeAmount - allocatedTotal
   }, [incomeAmount, allocatedTotal])
 
-  const allocatedByIncomeId = useMemo(() => {
-    const summary = new Map<string, number>()
-
-    for (const allocation of allAllocationsQuery.data ?? []) {
-      const prev = summary.get(allocation.income_id) ?? 0
-      summary.set(allocation.income_id, prev + toMoneyNumber(allocation.amount))
-    }
-
-    return summary
-  }, [allAllocationsQuery.data])
-
-  const incomeCards = useMemo<IncomeCardView[]>(
-    () =>
-      (incomes ?? [])
-        .slice()
-        .sort((a, b) => b.period_month.localeCompare(a.period_month))
-        .map((income) => {
-          const amount = toMoneyNumber(income.amount)
-          const allocated = allocatedByIncomeId.get(income.id) ?? 0
-          const percent =
-            amount > 0 ? Math.min(100, Math.round((allocated / amount) * 100)) : 0
-
-          return {
-            id: income.id,
-            periodMonth:
-              getMonthKeyFromIso(income.period_month) ?? income.period_month,
-            periodLabel: formatMonthLabel(income.period_month),
-            amount,
-            allocated,
-            percent,
-            tone: resolveIncomeTone(allocated, percent),
-          }
-        }),
-    [allocatedByIncomeId, incomes],
+  const allocationsQuery = combineAllocationListQuery(
+    monthAllocations,
+    allAllocationsQuery,
+    incomesQuery,
   )
 
-  const hasIncome = incomeCards.length > 0
-
   return {
-    selectedIncomeId,
-    setPickedIncomeId,
+    selectedPeriodMonth,
+    setPickedPeriodMonth,
+    selectedAllocationIncomeId,
     allocationCategories,
     incomeAmount,
-    selectedIncomeMonthLabel,
+    selectedPeriodMonthLabel,
     allocatedTotal,
     remainingBalance,
     incomeCards,
-    hasIncome,
+    hasIncome: incomeCards.length > 0,
     incomesQuery,
     allocationsQuery,
   }
