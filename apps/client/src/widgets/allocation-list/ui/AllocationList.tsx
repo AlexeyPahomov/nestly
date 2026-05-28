@@ -11,6 +11,7 @@ type AllocationListProps = {
   hasSelectedIncome: boolean
   incomeAmount?: number | null
   layout?: ItemsListLayout
+  onEditAllocation?: (allocation: Allocation) => void
 }
 
 export function AllocationList({
@@ -22,6 +23,7 @@ export function AllocationList({
   hasSelectedIncome,
   incomeAmount = null,
   layout = 'fill',
+  onEditAllocation,
 }: AllocationListProps) {
   if (!hasSelectedIncome) {
     return (
@@ -38,15 +40,19 @@ export function AllocationList({
       error={error}
       data={allocations}
       isFetching={isFetching}
-      title="Распределения"
       emptyMessage="Пока нет распределений по этому доходу."
       errorFallback="Не удалось загрузить распределения"
       layout={layout}
+      pendingLoaderPlacement={layout === 'fit' ? 'footer' : 'overlay'}
     >
       {(items) =>
         items.map((allocation) => (
           <li key={allocation.id}>
-            <AllocationCard allocation={allocation} incomeAmount={incomeAmount} />
+            <AllocationCard
+              allocation={allocation}
+              incomeAmount={incomeAmount}
+              onEdit={onEditAllocation}
+            />
           </li>
         ))
       }

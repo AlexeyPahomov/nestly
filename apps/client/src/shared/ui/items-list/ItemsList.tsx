@@ -15,6 +15,9 @@ import { itemsListShellClassName } from './itemsListLayout';
 
 export type ItemsListLayout = 'fill' | 'fit';
 
+/** `overlay` — карточка по центру тела; `footer` — компактный спиннер в конце списка */
+export type ItemsListPendingLoaderPlacement = 'overlay' | 'footer';
+
 export type ItemsListProps<T> = {
   isPending: boolean;
   isError: boolean;
@@ -46,6 +49,8 @@ export type ItemsListProps<T> = {
   listAnimateEnter?: boolean;
   /** Показывать карточку-лоадер в теле списка при `isPending`. */
   showPendingLoader?: boolean;
+  /** Где показывать лоадер при `isPending` / догрузке (`isFetching`). */
+  pendingLoaderPlacement?: ItemsListPendingLoaderPlacement;
   /** Показать тело списка при пустом `data` (напр. плитка «добавить»). */
   forceShowList?: boolean;
 };
@@ -76,6 +81,7 @@ export function ItemsList<T>({
   bodyCollapsed = false,
   listAnimateEnter = true,
   showPendingLoader = true,
+  pendingLoaderPlacement = 'overlay',
   forceShowList = false,
 }: ItemsListProps<T>) {
   const bodyPresence = useCollapsePresence(!bodyCollapsed, true);
@@ -94,13 +100,36 @@ export function ItemsList<T>({
     layout === 'fill' ? listUlFillClassName : listUlFitClassName;
 
   const items = data ?? [];
-  const showLoader = isPending && showPendingLoader;
+  const useFooterLoader = pendingLoaderPlacement === 'footer';
+  const showOverlayLoader =
+    isPending && showPendingLoader && !useFooterLoader;
+  const showFooterPendingLoader =
+    isPending && showPendingLoader && useFooterLoader;
+  const showFooterFetchingLoader =
+    isFetching && !isPending && useFooterLoader;
   const showError = !isPending && isError && data === undefined;
   const showEmpty =
     !isPending && !showError && items.length === 0 && !forceShowList;
   const showList =
-    !isPending && !showError && (items.length > 0 || forceShowList);
+    !showError &&
+    (items.length > 0 || forceShowList) &&
+    (!isPending || useFooterLoader);
+  const showPendingFooterOnly =
+    showFooterPendingLoader && items.length === 0 && !forceShowList;
   const showHeaderExtras = bodyPresence.isOpen;
+
+  const footerLoaderNode =
+    showFooterPendingLoader || showFooterFetchingLoader ? (
+      <ListLoader variant="inline" />
+    ) : null;
+
+  const combinedListFooter =
+    listFooter || footerLoaderNode ? (
+      <>
+        {listFooter}
+        {footerLoaderNode}
+      </>
+    ) : null;
 
   const listBody = (
     <div
@@ -109,26 +138,21 @@ export function ItemsList<T>({
         itemsListShellClassName,
       )}
     >
-      <div
-            aria-hidden={!showLoader}
-            className={cn(
-              'coffer-list-fade flex min-h-0 flex-1 flex-col',
-              showLoader
-                ? 'opacity-100'
-                : 'pointer-events-none absolute inset-0 z-10 opacity-0',
-            )}
-          >
-            {showLoader ? (
+      {showOverlayLoader ? (
+            <div
+              aria-hidden={!showOverlayLoader}
+              className="coffer-list-fade flex min-h-0 flex-1 flex-col opacity-100"
+            >
               <ItemsListInteractive className="flex min-h-0 flex-1 flex-col">
                 <ListLoader />
               </ItemsListInteractive>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
 
           <div
             className={cn(
               'coffer-list-fade flex min-h-0 flex-col gap-3',
-              showLoader
+              showOverlayLoader
                 ? cn(
                     itemsListShellClassName,
                     'pointer-events-none absolute inset-0 opacity-0',
@@ -160,10 +184,13 @@ export function ItemsList<T>({
                 >
                   {children(items)}
                 </ItemsListInteractiveList>
-                {listFooter ? (
-                  <ItemsListInteractive>{listFooter}</ItemsListInteractive>
+                {combinedListFooter ? (
+                  <ItemsListInteractive>{combinedListFooter}</ItemsListInteractive>
                 ) : null}
               </>
+            ) : null}
+            {showPendingFooterOnly && footerLoaderNode ? (
+              <ItemsListInteractive>{footerLoaderNode}</ItemsListInteractive>
             ) : null}
       </div>
     </div>
@@ -199,7 +226,9 @@ export function ItemsList<T>({
         title={title}
         headerEnd={showHeaderExtras ? headerEnd : undefined}
         headerAddon={showHeaderExtras ? headerAddon : undefined}
-        isFetching={showHeaderExtras ? isFetching : false}
+        isFetching={
+          showHeaderExtras ? isFetching && !useFooterLoader : false
+        }
         isPending={isPending}
         onTitleClick={onTitleClick}
       />

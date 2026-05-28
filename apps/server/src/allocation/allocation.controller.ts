@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { AllocationService } from './allocation.service';
 import { CreateAllocationDto } from './dto/create-allocation.dto';
+import { UpdateAllocationDto } from './dto/update-allocation.dto';
 
 @Controller('allocation')
 export class AllocationController {
@@ -14,5 +15,10 @@ export class AllocationController {
   @Get()
   findAll(@Query('incomeId') incomeId?: string) {
     return this.allocationService.findAll(incomeId);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateAllocationDto) {
+    return this.allocationService.update(id, dto);
   }
 }

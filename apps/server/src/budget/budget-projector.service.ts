@@ -219,4 +219,47 @@ export class BudgetProjectorService {
       0,
     );
   }
+
+  async onAllocationRemoved(
+    db: BudgetDbClient,
+    allocation: {
+      user_id: string;
+      category_id: string;
+      amount: { toString(): string };
+      period_month: Date;
+    },
+  ): Promise<void> {
+    const periodMonth = monthValueFromDate(allocation.period_month);
+    const snapshotId = await this.resolveSnapshotId(
+      db,
+      allocation.user_id,
+      periodMonth,
+      allocation.category_id,
+    );
+    await this.applySnapshotDeltas(
+      db,
+      snapshotId,
+      -toMoneyNumber(allocation.amount.toString()),
+      0,
+    );
+  }
+
+  async onAllocationUpdated(
+    db: BudgetDbClient,
+    before: {
+      user_id: string;
+      category_id: string;
+      amount: { toString(): string };
+      period_month: Date;
+    },
+    after: {
+      user_id: string;
+      category_id: string;
+      amount: { toString(): string };
+      period_month: Date;
+    },
+  ): Promise<void> {
+    await this.onAllocationRemoved(db, before);
+    await this.onAllocationCreated(db, after);
+  }
 }

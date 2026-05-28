@@ -23,3 +23,9 @@ export type CreateAllocationPayload = {
   category_id: string
   amount: number
 }
+
+/** Тело PATCH /allocation/:id. */
+export type UpdateAllocationPayload = {
+  category_id: string
+  amount: number
+}

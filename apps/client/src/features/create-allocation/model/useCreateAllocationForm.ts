@@ -4,13 +4,10 @@ import { useCreateAllocationMutation } from '@/entities/allocation/api/useCreate
 import { getErrorMessage } from '@/shared/lib/errors'
 import { useForm } from '@/shared/lib/hooks/useForm'
 
-import type { CreateAllocationFormValues } from './types'
-import { validateCreateAllocationForm } from './validation'
+import { emptyAllocationFormValues } from '../lib/allocationFormValues'
 
-const emptyFormValues = (): CreateAllocationFormValues => ({
-  category_id: '',
-  amount: '',
-})
+import type { CreateAllocationFormValues } from './types'
+import { validateAllocationForm } from './validation'
 
 type UseCreateAllocationFormParams = {
   incomeId: string | null
@@ -23,7 +20,7 @@ export function useCreateAllocationForm({
 }: UseCreateAllocationFormParams) {
   const mutation = useCreateAllocationMutation()
   const { values, handleChange, patchValues, setValues } =
-    useForm<CreateAllocationFormValues>(emptyFormValues())
+    useForm<CreateAllocationFormValues>(emptyAllocationFormValues())
 
   const [validationError, setValidationError] = useState<string | null>(null)
 
@@ -38,7 +35,7 @@ export function useCreateAllocationForm({
     setValidationError(null)
     mutation.reset()
 
-    const result = validateCreateAllocationForm(values, remainingBalance)
+    const result = validateAllocationForm(values, remainingBalance)
     if (result.ok === false) {
       setValidationError(result.error)
       return
@@ -49,7 +46,7 @@ export function useCreateAllocationForm({
         income_id: incomeId,
         ...result.payload,
       })
-      setValues(emptyFormValues())
+      setValues(emptyAllocationFormValues())
     } catch {
       // ошибка уже в mutation.error
     }

@@ -5,7 +5,7 @@ import type {
   ValidCreateAllocationFormPayload,
 } from './types'
 
-export function validateCreateAllocationForm(
+export function validateAllocationForm(
   values: CreateAllocationFormValues,
   remainingBalance: number,
 ):
@@ -23,7 +23,7 @@ export function validateCreateAllocationForm(
   if (parsed > remainingBalance) {
     return {
       ok: false as const,
-      error: 'Сумма превышает остаток по доходу',
+      error: 'Сумма превышает доступный остаток по доходу',
     }
   }
 

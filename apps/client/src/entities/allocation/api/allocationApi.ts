@@ -1,6 +1,10 @@
-import { apiGet, apiPost } from '@/shared/api/client'
+import { apiGet, apiPatch, apiPost } from '@/shared/api/client'
 
-import type { Allocation, CreateAllocationPayload } from '../model/types'
+import type {
+  Allocation,
+  CreateAllocationPayload,
+  UpdateAllocationPayload,
+} from '../model/types'
 
 const ALLOCATION_PATH = '/allocation'
 
@@ -20,4 +24,11 @@ export function createAllocation(
   payload: CreateAllocationPayload,
 ): Promise<Allocation> {
   return apiPost<Allocation>(ALLOCATION_PATH, payload)
+}
+
+export function updateAllocation(
+  id: string,
+  payload: UpdateAllocationPayload,
+): Promise<Allocation> {
+  return apiPatch<Allocation>(`${ALLOCATION_PATH}/${id}`, payload)
 }
