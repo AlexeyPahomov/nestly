@@ -8,10 +8,10 @@ export type CreatePlannedExpenseFormProps = {
   anchorPeriodMonth: string
 }
 
-export function CreatePlannedExpenseForm({
-  anchorPeriodMonth,
-}: CreatePlannedExpenseFormProps) {
-  const form = useCreatePlannedExpenseForm(anchorPeriodMonth)
+export function CreatePlannedExpenseForm(
+  _props: CreatePlannedExpenseFormProps,
+) {
+  const form = useCreatePlannedExpenseForm()
 
   return (
     <Card className="border-zinc-200/80 shadow-none">
@@ -25,6 +25,7 @@ export function CreatePlannedExpenseForm({
           patchValues={form.patchValues}
           onSubmit={form.submit}
           isPending={form.isPending}
+          isSubmitDisabled={form.isSubmitDisabled}
         />
       </CardContent>
     </Card>

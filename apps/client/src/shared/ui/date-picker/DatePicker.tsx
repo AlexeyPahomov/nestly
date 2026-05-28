@@ -38,6 +38,7 @@ export function DatePicker({
       id={inputId}
       label={label}
       display={display}
+      mutedWhenEmpty={!value.trim()}
       disabled={disabled}
       containerClassName={containerClassName}
       open={open}

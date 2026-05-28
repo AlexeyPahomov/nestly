@@ -5,7 +5,7 @@ import type { CreatePlannedExpenseFormValues } from '../model/types'
 export function createPlannedExpenseInputChangeHandler(
   onChange: (name: keyof CreatePlannedExpenseFormValues, value: string) => void,
 ) {
-  return (event: ChangeEvent<HTMLInputElement>) => {
+  return (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
     if (!name) {
       return

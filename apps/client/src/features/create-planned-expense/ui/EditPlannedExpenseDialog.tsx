@@ -26,7 +26,7 @@ export function EditPlannedExpenseDialog({
   onOpenChange,
   item,
 }: EditPlannedExpenseDialogProps) {
-  const form = useCreatePlannedExpenseForm(item?.period_month, {
+  const form = useCreatePlannedExpenseForm({
     editingPlannedExpense: item,
     onSuccess: () => onOpenChange(false),
   })
@@ -49,6 +49,7 @@ export function EditPlannedExpenseDialog({
             patchValues={form.patchValues}
             onSubmit={form.submit}
             isPending={form.isPending}
+            isSubmitDisabled={form.isSubmitDisabled}
             submitLabel="Сохранить"
           />
         </div>

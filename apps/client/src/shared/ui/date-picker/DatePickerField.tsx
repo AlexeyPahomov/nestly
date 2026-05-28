@@ -11,6 +11,7 @@ type DatePickerFieldProps = {
   id?: string
   label?: React.ReactNode
   display: string
+  mutedWhenEmpty?: boolean
   disabled?: boolean
   containerClassName?: string
   open: boolean
@@ -30,6 +31,7 @@ export function DatePickerField({
   id: inputId,
   label,
   display,
+  mutedWhenEmpty = false,
   disabled,
   containerClassName,
   open,
@@ -49,7 +51,14 @@ export function DatePickerField({
           )}
         >
           <CalendarIcon className="size-4 shrink-0 opacity-60" />
-          <span className="truncate">{display}</span>
+          <span
+            className={cn(
+              'truncate',
+              mutedWhenEmpty && 'text-muted-foreground',
+            )}
+          >
+            {display}
+          </span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

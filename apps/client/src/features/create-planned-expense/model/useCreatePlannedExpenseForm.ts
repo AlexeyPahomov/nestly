@@ -5,7 +5,6 @@ import { useCreatePlannedExpenseMutation } from '@/entities/planned-expense/api/
 import { useUpdatePlannedExpenseMutation } from '@/entities/planned-expense/api/useUpdatePlannedExpenseMutation'
 import type { PlannedExpense } from '@/entities/planned-expense/model/types'
 import type { UpdatePlannedExpensePayload } from '@/entities/planned-expense/model/types'
-import { currentMonthInputValue } from '@/shared/lib/date'
 
 import {
   buildPlannedExpenseDatePayload,
@@ -23,7 +22,6 @@ type UseCreatePlannedExpenseFormOptions = {
 }
 
 export function useCreatePlannedExpenseForm(
-  anchorPeriodMonth?: string,
   options?: UseCreatePlannedExpenseFormOptions,
 ) {
   const editingPlannedExpense = options?.editingPlannedExpense ?? null
@@ -52,18 +50,22 @@ export function useCreatePlannedExpenseForm(
   }
 
   const reset = () => setValues(emptyPlannedExpenseFormValues())
+  const activeMutation = isEditing ? updateMutation : createMutation
+
+  const parsedAmount = parseMoneyInput(values.amount)
+  const isSubmitDisabled =
+    activeMutation.isPending ||
+    !values.title.trim() ||
+    parsedAmount === null ||
+    !values.planned_date.trim()
 
   const submit = async () => {
     const amount = parseMoneyInput(values.amount)
-    if (!values.title.trim() || amount === null) {
+    if (!values.title.trim() || amount === null || !values.planned_date.trim()) {
       return
     }
-
-    const plannedDate =
-      values.planned_date ||
-      `${anchorPeriodMonth ?? currentMonthInputValue()}-01`
     const dateFields = buildPlannedExpenseDatePayload(
-      plannedDate,
+      values.planned_date,
       values.planned_date_end,
     )
 
@@ -100,14 +102,13 @@ export function useCreatePlannedExpenseForm(
     options?.onSuccess?.()
   }
 
-  const activeMutation = isEditing ? updateMutation : createMutation
-
   return {
     values,
     handleChange,
     patchValues,
     submit,
     isPending: activeMutation.isPending,
+    isSubmitDisabled,
     error: activeMutation.error,
     isEditing,
   }

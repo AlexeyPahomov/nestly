@@ -13,6 +13,7 @@ import { DatePickerField, useDatePickerFieldId } from './DatePickerField'
 type DateRangePickerProps = {
   id?: string
   label?: React.ReactNode
+  emptyLabel?: string
   from: string
   to: string
   onChange: (from: string, to: string) => void
@@ -23,6 +24,7 @@ type DateRangePickerProps = {
 export function DateRangePicker({
   id: idProp,
   label,
+  emptyLabel,
   from,
   to,
   onChange,
@@ -41,7 +43,8 @@ export function DateRangePicker({
     <DatePickerField
       id={inputId}
       label={label}
-      display={formatDateRangeLabel(from, to)}
+      display={formatDateRangeLabel(from, to, emptyLabel)}
+      mutedWhenEmpty={!from.trim()}
       disabled={disabled}
       containerClassName={containerClassName}
       open={open}

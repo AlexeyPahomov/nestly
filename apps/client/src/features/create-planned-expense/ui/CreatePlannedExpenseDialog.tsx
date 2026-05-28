@@ -20,9 +20,9 @@ export type CreatePlannedExpenseDialogProps = {
 export function CreatePlannedExpenseDialog({
   open,
   onOpenChange,
-  anchorPeriodMonth,
+  anchorPeriodMonth: _anchorPeriodMonth,
 }: CreatePlannedExpenseDialogProps) {
-  const form = useCreatePlannedExpenseForm(anchorPeriodMonth, {
+  const form = useCreatePlannedExpenseForm({
     onSuccess: () => onOpenChange(false),
   })
 
@@ -42,6 +42,7 @@ export function CreatePlannedExpenseDialog({
             patchValues={form.patchValues}
             onSubmit={form.submit}
             isPending={form.isPending}
+            isSubmitDisabled={form.isSubmitDisabled}
           />
         </div>
       </DialogContent>

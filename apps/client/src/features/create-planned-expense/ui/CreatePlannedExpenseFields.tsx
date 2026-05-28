@@ -11,6 +11,7 @@ export type CreatePlannedExpenseFieldsProps = {
   patchValues: (patch: Partial<CreatePlannedExpenseFormValues>) => void
   onSubmit: () => void
   isPending: boolean
+  isSubmitDisabled?: boolean
   submitLabel?: string
 }
 
@@ -20,6 +21,7 @@ export function CreatePlannedExpenseFields({
   patchValues,
   onSubmit,
   isPending,
+  isSubmitDisabled = false,
   submitLabel = 'Добавить план',
 }: CreatePlannedExpenseFieldsProps) {
   const onFieldChange = createPlannedExpenseInputChangeHandler(onChange)
@@ -39,10 +41,13 @@ export function CreatePlannedExpenseFields({
         value={values.title}
         onChange={onFieldChange}
       />
-      <Input
+      <textarea
         name="description"
         placeholder="Описание (необязательно)"
+        className="min-h-14 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:min-h-8 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 resize-none"
         value={values.description}
+        rows={2}
+        disabled={isPending}
         onChange={onFieldChange}
       />
       <MoneyInput
@@ -53,7 +58,7 @@ export function CreatePlannedExpenseFields({
         )}
       />
       <DateRangePicker
-        label="Дата"
+        emptyLabel="Когда?"
         from={values.planned_date}
         to={values.planned_date_end}
         onChange={(from, to) =>
@@ -67,7 +72,7 @@ export function CreatePlannedExpenseFields({
         size="lg"
         className="w-full"
         isLoading={isPending}
-        disabled={isPending}
+        disabled={isSubmitDisabled}
         onClick={() => void onSubmit()}
       >
         {submitLabel}

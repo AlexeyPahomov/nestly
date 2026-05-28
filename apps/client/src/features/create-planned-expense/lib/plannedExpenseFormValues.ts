@@ -11,7 +11,6 @@ import type {
 import {
   isoToDateInputValue,
   normalizeDateRangeEnd,
-  todayDateInputValue,
 } from '@/shared/lib/date'
 import { moneyAmountToFormValue } from '@/shared/lib/moneyInput'
 
@@ -24,7 +23,7 @@ export function emptyPlannedExpenseFormValues(): CreatePlannedExpenseFormValues 
     icon_name: DEFAULT_PLANNED_EXPENSE_ICON_KEY,
     icon_color: DEFAULT_ICON_COLOR_KEY,
     amount: '',
-    planned_date: todayDateInputValue(),
+    planned_date: '',
     planned_date_end: '',
   }
 }
