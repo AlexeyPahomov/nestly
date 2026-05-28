@@ -1,5 +1,5 @@
 export { ItemsList } from './ItemsList'
-export type { ItemsListProps } from './ItemsList'
+export type { ItemsListLayout, ItemsListProps } from './ItemsList'
 export { ListEmpty } from './ListEmpty'
 export { ListError } from './ListError'
 export { ListLoader } from './ListLoader'

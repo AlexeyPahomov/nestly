@@ -36,7 +36,7 @@ export {
   ListError,
   ListLoader,
 } from './items-list'
-export type { ItemsListProps } from './items-list'
+export type { ItemsListLayout, ItemsListProps } from './items-list'
 export { DatePicker } from './date-picker/DatePicker'
 export { DateRangePicker } from './date-picker/DateRangePicker'
 export { MonthPicker } from './month-picker/MonthPicker'
