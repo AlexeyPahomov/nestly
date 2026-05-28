@@ -18,7 +18,12 @@ export function Fab({ label, className, type = 'button', ...props }: FabProps) {
       <Button
         type={type}
         size="icon-lg"
-        className={cn(primaryActionButtonClassName, fabButtonClassName, className)}
+        className={cn(
+          primaryActionButtonClassName,
+          fabButtonClassName,
+          'pointer-events-auto',
+          className,
+        )}
         aria-label={label}
         title={label}
         {...props}

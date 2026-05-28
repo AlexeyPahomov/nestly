@@ -57,7 +57,7 @@ function SidebarNavItem({
         isActive={isActive}
         tooltip={label}
         size="lg"
-        className="rounded-xl px-3"
+        className="rounded-2xl px-3 text-sidebar-foreground/80 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-primary data-[active=true]:shadow-sm"
       >
         <NavLink
           to={to}
@@ -84,7 +84,11 @@ export function Sidebar() {
   }
 
   return (
-    <ShadcnSidebar collapsible="icon">
+    <ShadcnSidebar
+      collapsible="icon"
+      variant="floating"
+      className="hidden md:flex"
+    >
       <SidebarHeader className="px-2 py-3">
         <div className="flex h-8 items-center justify-between gap-2 group-data-[collapsible=icon]:justify-center">
           <Logo
@@ -100,7 +104,7 @@ export function Sidebar() {
       <SidebarContent>
         <SidebarGroup className="px-2">
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu className="gap-2">
               {APP_ROUTES.map((route) => {
                 const to = appRouteHref(route.segment)
                 const Icon = iconByRouteId[route.id]

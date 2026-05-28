@@ -1,4 +1,5 @@
 import { RussianRuble } from 'lucide-react'
+import { cn } from '@/shared/lib/utils'
 
 import { Input, type InputProps } from './Input'
 
@@ -11,11 +12,16 @@ const rubleSuffix = (
 export function MoneyInput({
   autoComplete = 'off',
   suffix = rubleSuffix,
+  className,
   ...props
 }: MoneyInputProps) {
   return (
     <Input
       {...props}
+      className={cn(
+        'placeholder:text-xs placeholder:font-medium md:placeholder:text-xs',
+        className,
+      )}
       type="text"
       inputMode="decimal"
       autoComplete={autoComplete}

@@ -105,6 +105,8 @@ export {
   DialogTitle,
   DialogTrigger,
 } from './dialog/Dialog'
+export { ResponsiveFormDialog } from './responsive-form-dialog'
+export type { ResponsiveFormDialogProps } from './responsive-form-dialog'
 export {
   Carousel,
   CarouselContent,

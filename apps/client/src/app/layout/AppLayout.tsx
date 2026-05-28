@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 
 import { Spinner, TooltipProvider } from '@/shared/ui';
 import { SidebarInset, SidebarProvider } from '@/shared/ui/sidebar';
+import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { Sidebar } from '@/widgets/sidebar';
 
 import { appInsetClassName, appMainClassName } from './appLayoutLayout';
@@ -37,6 +38,7 @@ export function AppLayout() {
             </Suspense>
           </div>
         </SidebarInset>
+        <MobileBottomNav />
       </SidebarProvider>
     </TooltipProvider>
   );

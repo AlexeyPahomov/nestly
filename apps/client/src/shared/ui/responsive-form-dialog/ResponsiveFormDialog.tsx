@@ -34,6 +34,7 @@ export type ResponsiveFormDialogProps = {
   children: ReactNode
   bodyClassName?: string
   showCloseButton?: boolean
+  hideHeader?: boolean
 }
 
 export function ResponsiveFormDialog({
@@ -44,6 +45,7 @@ export function ResponsiveFormDialog({
   children,
   bodyClassName,
   showCloseButton = false,
+  hideHeader = false,
 }: ResponsiveFormDialogProps) {
   const isMobile = useIsMobile()
 
@@ -62,12 +64,21 @@ export function ResponsiveFormDialog({
           className={responsiveFormSheetContentClassName}
         >
           <div className={responsiveFormSheetHandleClassName} aria-hidden />
-          <SheetHeader className={responsiveFormSheetHeaderClassName}>
-            <SheetTitle>{title}</SheetTitle>
-            <SheetDescription className="sr-only">
-              {description}
-            </SheetDescription>
-          </SheetHeader>
+          {hideHeader ? (
+            <>
+              <SheetTitle className="sr-only">{title}</SheetTitle>
+              <SheetDescription className="sr-only">
+                {description}
+              </SheetDescription>
+            </>
+          ) : (
+            <SheetHeader className={responsiveFormSheetHeaderClassName}>
+              <SheetTitle>{title}</SheetTitle>
+              <SheetDescription className="sr-only">
+                {description}
+              </SheetDescription>
+            </SheetHeader>
+          )}
           {body}
         </SheetContent>
       </Sheet>
@@ -80,10 +91,17 @@ export function ResponsiveFormDialog({
         showCloseButton={showCloseButton}
         className={responsiveFormDialogDesktopContentClassName}
       >
-        <DialogHeader className={responsiveFormDialogDesktopHeaderClassName}>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="sr-only">{description}</DialogDescription>
-        </DialogHeader>
+        {hideHeader ? (
+          <>
+            <DialogTitle className="sr-only">{title}</DialogTitle>
+            <DialogDescription className="sr-only">{description}</DialogDescription>
+          </>
+        ) : (
+          <DialogHeader className={responsiveFormDialogDesktopHeaderClassName}>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription className="sr-only">{description}</DialogDescription>
+          </DialogHeader>
+        )}
         {body}
       </DialogContent>
     </Dialog>
