@@ -85,6 +85,7 @@ export function computeOperationalSummary(
     periodMonth,
     periodLabel: formatPeriodMonthLabel(periodMonth),
     incomeTotal,
+    allocatedTotal,
     available,
     inReserve,
     spentThisMonth,

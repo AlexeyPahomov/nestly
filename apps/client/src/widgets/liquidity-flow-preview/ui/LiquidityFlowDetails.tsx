@@ -2,6 +2,7 @@ import type { MonthBudgetProjection } from '@/processes/forecasting'
 import { formatAmount } from '@/shared/lib/format'
 
 import {
+  liquidityFlowAllocatedDetailLabel,
   liquidityFlowIncomeDetailLabel,
   liquidityFlowNodeLabels,
 } from '../lib/liquidityFlowCopy'
@@ -9,6 +10,7 @@ import {
 export type LiquidityFlowDetailsProps = {
   projection: MonthBudgetProjection
   incomeTotal: number
+  allocatedTotal?: number
 }
 
 type DetailLine = {
@@ -17,21 +19,31 @@ type DetailLine = {
   sign?: '+' | '−' | '='
 }
 
-export function LiquidityFlowDetails({
-  projection,
-  incomeTotal,
-}: LiquidityFlowDetailsProps) {
-  const lines: DetailLine[] = []
+function buildDetailLines(
+  projection: MonthBudgetProjection,
+  incomeTotal: number,
+  allocatedTotal: number,
+): DetailLine[] {
+  const optionalLines: DetailLine[] = []
 
   if (incomeTotal > 0) {
-    lines.push({
+    optionalLines.push({
       label: liquidityFlowIncomeDetailLabel,
       amount: incomeTotal,
       sign: '+',
     })
   }
 
-  lines.push(
+  if (allocatedTotal > 0) {
+    optionalLines.push({
+      label: liquidityFlowAllocatedDetailLabel,
+      amount: allocatedTotal,
+      sign: '−',
+    })
+  }
+
+  return [
+    ...optionalLines,
     { label: liquidityFlowNodeLabels.pool, amount: projection.available, sign: '+' },
     { label: liquidityFlowNodeLabels.planned, amount: projection.plannedTotal, sign: '−' },
     { label: liquidityFlowNodeLabels.reserved, amount: projection.reservedTotal, sign: '−' },
@@ -40,7 +52,15 @@ export function LiquidityFlowDetails({
       amount: projection.projectedFree,
       sign: '=',
     },
-  )
+  ]
+}
+
+export function LiquidityFlowDetails({
+  projection,
+  incomeTotal,
+  allocatedTotal = 0,
+}: LiquidityFlowDetailsProps) {
+  const lines = buildDetailLines(projection, incomeTotal, allocatedTotal)
 
   return (
     <div className="space-y-2 text-sm">

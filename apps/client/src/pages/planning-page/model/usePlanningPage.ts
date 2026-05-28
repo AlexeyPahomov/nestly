@@ -91,6 +91,7 @@ export function usePlanningPage() {
       ? statusMutation.variables
       : undefined,
     incomeTotal: operationalSummary.incomeTotal,
+    allocatedTotal: operationalSummary.allocatedTotal,
     isLoading: plannedQuery.isLoading || core.isCoreLoading,
   }
 }

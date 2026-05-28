@@ -25,3 +25,4 @@ export const liquidityFlowRailLabels: Record<
 }
 
 export const liquidityFlowIncomeDetailLabel = 'Доход за месяц'
+export const liquidityFlowAllocatedDetailLabel = 'Распределено'

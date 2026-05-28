@@ -18,6 +18,7 @@ export type PlanningMobileLiquidityHeaderProps = LiquidityFlowDataProps & {
 export function PlanningMobileLiquidityHeader({
   projection,
   incomeTotal = 0,
+  allocatedTotal,
   className,
 }: PlanningMobileLiquidityHeaderProps) {
   return (
@@ -32,6 +33,7 @@ export function PlanningMobileLiquidityHeader({
         <LiquidityFlowDetails
           projection={projection}
           incomeTotal={incomeTotal}
+          allocatedTotal={allocatedTotal}
         />
       </InfoHint>
 

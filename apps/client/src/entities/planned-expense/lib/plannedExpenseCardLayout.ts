@@ -28,10 +28,10 @@ export const plannedExpenseCardTitleClassName =
   'truncate text-base font-semibold leading-tight text-zinc-900'
 
 export const plannedExpenseCardDescriptionClassName =
-  'truncate text-sm text-zinc-500'
+  'w-full text-sm text-zinc-500'
 
 export const plannedExpenseCardFinanceClassName =
-  'flex min-w-0 flex-1 shrink-0 flex-col items-start gap-1 sm:w-36 sm:items-end'
+  'flex min-w-0 shrink-0 flex-col items-start gap-1 sm:w-36 sm:items-end'
 
 export const plannedExpenseCardAmountClassName =
   'text-base font-bold tabular-nums leading-none text-zinc-900'

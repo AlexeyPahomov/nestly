@@ -25,6 +25,7 @@ export type MonthLiquidityFlowProps = LiquidityFlowDataProps & {
 export function MonthLiquidityFlow({
   projection,
   incomeTotal = 0,
+  allocatedTotal,
   className,
 }: MonthLiquidityFlowProps) {
   const nodes = buildLiquidityFlowNodes(projection, incomeTotal)
@@ -39,6 +40,7 @@ export function MonthLiquidityFlow({
           <LiquidityFlowDetails
             projection={projection}
             incomeTotal={incomeTotal}
+            allocatedTotal={allocatedTotal}
           />
         </InfoHint>
       </div>

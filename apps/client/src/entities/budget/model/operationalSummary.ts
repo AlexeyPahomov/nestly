@@ -12,6 +12,8 @@ export type OperationalSummary = {
   reserveCategory?: ReserveCategorySummary
   /** Сумма доходов с датой в этом месяце. */
   incomeTotal: number
+  /** Сумма распределений по категориям в этом месяце. */
+  allocatedTotal: number
   /** Сумма расходов с датой в этом месяце. */
   spentThisMonth: number
   /** Сумма opening balance по всем конвертам. */

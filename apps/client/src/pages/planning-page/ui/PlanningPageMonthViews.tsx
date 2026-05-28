@@ -19,11 +19,14 @@ export function PlanningPageMonthMobileHeader({
     return null
   }
 
+  const liquidityFlowProps = {
+    projection: page.projection,
+    incomeTotal: page.incomeTotal,
+    allocatedTotal: page.allocatedTotal,
+  }
+
   return (
-    <PlanningMobileLiquidityHeader
-      projection={page.projection}
-      incomeTotal={page.incomeTotal}
-    />
+    <PlanningMobileLiquidityHeader {...liquidityFlowProps} />
   )
 }
 
@@ -39,6 +42,12 @@ export function PlanningPageMonthBody({
     )
   }
 
+  const liquidityFlowProps = {
+    projection: page.projection,
+    incomeTotal: page.incomeTotal,
+    allocatedTotal: page.allocatedTotal,
+  }
+
   return (
     <>
       <PlanningMonthMetrics
@@ -49,8 +58,7 @@ export function PlanningPageMonthBody({
 
       <MonthLiquidityFlow
         className="hidden md:flex"
-        projection={page.projection}
-        incomeTotal={page.incomeTotal}
+        {...liquidityFlowProps}
       />
 
       <PlanningPagePlansSection page={page} onEditPlanned={onEditPlanned} />
