@@ -59,7 +59,7 @@ export function ExpenseCard({
         <span className="hidden flex-1 sm:block" />
       )}
 
-      <span className="shrink-0 text-base font-bold tabular-nums text-slate">
+      <span className="ml-auto shrink-0 text-base font-bold tabular-nums text-slate">
         {formatMoneyWithRub(expense.amount)}
       </span>
 
