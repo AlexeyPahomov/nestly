@@ -30,8 +30,15 @@ export function mergeBudgetMonthWithDerived(
   derived: readonly CategoryBudgetItem[],
   view: BudgetMonthView | undefined,
   categories: readonly Category[],
+  periodMonth: string,
 ): CategoryBudgetItem[] {
-  if (!view?.snapshots.length) {
+  // Для открытого месяца источник истины — derive из событий.
+  // Snapshot'ы безопасно показывать только в закрытом месяце.
+  if (
+    !view?.snapshots.length ||
+    view.periodMonth !== periodMonth ||
+    view.status !== 'CLOSED'
+  ) {
     return [...derived]
   }
 

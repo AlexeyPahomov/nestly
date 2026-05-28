@@ -21,7 +21,7 @@ export function AllocationPage() {
   return (
     <PageSection title="Распределение">
       <div className="flex min-h-0 flex-1 flex-col gap-6">
-        <div className="shrink-0 space-y-4">
+        <div className="shrink-0 space-y-4 ps-px pt-px md:ps-0.5 md:pt-0.5">
           <Select
             id="allocation-income"
             label="Доход"
