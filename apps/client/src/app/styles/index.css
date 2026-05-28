@@ -165,6 +165,7 @@ body {
 }
 
 .coffer-scroll-list {
+  --coffer-scrollbar-radius: 4px;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgb(212 212 216) transparent;
@@ -172,15 +173,21 @@ body {
 
 .coffer-scroll-list::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .coffer-scroll-list::-webkit-scrollbar-track {
+  border-radius: var(--coffer-scrollbar-radius);
   background: transparent;
 }
 
 .coffer-scroll-list::-webkit-scrollbar-thumb {
-  border-radius: 9999px;
+  border-radius: var(--coffer-scrollbar-radius);
   background-color: rgb(212 212 216);
+}
+
+.coffer-scroll-list::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 @theme inline {

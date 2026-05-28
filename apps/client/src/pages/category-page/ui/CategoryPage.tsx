@@ -1,4 +1,5 @@
 import { CategoryFormDialog } from '@/features/create-category/ui/CategoryFormDialog'
+import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
 import { Fab, PageSection } from '@/shared/ui'
 import { CategoryList } from '@/widgets/category-list'
 
@@ -11,12 +12,13 @@ import {
 import { useCategoryPage } from '../model/useCategoryPage'
 
 export function CategoryPage() {
+  const pageTitle = useDesktopPageSectionTitle('Категории')
   const page = useCategoryPage()
   const { data, isPending, isError, error } = page.categoriesQuery
 
   return (
     <PageSection
-      title="Категории"
+      title={pageTitle}
       titleLoading={page.isLoading}
       className={categoryPageSectionClassName}
     >

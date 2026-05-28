@@ -1,6 +1,11 @@
 export { AddButton } from './add-button'
 export type { AddButtonProps } from './add-button'
-export { Fab, fabDesktopAddButtonClassName, mobileFabScrollReserveClassName } from './fab'
+export {
+  Fab,
+  fabDesktopAddButtonClassName,
+  mobileFabRowStartWrapClassName,
+  mobileFabScrollReserveClassName,
+} from './fab'
 export type { FabProps } from './fab'
 export { Badge } from './badge/Badge'
 export { badgeVariants } from './badge/variants'
@@ -44,6 +49,14 @@ export type {
 export { DatePicker } from './date-picker/DatePicker'
 export { DateRangePicker } from './date-picker/DateRangePicker'
 export { MonthPicker } from './month-picker/MonthPicker'
+export { ResponsiveLabel } from './responsive-label/ResponsiveLabel'
+export {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  tabsListVariants,
+} from './tabs'
 export {
   Select,
   SelectContent,

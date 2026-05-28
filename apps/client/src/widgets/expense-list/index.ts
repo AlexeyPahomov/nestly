@@ -1,3 +1,5 @@
 export { ExpenseList } from './ui/ExpenseList'
 export type { ExpenseListProps } from './ui/ExpenseList'
+export { ExpenseListToolbar } from './ui/ExpenseListToolbar'
+export type { ExpenseListViewMode } from './ui/ExpenseListToolbar'
 export type { ExpenseListItem } from './model/types'

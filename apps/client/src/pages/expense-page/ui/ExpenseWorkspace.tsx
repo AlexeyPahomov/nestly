@@ -1,17 +1,14 @@
 import type { Allocation } from '@/entities/allocation/model/types';
 import type { Category } from '@/entities/category/model/types';
-import type { Expense } from '@/entities/expense/model/types';
 import type { Income } from '@/entities/income/model/types';
 import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget';
-import { ExpenseFormDialog } from '@/features/create-expense/ui/ExpenseFormDialog';
 import { cn } from '@/shared/lib/utils';
-import { AddButton, Fab, fabDesktopAddButtonClassName } from '@/shared/ui';
+import { AddButton, fabDesktopAddButtonClassName } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
 import type { CategoryBudgetItem } from '@/entities/budget/model/types';
+import { expensePageListInTabClassName } from '../lib/expensePageLayout';
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
 import { CategoryBudgetList } from '@/widgets/category-budget-list';
-
-import { useExpenseFormDialog } from '../model/useExpenseFormDialog';
 
 type ExpenseWorkspaceProps = {
   categories: Category[];
@@ -20,8 +17,7 @@ type ExpenseWorkspaceProps = {
   allocations: Allocation[];
   budgetItems: CategoryBudgetItem[];
   selectedCategoryId: string | null;
-  editingExpense?: Expense | null;
-  onCancelEdit?: () => void;
+  onAddExpense: () => void;
   stressCategoryId: string | null;
   onStressCategoryChange: (categoryId: string | null) => void;
   onCategorySelect: (categoryId: string) => void;
@@ -30,6 +26,7 @@ type ExpenseWorkspaceProps = {
   budgetError: unknown;
   isBudgetFetching: boolean;
   listLayout?: ItemsListLayout;
+  hideListTitle?: boolean;
 };
 
 export function ExpenseWorkspace({
@@ -39,8 +36,7 @@ export function ExpenseWorkspace({
   allocations,
   budgetItems,
   selectedCategoryId,
-  editingExpense = null,
-  onCancelEdit,
+  onAddExpense,
   stressCategoryId,
   onStressCategoryChange,
   onCategorySelect,
@@ -49,64 +45,46 @@ export function ExpenseWorkspace({
   budgetError,
   isBudgetFetching,
   listLayout = 'fill',
+  hideListTitle = false,
 }: ExpenseWorkspaceProps) {
-  const dialog = useExpenseFormDialog(editingExpense, onCancelEdit);
   const categoriesCompact = listLayout === 'fill';
 
   return (
-    <>
-      <div
+    <div
+      className={cn(
+        listLayout === 'fill' &&
+          cn(
+            'flex w-full min-h-0 flex-1 flex-col overflow-hidden',
+            categoryBudgetListCompactShellClassName,
+          ),
+      )}
+    >
+      <CategoryBudgetList
         className={cn(
-          'flex w-full flex-col',
-          listLayout === 'fill'
-            ? cn(
-                'min-h-0 flex-1 overflow-hidden',
-                categoryBudgetListCompactShellClassName,
-              )
-            : 'overflow-visible',
+          'w-full',
+          listLayout === 'fill' && 'min-h-0 flex-1 overflow-hidden',
+          hideListTitle && expensePageListInTabClassName,
         )}
-      >
-        <CategoryBudgetList
-          className={cn(
-            'w-full',
-            listLayout === 'fill' ? 'min-h-0 flex-1 overflow-hidden' : '',
-          )}
-          layout={listLayout}
-          limitToTwoRows={categoriesCompact}
-          budgetItems={budgetItems}
-          isPending={isBudgetPending}
-          isError={isBudgetError}
-          error={budgetError}
-          isFetching={isBudgetFetching}
-          selectedCategoryId={selectedCategoryId}
-          stressCategoryId={stressCategoryId}
-          onCategorySelect={onCategorySelect}
-          headerEnd={
-            <AddButton
-              className={fabDesktopAddButtonClassName}
-              onClick={dialog.openForAdd}
-            >
-              Добавить расход
-            </AddButton>
-          }
-        />
-      </div>
-
-      <Fab label="Добавить расход" onClick={dialog.openForAdd} />
-
-      <ExpenseFormDialog
-        open={dialog.isOpen}
-        onOpenChange={dialog.onOpenChange}
-        isEditing={dialog.isEditing}
-        onClose={dialog.close}
-        categories={categories}
-        budgets={budgets}
-        incomes={incomes}
-        allocations={allocations}
-        selectedCategoryId={selectedCategoryId ?? undefined}
-        editingExpense={editingExpense}
-        onStressCategoryChange={onStressCategoryChange}
+        layout={listLayout}
+        hideListTitle={hideListTitle}
+        limitToTwoRows={categoriesCompact}
+        budgetItems={budgetItems}
+        isPending={isBudgetPending}
+        isError={isBudgetError}
+        error={budgetError}
+        isFetching={isBudgetFetching}
+        selectedCategoryId={selectedCategoryId}
+        stressCategoryId={stressCategoryId}
+        onCategorySelect={onCategorySelect}
+        headerEnd={
+          <AddButton
+            className={fabDesktopAddButtonClassName}
+            onClick={onAddExpense}
+          >
+            Добавить расход
+          </AddButton>
+        }
       />
-    </>
+    </div>
   );
 }

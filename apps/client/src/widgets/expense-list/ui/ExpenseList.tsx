@@ -8,6 +8,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
+import { itemsListInTabUlClassName } from '@/shared/ui/items-list/itemsListLayout';
 
 import { filterExpensesByCategoryAndMonth } from '../lib/filterExpenses';
 import { EXPENSE_LIST_PAGE_SIZE } from '../lib/expenseListPageSize';
@@ -36,6 +37,12 @@ export interface ExpenseListProps {
   /** `all` или id категории (задаётся снаружи, например кликом по карточке). */
   categoryFilter?: string;
   layout?: ItemsListLayout;
+  /** Скрыть заголовок списка (например, заголовок вынесен в табы). */
+  hideListTitle?: boolean;
+  /** Скрыть переключатель вида в шапке списка (рендер снаружи, напр. у FAB). */
+  hideHeaderViewSwitcher?: boolean;
+  viewMode?: ExpenseListViewMode;
+  onViewModeChange?: (mode: ExpenseListViewMode) => void;
 }
 
 export function ExpenseList({
@@ -55,8 +62,15 @@ export function ExpenseList({
   bodyCollapsed = false,
   categoryFilter = 'all',
   layout = 'fill',
+  hideListTitle = false,
+  hideHeaderViewSwitcher = false,
+  viewMode: viewModeProp,
+  onViewModeChange,
 }: ExpenseListProps) {
-  const [viewMode, setViewMode] = useState<ExpenseListViewMode>('list');
+  const [internalViewMode, setInternalViewMode] =
+    useState<ExpenseListViewMode>('list');
+  const viewMode = viewModeProp ?? internalViewMode;
+  const setViewMode = onViewModeChange ?? setInternalViewMode;
 
   const filteredExpenses = useMemo(
     () =>
@@ -71,6 +85,10 @@ export function ExpenseList({
   const visibleExpenses = useMemo(
     () => filteredExpenses.slice(0, EXPENSE_LIST_PAGE_SIZE),
     [filteredExpenses],
+  );
+
+  const viewSwitcher = (
+    <ExpenseListToolbar viewMode={viewMode} onViewModeChange={setViewMode} />
   );
 
   return (
@@ -88,17 +106,18 @@ export function ExpenseList({
       error={error}
       data={viewMode === 'list' ? visibleExpenses : []}
       isFetching={isFetching}
-      title="История расходов"
-      headerEnd={
-        <ExpenseListToolbar viewMode={viewMode} onViewModeChange={setViewMode} />
-      }
+      title={hideListTitle ? undefined : 'История расходов'}
+      headerEnd={hideHeaderViewSwitcher ? undefined : viewSwitcher}
       emptyMessage={
         viewMode === 'chart'
           ? 'График расходов появится в следующих версиях.'
           : 'Пока нет расходов за выбранный период.'
       }
       errorFallback="Не удалось загрузить расходы"
-      listClassName="!space-y-2"
+      listClassName={cn(
+        '!space-y-2',
+        hideListTitle && itemsListInTabUlClassName,
+      )}
     >
       {(items) =>
         items.map((item) => {

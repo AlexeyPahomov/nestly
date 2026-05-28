@@ -4,5 +4,6 @@ export {
   fabButtonClassName,
   fabDesktopAddButtonClassName,
   fabWrapClassName,
+  mobileFabRowStartWrapClassName,
   mobileFabScrollReserveClassName,
 } from './fabLayout'

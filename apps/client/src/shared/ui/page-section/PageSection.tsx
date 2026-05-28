@@ -17,6 +17,8 @@ type PageSectionProps = {
    */
   header?: ReactNode
   headerAction?: ReactNode
+  /** См. {@link PageSectionHeader}. */
+  mobileSidebarOnHeader?: boolean
 }
 
 function PageSection({
@@ -26,6 +28,7 @@ function PageSection({
   className,
   header,
   headerAction,
+  mobileSidebarOnHeader,
 }: PageSectionProps) {
   return (
     <section
@@ -37,6 +40,7 @@ function PageSection({
         titleLoading={titleLoading}
         header={header}
         headerAction={headerAction}
+        mobileSidebarOnHeader={mobileSidebarOnHeader}
       />
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {children}

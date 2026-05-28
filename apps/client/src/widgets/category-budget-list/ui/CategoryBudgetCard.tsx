@@ -23,7 +23,15 @@ import type { CategoryBudgetListItem } from '../model/types';
 
 import {
   categoryBudgetCardContentClassName,
+  categoryBudgetCardFooterBalanceClassName,
+  categoryBudgetCardFooterClassName,
+  categoryBudgetCardFooterLabelClassName,
+  categoryBudgetCardHeaderRowClassName,
+  categoryBudgetCardIconGlyphClassName,
+  categoryBudgetCardIconWrapSizeClassName,
+  categoryBudgetCardProgressClassName,
   categoryBudgetCardShellClassName,
+  categoryBudgetCardTitleClassName,
 } from '../lib/categoryBudgetCardLayout';
 import { getCategoryBudgetCardDomProps } from '../lib/categoryBudgetCardTarget';
 
@@ -71,21 +79,22 @@ export function CategoryBudgetCard({
       onClick={onSelect ? () => onSelect(category.id) : undefined}
     >
       <CardContent className={categoryBudgetCardContentClassName}>
-        <div className="flex min-h-0 items-start gap-2.5">
+        <div className={categoryBudgetCardHeaderRowClassName}>
           <span
             className={cn(
-              'flex size-9 shrink-0 items-center justify-center rounded-full',
+              'flex shrink-0 items-center justify-center rounded-full',
+              categoryBudgetCardIconWrapSizeClassName,
               categoryIconWrapClassName(tone),
             )}
           >
             <CategoryLucideIcon
               {...toCategoryLucideIconProps(category)}
-              className="size-4"
+              className={categoryBudgetCardIconGlyphClassName}
               aria-hidden
             />
           </span>
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold leading-snug text-zinc-900">
+            <h3 className={categoryBudgetCardTitleClassName}>
               {category.name}
             </h3>
           </div>
@@ -108,16 +117,18 @@ export function CategoryBudgetCard({
 
         <Progress
           value={usage.barPercent}
-          className="h-2 bg-zinc-100"
+          className={categoryBudgetCardProgressClassName}
           indicatorClassName={envelopeProgressIndicatorClassName(tone)}
           aria-label={`${usageCaption}: ${usage.displayPercent}%`}
         />
 
-        <div className="flex items-center justify-between gap-2 border-t border-zinc-100 pt-1.5">
-          <span className="text-sm text-zinc-500">{balanceLabel}</span>
+        <div className={categoryBudgetCardFooterClassName}>
+          <span className={categoryBudgetCardFooterLabelClassName}>
+            {balanceLabel}
+          </span>
           <span
             className={cn(
-              'text-base font-bold tabular-nums',
+              categoryBudgetCardFooterBalanceClassName,
               envelopeBalanceToneClassName(tone),
             )}
           >

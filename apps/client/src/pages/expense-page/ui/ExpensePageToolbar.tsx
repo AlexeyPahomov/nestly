@@ -1,8 +1,9 @@
+import { cn } from '@/shared/lib/utils'
 import { PageTitle, pageSectionToolbarClassName } from '@/shared/ui'
 
-import { expensePageToolbarTitleEndClassName } from '../lib/expensePageLayout'
+import { expensePageToolbarClassName } from '../lib/expensePageLayout'
 
-import { ExpensePageMonthPicker } from './ExpensePageMonthPicker'
+import { ExpensePageMonthSwitcher } from './ExpensePageMonthSwitcher'
 
 export type ExpensePageToolbarProps = {
   periodMonth: string
@@ -14,14 +15,12 @@ export function ExpensePageToolbar({
   onPeriodMonthChange,
 }: ExpensePageToolbarProps) {
   return (
-    <div className={pageSectionToolbarClassName}>
-      <PageTitle className="min-w-0 flex-1">Расходы</PageTitle>
-      <div className={expensePageToolbarTitleEndClassName}>
-        <ExpensePageMonthPicker
-          value={periodMonth}
-          onChange={onPeriodMonthChange}
-        />
-      </div>
+    <div className={cn(pageSectionToolbarClassName, expensePageToolbarClassName)}>
+      <PageTitle className="hidden min-w-0 flex-1 md:block">Расходы</PageTitle>
+      <ExpensePageMonthSwitcher
+        periodMonth={periodMonth}
+        onPeriodMonthChange={onPeriodMonthChange}
+      />
     </div>
   )
 }

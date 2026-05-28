@@ -43,7 +43,6 @@ export function AllocationList({
       emptyMessage="Пока нет распределений по этому доходу."
       errorFallback="Не удалось загрузить распределения"
       layout={layout}
-      pendingLoaderPlacement={layout === 'fit' ? 'footer' : 'overlay'}
     >
       {(items) =>
         items.map((allocation) => (

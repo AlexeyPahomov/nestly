@@ -14,6 +14,7 @@ import { AllocationFormSheets } from '@/pages/allocation-page/ui/AllocationFormS
 import { AllocationIncomeSection } from '@/pages/allocation-page/ui/AllocationIncomeSection'
 import { QuickAllocateCta } from '@/pages/allocation-page/ui/QuickAllocateCta'
 import { RemainingBalanceCard } from '@/pages/allocation-page/ui/RemainingBalanceCard'
+import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
 import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { Fab, PageSection, type CarouselApi } from '@/shared/ui'
 import { AllocationList } from '@/widgets/allocation-list'
@@ -41,6 +42,7 @@ function computeProgressValue(
 
 export function AllocationPage() {
   const isMobile = useIsMobile()
+  const pageTitle = useDesktopPageSectionTitle('Распределение')
   const [allocateSheetOpen, setAllocateSheetOpen] = useState(false)
   const [editingAllocation, setEditingAllocation] = useState<Allocation | null>(
     null,
@@ -100,7 +102,7 @@ export function AllocationPage() {
   }
 
   return (
-    <PageSection title={isMobile ? undefined : 'Распределение'}>
+    <PageSection title={pageTitle}>
       <div className={allocationPageMainClassName}>
         <div className="shrink-0 space-y-4">
           <AllocationIncomeSection

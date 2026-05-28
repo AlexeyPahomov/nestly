@@ -8,14 +8,21 @@ export type ExpenseListViewMode = 'list' | 'chart'
 type ExpenseListToolbarProps = {
   viewMode: ExpenseListViewMode
   onViewModeChange: (mode: ExpenseListViewMode) => void
+  className?: string
 }
 
 export function ExpenseListToolbar({
   viewMode,
   onViewModeChange,
+  className,
 }: ExpenseListToolbarProps) {
   return (
-    <div className="flex shrink-0 items-center gap-1 rounded-lg border border-zinc-200 bg-white p-0.5">
+    <div
+      className={cn(
+        'flex shrink-0 items-center gap-1 rounded-lg border border-zinc-200 bg-white p-0.5 shadow-md',
+        className,
+      )}
+    >
       <Button
         type="button"
         variant={viewMode === 'list' ? 'secondary' : 'ghost'}

@@ -1,16 +1,18 @@
-import type { CurrentBudgetSummaryView } from '@/entities/budget/model/currentBudgetSummaryView'
-import { CurrentBudgetSummary } from '@/widgets/current-budget-summary'
+import type { CurrentBudgetSummaryView } from '@/entities/budget/model/currentBudgetSummaryView';
+import { CurrentBudgetSummary } from '@/widgets/current-budget-summary';
+
+import { expensePageBudgetSectionClassName } from '../lib/expensePageLayout';
 
 export type ExpensePageBudgetSectionProps = {
-  summary: CurrentBudgetSummaryView
-}
+  summary: CurrentBudgetSummaryView;
+};
 
 export function ExpensePageBudgetSection({
   summary,
 }: ExpensePageBudgetSectionProps) {
   return (
-    <div className="shrink-0 ps-px pt-px md:ps-0.5 md:pt-0.5">
+    <div className={expensePageBudgetSectionClassName}>
       <CurrentBudgetSummary {...summary} />
     </div>
-  )
+  );
 }

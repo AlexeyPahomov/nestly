@@ -1,3 +1,6 @@
+/** Отступы `<ul>` внутри вкладки (заголовок списка вынесен в табы). */
+export const itemsListInTabUlClassName = 'px-1 pb-1 pt-px'
+
 /** Оболочка ItemsList: не перехватывает клики по пустому месту вокруг контента. */
 export const itemsListShellClassName = 'pointer-events-none'
 

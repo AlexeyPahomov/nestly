@@ -1,7 +1,7 @@
-import type { RefObject } from 'react'
+import type { RefObject } from 'react';
 
-import type { IncomeCardView } from '@/pages/allocation-page/model/useAllocationPage'
-import { IncomeMonthCard } from '@/pages/allocation-page/ui/IncomeMonthCard'
+import type { IncomeCardView } from '@/pages/allocation-page/model/useAllocationPage';
+import { IncomeMonthCard } from '@/pages/allocation-page/ui/IncomeMonthCard';
 import {
   Card,
   CardContent,
@@ -9,16 +9,16 @@ import {
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from '@/shared/ui'
+} from '@/shared/ui';
 
 type AllocationIncomeSectionProps = {
-  hasIncome: boolean
-  incomeCards: IncomeCardView[]
-  selectedIncomeId: string | null
-  onSelectIncome: (incomeId: string | null) => void
-  desktopIncomeScrollRef: RefObject<HTMLDivElement | null>
-  onCarouselApiChange: (api: CarouselApi) => void
-}
+  hasIncome: boolean;
+  incomeCards: IncomeCardView[];
+  selectedIncomeId: string | null;
+  onSelectIncome: (incomeId: string | null) => void;
+  desktopIncomeScrollRef: RefObject<HTMLDivElement | null>;
+  onCarouselApiChange: (api: CarouselApi) => void;
+};
 
 export function AllocationIncomeSection({
   hasIncome,
@@ -57,12 +57,9 @@ export function AllocationIncomeSection({
             opts={{ align: 'start', dragFree: true }}
             className="px-1 py-1 md:hidden"
           >
-            <CarouselContent className="ml-0 py-0">
+            <CarouselContent className="ml-0 py-0 gap-1">
               {incomeCards.map((incomeCard) => (
-                <CarouselItem
-                  key={incomeCard.id}
-                  className="basis-[24%] pl-2"
-                >
+                <CarouselItem key={incomeCard.id} className="basis-[24%]">
                   <IncomeMonthCard
                     cardId={incomeCard.id}
                     incomeCard={incomeCard}
@@ -84,5 +81,5 @@ export function AllocationIncomeSection({
         </Card>
       )}
     </section>
-  )
+  );
 }

@@ -49,7 +49,10 @@ export type ItemsListProps<T> = {
   listAnimateEnter?: boolean;
   /** Показывать карточку-лоадер в теле списка при `isPending`. */
   showPendingLoader?: boolean;
-  /** Где показывать лоадер при `isPending` / догрузке (`isFetching`). */
+  /**
+   * Где показывать лоадер при `isPending` / догрузке (`isFetching`).
+   * По умолчанию: `footer` для `layout="fit"`, иначе `overlay`.
+   */
   pendingLoaderPlacement?: ItemsListPendingLoaderPlacement;
   /** Показать тело списка при пустом `data` (напр. плитка «добавить»). */
   forceShowList?: boolean;
@@ -58,7 +61,7 @@ export type ItemsListProps<T> = {
 const listUlFillClassName =
   'coffer-scroll-list min-h-0 flex-1 list-none space-y-3 overflow-y-auto overscroll-y-contain [overflow-anchor:none] p-1.5';
 
-const listUlFitClassName = 'list-none space-y-3';
+const listUlFitClassName = 'list-none space-y-3 p-1';
 
 export function ItemsList<T>({
   isPending,
@@ -81,11 +84,13 @@ export function ItemsList<T>({
   bodyCollapsed = false,
   listAnimateEnter = true,
   showPendingLoader = true,
-  pendingLoaderPlacement = 'overlay',
+  pendingLoaderPlacement,
   forceShowList = false,
 }: ItemsListProps<T>) {
   const bodyPresence = useCollapsePresence(!bodyCollapsed, true);
   const bodyLayoutExpanded = !bodyCollapsed || bodyPresence.isMounted;
+  const resolvedPendingLoaderPlacement =
+    pendingLoaderPlacement ?? (layout === 'fit' ? 'footer' : 'overlay');
 
   const rootClassName = cn(
     'flex flex-col',
@@ -100,7 +105,7 @@ export function ItemsList<T>({
     layout === 'fill' ? listUlFillClassName : listUlFitClassName;
 
   const items = data ?? [];
-  const useFooterLoader = pendingLoaderPlacement === 'footer';
+  const useFooterLoader = resolvedPendingLoaderPlacement === 'footer';
   const showOverlayLoader =
     isPending && showPendingLoader && !useFooterLoader;
   const showFooterPendingLoader =
@@ -175,7 +180,7 @@ export function ItemsList<T>({
                 <ItemsListInteractiveList
                   className={cn(
                     listUlClassName,
-                    'p-1',
+                    layout === 'fill' && 'p-1',
                     listAnimateEnter &&
                       'coffer-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
                     listClassName,

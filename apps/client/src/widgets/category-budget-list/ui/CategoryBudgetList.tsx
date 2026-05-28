@@ -7,6 +7,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { ItemsList } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
+import { itemsListInTabUlClassName } from '@/shared/ui/items-list/itemsListLayout';
 
 import { getCategoryBudgetListGridClassName } from '../lib/categoryBudgetListLayout';
 
@@ -30,6 +31,8 @@ export type CategoryBudgetListProps = {
   /** Ограничить сетку двумя рядами со скроллом (история развёрнута). */
   limitToTwoRows?: boolean;
   layout?: ItemsListLayout;
+  /** Скрыть заголовок списка (например, заголовок вынесен в табы). */
+  hideListTitle?: boolean;
 };
 
 export function CategoryBudgetList({
@@ -47,8 +50,12 @@ export function CategoryBudgetList({
   onTitleClick,
   limitToTwoRows = false,
   layout = 'fill',
+  hideListTitle = false,
 }: CategoryBudgetListProps) {
-  const listClassName = getCategoryBudgetListGridClassName(limitToTwoRows);
+  const listClassName = cn(
+    getCategoryBudgetListGridClassName(limitToTwoRows),
+    hideListTitle && itemsListInTabUlClassName,
+  );
 
   return (
     <ItemsList
@@ -63,7 +70,7 @@ export function CategoryBudgetList({
       error={error}
       data={budgetItems}
       isFetching={isFetching}
-      title="По категориям"
+      title={hideListTitle ? undefined : 'По категориям'}
       headerEnd={headerEnd}
       emptyMessage="Нет категорий расходов."
       errorFallback="Не удалось загрузить бюджет"

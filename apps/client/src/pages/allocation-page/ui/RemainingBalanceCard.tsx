@@ -1,3 +1,9 @@
+import {
+  remainingBalanceCardBodyClassName,
+  remainingBalanceCardCaptionInlineClassName,
+  remainingBalanceCardCaptionStackedClassName,
+  remainingBalanceCardMetaRowClassName,
+} from '@/pages/allocation-page/lib/allocationPageLayout'
 import type { IncomeCardTone } from '@/pages/allocation-page/model/useAllocationPage'
 import {
   getToneSurfaceClassName,
@@ -35,8 +41,8 @@ export function RemainingBalanceCard({
         aria-hidden
       />
       <CardContent className="relative z-10 space-y-4">
-        <div className="grid grid-cols-[1fr_auto] items-center gap-4">
-          <div className="space-y-1.5">
+        <div className={remainingBalanceCardBodyClassName}>
+          <div className="min-w-0 space-y-1.5">
             <p className="text-sm font-medium text-slate-hover">Осталось</p>
             <CardTitle
               className={cn(
@@ -59,10 +65,10 @@ export function RemainingBalanceCard({
               )}
             </CardTitle>
           </div>
-          <div className="flex items-center gap-3">
+          <div className={remainingBalanceCardMetaRowClassName}>
             <div
               className={cn(
-                'relative flex size-16 items-center justify-center rounded-full bg-white/75 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]',
+                'relative flex size-16 shrink-0 items-center justify-center rounded-full bg-white/75 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]',
                 toneTextClassName,
               )}
               style={{
@@ -75,10 +81,14 @@ export function RemainingBalanceCard({
                 {progressValue}%
               </span>
             </div>
-            <div className="space-y-0.5 text-right">
+            <div className={remainingBalanceCardCaptionInlineClassName}>
               <p className="text-xs font-medium text-slate">Распределено</p>
               <p className="text-sm font-semibold text-slate-hover">от дохода</p>
             </div>
+          </div>
+          <div className={remainingBalanceCardCaptionStackedClassName}>
+            <span className="font-medium text-slate">Распределено</span>
+            <span className="font-semibold text-slate-hover">от дохода</span>
           </div>
         </div>
       </CardContent>

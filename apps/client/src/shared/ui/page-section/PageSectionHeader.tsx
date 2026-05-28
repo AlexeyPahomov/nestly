@@ -9,6 +9,8 @@ type PageSectionHeaderProps = {
   titleLoading?: boolean
   header?: ReactNode
   headerAction?: ReactNode
+  /** Кнопка сайдбара рядом с `header`, если нет `title` (по умолчанию включена). */
+  mobileSidebarOnHeader?: boolean
 }
 
 export function PageSectionHeader({
@@ -16,6 +18,7 @@ export function PageSectionHeader({
   titleLoading = false,
   header,
   headerAction,
+  mobileSidebarOnHeader = true,
 }: PageSectionHeaderProps) {
   const hasTitleRow = title != null || headerAction != null
   const hasHeaderBelow = header != null
@@ -23,6 +26,20 @@ export function PageSectionHeader({
   if (!hasTitleRow && !hasHeaderBelow) {
     return null
   }
+
+  const headerOnlySlot =
+    hasHeaderBelow && !hasTitleRow ? (
+      mobileSidebarOnHeader ? (
+        <PageSectionMobileHeader>{header}</PageSectionMobileHeader>
+      ) : (
+        <div className="shrink-0">{header}</div>
+      )
+    ) : null
+
+  const headerBelowTitleSlot =
+    hasTitleRow && hasHeaderBelow ? (
+      <div className="shrink-0">{header}</div>
+    ) : null
 
   return (
     <div className={pageSectionHeaderStackClassName}>
@@ -40,11 +57,9 @@ export function PageSectionHeader({
           </div>
         </PageSectionMobileHeader>
       ) : (
-        <PageSectionMobileHeader>{header}</PageSectionMobileHeader>
+        headerOnlySlot
       )}
-      {hasTitleRow && hasHeaderBelow ? (
-        <div className="shrink-0">{header}</div>
-      ) : null}
+      {headerBelowTitleSlot}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { isCategoryBudgetCardPointerTarget } from '@/widgets/category-budget-list/lib/categoryBudgetCardTarget'
+import { shouldPreserveExpensePageCategoryFilter } from '../lib/expensePageCategoryFilterTarget'
 
 type UseExpensePageOutsideInteractionOptions = {
   selectedCategoryId: string | null
@@ -20,7 +20,7 @@ export function useExpensePageOutsideInteraction({
     }
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (!isCategoryBudgetCardPointerTarget(event.target)) {
+      if (!shouldPreserveExpensePageCategoryFilter(event.target)) {
         onClearSelectedCategory()
       }
     }

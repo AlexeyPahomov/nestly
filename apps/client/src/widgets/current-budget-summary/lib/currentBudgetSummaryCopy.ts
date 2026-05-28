@@ -20,3 +20,5 @@ export const CURRENT_BUDGET_RESERVE_INFO =
   'Резервные средства. Используйте только для целей накопления.'
 
 export const CURRENT_BUDGET_RESERVE_LABEL = 'В резерве'
+
+export const CURRENT_BUDGET_RESERVE_MOBILE_LABEL = 'Накопления'

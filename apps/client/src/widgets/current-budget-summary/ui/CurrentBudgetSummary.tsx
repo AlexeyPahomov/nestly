@@ -2,13 +2,21 @@ import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
 import type { CurrentBudgetSummaryView } from '@/entities/budget/model/currentBudgetSummaryView'
 import type { ReserveCategorySummary } from '@/entities/budget/model/types'
+import { ResponsiveLabel } from '@/shared/ui/responsive-label/ResponsiveLabel'
 import { SummaryMetricCard } from '@/shared/ui/summary-metric-card'
 
 import {
   buildCurrentBudgetAvailableInfo,
   CURRENT_BUDGET_RESERVE_INFO,
   CURRENT_BUDGET_RESERVE_LABEL,
+  CURRENT_BUDGET_RESERVE_MOBILE_LABEL,
 } from '../lib/currentBudgetSummaryCopy'
+import {
+  currentBudgetSummaryGridClassName,
+  currentBudgetSummaryMetricCompact,
+  reserveCategoryIconClassName,
+  reserveCategoryIconGlyphClassName,
+} from '../lib/currentBudgetSummaryLayout'
 
 /** Reporting: что произошло / текущее состояние пула (факт). */
 export type CurrentBudgetSummaryProps = CurrentBudgetSummaryView
@@ -19,10 +27,10 @@ function ReserveCategoryIcon({
   reserveCategory: ReserveCategorySummary
 }) {
   return (
-    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-green-subtle text-green">
+    <span className={reserveCategoryIconClassName}>
       <CategoryLucideIcon
         {...toCategoryLucideIconProps(reserveCategory)}
-        className="size-4"
+        className={reserveCategoryIconGlyphClassName}
         aria-hidden
       />
     </span>
@@ -39,7 +47,7 @@ export function CurrentBudgetSummary({
 }: CurrentBudgetSummaryProps) {
   const availableTone =
     available > 0
-      ? 'text-green'
+      ? 'text-teal'
       : available < 0
         ? 'text-destructive'
         : undefined
@@ -49,10 +57,12 @@ export function CurrentBudgetSummary({
     carryForwardTotal,
     previousPeriodLabel,
   )
+  const metricCompact = currentBudgetSummaryMetricCompact
 
   return (
-    <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
+    <div className={currentBudgetSummaryGridClassName}>
       <SummaryMetricCard
+        responsiveCompact={metricCompact}
         label="Доступно"
         infoText={availableInfoText}
         value={available}
@@ -60,7 +70,13 @@ export function CurrentBudgetSummary({
       />
 
       <SummaryMetricCard
-        label={reserveLabel}
+        responsiveCompact={metricCompact}
+        label={
+          <ResponsiveLabel
+            mobile={CURRENT_BUDGET_RESERVE_MOBILE_LABEL}
+            desktop={reserveLabel}
+          />
+        }
         labelStart={
           reserveCategory ? (
             <ReserveCategoryIcon reserveCategory={reserveCategory} />
@@ -73,7 +89,10 @@ export function CurrentBudgetSummary({
       />
 
       <SummaryMetricCard
-        label="Потрачено в месяце"
+        responsiveCompact={metricCompact}
+        label={
+          <ResponsiveLabel mobile="Потрачено" desktop="Потрачено в месяце" />
+        }
         value={spentThisMonth}
         valueClassName="text-slate"
       />

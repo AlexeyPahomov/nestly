@@ -14,7 +14,7 @@ export const categoryBudgetListTwoRowMaxHeightRem =
 
 /** Сетка карточек конвертов в списке «По категориям». */
 export const categoryBudgetListGridClassName =
-  'grid w-full auto-rows-min grid-cols-1 items-start gap-2 space-y-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+  'grid w-full auto-rows-min grid-cols-1 items-start gap-1.5 space-y-0 sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 xl:grid-cols-4';
 
 const categoryBudgetListGridTwoRowScrollClassName = cn(
   'coffer-scroll-list min-h-0 max-h-[21rem] overflow-y-auto overscroll-y-contain [overflow-anchor:none]',
