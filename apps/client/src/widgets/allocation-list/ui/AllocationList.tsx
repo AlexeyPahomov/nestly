@@ -1,3 +1,6 @@
+import { useMemo } from 'react'
+
+import { sortAllocationsByIncomePercentDesc } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
 import { AllocationCard } from '@/entities/allocation/ui/AllocationCard'
 import { ItemsList, type ItemsListLayout } from '@/shared/ui'
@@ -25,6 +28,14 @@ export function AllocationList({
   layout = 'fill',
   onEditAllocation,
 }: AllocationListProps) {
+  const sortedAllocations = useMemo(
+    () =>
+      allocations
+        ? sortAllocationsByIncomePercentDesc(allocations, incomeAmount)
+        : undefined,
+    [allocations, incomeAmount],
+  )
+
   if (!hasSelectedIncome) {
     return (
       <p className="text-sm text-muted-foreground">
@@ -38,7 +49,7 @@ export function AllocationList({
       isPending={isPending}
       isError={isError}
       error={error}
-      data={allocations}
+      data={sortedAllocations}
       isFetching={isFetching}
       emptyMessage="Пока нет распределений по этому доходу."
       errorFallback="Не удалось загрузить распределения"

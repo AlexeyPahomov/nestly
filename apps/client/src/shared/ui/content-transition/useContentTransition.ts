@@ -1,15 +1,13 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 
+import { prefersReducedMotion } from '@/shared/lib/prefersReducedMotion'
+
 import {
   CONTENT_TRANSITION_ENTER_MS,
   CONTENT_TRANSITION_EXIT_MS,
 } from './contentTransitionLayout'
 
 export type ContentTransitionPhase = 'idle' | 'exit' | 'enter'
-
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
 
 export function useContentTransition(contentKey: string, content: ReactNode) {
   const [renderedContent, setRenderedContent] = useState(content)

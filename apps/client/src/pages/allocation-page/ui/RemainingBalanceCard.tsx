@@ -1,3 +1,4 @@
+import { useRemainingBalanceMetrics } from '@/pages/allocation-page/model/useRemainingBalanceMetrics'
 import {
   remainingBalanceCardBodyClassName,
   remainingBalanceCardCaptionInlineClassName,
@@ -17,22 +18,28 @@ type RemainingBalanceCardProps = {
   tone: IncomeCardTone
   remainingBalance: number
   incomeAmount: number | null
-  progressValue: number
+  allocatedPercent: number
 }
 
 export function RemainingBalanceCard({
   tone,
   remainingBalance,
   incomeAmount,
-  progressValue,
+  allocatedPercent,
 }: RemainingBalanceCardProps) {
+  const { displayRemaining, displayPercent, ringPercent } = useRemainingBalanceMetrics({
+    remainingBalance,
+    allocatedPercent,
+    enabled: incomeAmount !== null,
+  })
+
   const toneTextClassName = getToneTextClassName(tone)
   const toneSurfaceClassName = getToneSurfaceClassName(tone)
 
   return (
     <Card
       className={cn(
-        'relative isolate min-w-0 overflow-hidden text-main-black shadow-[0_10px_28px_-16px_rgba(20,24,36,0.32)] ring-1 ring-white/40 supports-backdrop-filter:backdrop-blur-[2px] md:flex-[1.25]',
+        'relative isolate min-w-0 overflow-hidden text-main-black shadow-[0_10px_28px_-16px_rgba(20,24,36,0.32)] ring-1 ring-white/40 transition-[background,box-shadow] duration-300 ease-out supports-backdrop-filter:backdrop-blur-[2px] md:flex-[1.25]',
         toneSurfaceClassName,
       )}
     >
@@ -46,13 +53,13 @@ export function RemainingBalanceCard({
             <p className="text-sm font-medium text-slate-hover">Осталось</p>
             <CardTitle
               className={cn(
-                'flex items-baseline gap-1 text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl',
+                'flex items-baseline gap-1 text-3xl font-extrabold tracking-tight tabular-nums transition-colors duration-300 ease-out sm:text-4xl',
                 toneTextClassName,
               )}
             >
               {incomeAmount !== null ? (
                 <>
-                  {formatAmount(remainingBalance)}
+                  {formatAmount(displayRemaining)}
                   <span
                     className="text-lg font-semibold text-current/45 sm:text-xl"
                     aria-hidden
@@ -68,17 +75,17 @@ export function RemainingBalanceCard({
           <div className={remainingBalanceCardMetaRowClassName}>
             <div
               className={cn(
-                'relative flex size-16 shrink-0 items-center justify-center rounded-full bg-white/75 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]',
+                'relative flex size-16 shrink-0 items-center justify-center rounded-full bg-white/75 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] transition-colors duration-300 ease-out',
                 toneTextClassName,
               )}
               style={{
-                background: `conic-gradient(currentColor ${progressValue}%, rgba(255,255,255,0.7) 0)`,
+                background: `conic-gradient(currentColor ${ringPercent}%, rgba(255,255,255,0.7) 0)`,
               }}
-              aria-label={`Распределено ${progressValue}%`}
+              aria-label={`Распределено ${displayPercent}%`}
             >
               <span className="absolute inset-1.5 rounded-full bg-white/95" />
-              <span className="relative text-sm font-bold text-main-black">
-                {progressValue}%
+              <span className="relative text-sm font-bold tabular-nums text-main-black">
+                {displayPercent}%
               </span>
             </div>
             <div className={remainingBalanceCardCaptionInlineClassName}>

@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 
+import { isAllocationListBackgroundFetch } from '@/entities/allocation/api/allocationQueryFlags'
+import { allocationIncomePercentOrZero } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
 import type { Category } from '@/entities/category/model/types'
 import { useCreateAllocationForm } from '@/features/create-allocation/model/useCreateAllocationForm'
@@ -16,6 +18,7 @@ import { QuickAllocateCta } from '@/pages/allocation-page/ui/QuickAllocateCta'
 import { RemainingBalanceCard } from '@/pages/allocation-page/ui/RemainingBalanceCard'
 import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
 import { useIsMobile } from '@/shared/hooks/use-mobile'
+import { ContentTransition } from '@/shared/ui/content-transition'
 import { Fab, PageSection, type CarouselApi } from '@/shared/ui'
 import { AllocationList } from '@/widgets/allocation-list'
 
@@ -24,20 +27,6 @@ function toCategoryOptions(categories: Category[]) {
     value: category.id,
     label: category.name,
   }))
-}
-
-function computeProgressValue(
-  incomeAmount: number | null,
-  allocatedTotal: number,
-): number {
-  if (!incomeAmount || incomeAmount <= 0) {
-    return 0
-  }
-
-  return Math.min(
-    100,
-    Math.max(0, Math.round((allocatedTotal / incomeAmount) * 100)),
-  )
 }
 
 export function AllocationPage() {
@@ -82,7 +71,10 @@ export function AllocationPage() {
 
   const noCategories = allocationCategories.length === 0
   const createDisabled = form.disabled || form.submitting
-  const progressValue = computeProgressValue(incomeAmount, allocatedTotal)
+  const allocatedPercent = allocationIncomePercentOrZero(
+    allocatedTotal,
+    incomeAmount,
+  )
 
   const selectedIncomeTone =
     incomeCards.find((card) => card.id === selectedIncomeId)?.tone ?? 'empty'
@@ -119,7 +111,7 @@ export function AllocationPage() {
               tone={selectedIncomeTone}
               remainingBalance={remainingBalance}
               incomeAmount={incomeAmount}
-              progressValue={progressValue}
+              allocatedPercent={allocatedPercent}
             />
             <QuickAllocateCta
               disabled={createDisabled || noCategories}
@@ -128,19 +120,22 @@ export function AllocationPage() {
           </div>
         </div>
 
-        <div className={allocationPageListClassName}>
+        <ContentTransition
+          contentKey={selectedIncomeId ?? 'none'}
+          className={allocationPageListClassName}
+        >
           <AllocationList
             isPending={allocationsQuery.isPending}
             isError={allocationsQuery.isError}
             error={allocationsQuery.error}
             allocations={allocationsQuery.data}
-            isFetching={allocationsQuery.isFetching}
+            isFetching={isAllocationListBackgroundFetch(allocationsQuery)}
             hasSelectedIncome={selectedIncomeId !== null}
             incomeAmount={incomeAmount}
             layout={isMobile ? 'fit' : 'fill'}
             onEditAllocation={setEditingAllocation}
           />
-        </div>
+        </ContentTransition>
       </div>
 
       {isMobile ? (

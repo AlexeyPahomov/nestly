@@ -1,8 +1,10 @@
 import { useCallback } from 'react'
 
+import { allocationIncomePercent } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
 import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
 import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
+import { useAnimatedPercent } from '@/shared/hooks/useAnimatedPercent'
 import { useCardActivate } from '@/shared/hooks/use-card-activate'
 import { formatAmount } from '@/shared/lib/format'
 import { resolveIconColorTone } from '@/shared/lib/iconColorStyles'
@@ -16,21 +18,14 @@ type AllocationCardProps = {
   onEdit?: (allocation: Allocation) => void
 }
 
-function toPercent(part: number, total: number | null | undefined): number | null {
-  if (total == null || total <= 0) {
-    return null
-  }
-
-  return Math.min(100, Math.max(0, Math.round((part / total) * 100)))
-}
-
 export function AllocationCard({
   allocation,
   incomeAmount = null,
   onEdit,
 }: AllocationCardProps) {
   const allocationAmount = toMoneyNumber(allocation.amount)
-  const percent = toPercent(allocationAmount, incomeAmount)
+  const percent = allocationIncomePercent(allocationAmount, incomeAmount)
+  const animatedPercent = useAnimatedPercent(percent, { mountFrom: 0 })
   const tone = resolveIconColorTone(allocation.category.icon_color)
 
   const handleEdit = useCallback(() => {
@@ -73,16 +68,16 @@ export function AllocationCard({
           </span>
         </CardTitle>
       </CardHeader>
-      {percent !== null ? (
+      {animatedPercent ? (
         <CardContent className="space-y-2">
           <Progress
-            value={percent}
+            value={animatedPercent.rounded}
             className="h-1 bg-slate-muted/60"
-            indicatorClassName={tone.progressClassName}
+            indicatorClassName={cn(tone.progressClassName, 'transition-none')}
             aria-label={`Доля категории ${allocation.category.name}`}
           />
-          <p className={`text-xs font-medium ${tone.iconClassName}`}>
-            {percent}% от дохода
+          <p className={`text-xs font-medium tabular-nums ${tone.iconClassName}`}>
+            {animatedPercent.rounded}% от дохода
           </p>
         </CardContent>
       ) : null}

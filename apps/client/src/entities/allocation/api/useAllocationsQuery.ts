@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Allocation } from '../model/types'
 import { getAllocations } from './allocationApi'
@@ -18,5 +18,6 @@ export function useAllocationsQuery(incomeId: string | null) {
       return getAllocations(incomeId)
     },
     enabled,
+    placeholderData: keepPreviousData,
   })
 }
