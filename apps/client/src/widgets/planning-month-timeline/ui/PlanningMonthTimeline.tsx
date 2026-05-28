@@ -19,6 +19,7 @@ export type PlanningMonthTimelineProps = {
   periodMonth: string
   periodLabels: Record<string, string>
   itemCounts: Record<string, number>
+  itemSwatches: Record<string, string[]>
   onSelect: (periodMonth: string) => void
 }
 
@@ -26,6 +27,7 @@ export function PlanningMonthTimeline({
   periodMonth,
   periodLabels,
   itemCounts,
+  itemSwatches,
   onSelect,
 }: PlanningMonthTimelineProps) {
   const carousel = usePlanningMonthCarousel({ periodMonth, onSelect })
@@ -59,6 +61,7 @@ export function PlanningMonthTimeline({
               <PlanningMonthCard
                 label={periodLabels[month] ?? formatPeriodMonthLabel(month)}
                 planCount={itemCounts[month] ?? 0}
+                swatches={itemSwatches[month] ?? []}
                 active={month === periodMonth}
                 onSelect={() => carousel.selectMonth(month)}
               />

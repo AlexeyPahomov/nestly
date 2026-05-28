@@ -1,4 +1,5 @@
 import type { PlannedExpense } from '../model/types'
+import { resolveIconColorTone } from '@/shared/lib/iconColorStyles'
 
 export function filterPlannedExpensesByPeriodMonth(
   items: readonly PlannedExpense[],
@@ -17,4 +18,22 @@ export function countPlannedExpensesByPeriodMonth(
   }
 
   return counts
+}
+
+export function collectPlannedExpenseSwatchesByPeriodMonth(
+  items: readonly PlannedExpense[],
+): Record<string, string[]> {
+  const swatchesByMonth: Record<string, string[]> = {}
+
+  for (const item of items) {
+    if (swatchesByMonth[item.period_month] == null) {
+      swatchesByMonth[item.period_month] = []
+    }
+
+    swatchesByMonth[item.period_month].push(
+      resolveIconColorTone(item.icon_color).swatchClassName,
+    )
+  }
+
+  return swatchesByMonth
 }

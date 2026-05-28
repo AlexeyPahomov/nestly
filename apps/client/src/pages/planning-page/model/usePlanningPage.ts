@@ -12,6 +12,7 @@ import { usePlannedExpensesQuery } from '@/entities/planned-expense/api/usePlann
 import { usePlannedExpenseStatusMutation } from '@/entities/planned-expense/api/usePlannedExpenseStatusMutation'
 import { buildPlanningTimelineMonths } from '@/entities/planned-expense/lib/buildPlanningTimelineMonths'
 import {
+  collectPlannedExpenseSwatchesByPeriodMonth,
   countPlannedExpensesByPeriodMonth,
   filterPlannedExpensesByPeriodMonth,
 } from '@/entities/planned-expense/lib/groupPlannedExpensesByPeriodMonth'
@@ -66,6 +67,10 @@ export function usePlanningPage() {
     () => countPlannedExpensesByPeriodMonth(allPlanned),
     [allPlanned],
   )
+  const itemSwatches = useMemo(
+    () => collectPlannedExpenseSwatchesByPeriodMonth(allPlanned),
+    [allPlanned],
+  )
 
   return {
     periodMonth,
@@ -75,6 +80,7 @@ export function usePlanningPage() {
     projection,
     periodLabels,
     itemCounts,
+    itemSwatches,
     reserve: (id: string, amount: number) =>
       statusMutation.mutate(fullReserveMutationArgs(id, amount)),
     cancelPlan: (id: string) =>

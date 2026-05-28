@@ -30,7 +30,7 @@ export const planningMonthNavButtonClassName =
 /** Карточка месяца в переключателе (rounded-lg, как Card / кнопки расходов). */
 export function planningMonthCardClassName(active: boolean): string {
   const size =
-    'min-w-[7.25rem] flex-col items-center gap-0.5 px-3 py-2 text-center sm:min-w-[9rem] sm:px-4';
+    'min-w-[7.25rem] flex-col items-center gap-0.5 px-3 py-1.5 text-center sm:min-w-[9rem] sm:px-4';
 
   return active
     ? `${size} rounded-lg border border-zinc-900 bg-zinc-900 text-white shadow-sm hover:border-zinc-900 hover:bg-zinc-900`

@@ -14,6 +14,7 @@ export type PlanningPageToolbarProps = {
   periodMonth: string
   periodLabels: Record<string, string>
   itemCounts: Record<string, number>
+  itemSwatches: Record<string, string[]>
   onSelectMonth: (periodMonth: string) => void
 }
 
@@ -21,6 +22,7 @@ export function PlanningPageToolbar({
   periodMonth,
   periodLabels,
   itemCounts,
+  itemSwatches,
   onSelectMonth,
 }: PlanningPageToolbarProps) {
   const [createOpen, setCreateOpen] = useState(false)
@@ -33,6 +35,7 @@ export function PlanningPageToolbar({
             periodMonth={periodMonth}
             periodLabels={periodLabels}
             itemCounts={itemCounts}
+            itemSwatches={itemSwatches}
             onSelect={onSelectMonth}
           />
 

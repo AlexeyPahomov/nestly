@@ -25,7 +25,6 @@ export function AddCategoryCard({ onClick, className }: AddCategoryCardProps) {
     <Card
       size="sm"
       className={cn(categoryTileCardClassName, addCategoryCardClassName, className)}
-      onClick={onClick}
       {...activateProps}
     >
       <CategoryTileShell

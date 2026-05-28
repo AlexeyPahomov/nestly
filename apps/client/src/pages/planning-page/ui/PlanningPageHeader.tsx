@@ -16,6 +16,7 @@ export function PlanningPageHeader({ page }: PlanningPageHeaderProps) {
         periodMonth={page.periodMonth}
         periodLabels={page.periodLabels}
         itemCounts={page.itemCounts}
+        itemSwatches={page.itemSwatches}
         onSelectMonth={page.setPeriodMonth}
       />
 
