@@ -1,25 +1,16 @@
-import type { Allocation } from '@/entities/allocation/model/types';
-import type { Category } from '@/entities/category/model/types';
-import type { Income } from '@/entities/income/model/types';
-import type { CategoryBudgetSnapshot } from '@/features/create-expense/model/budget';
+import type { CategoryBudgetItem } from '@/entities/budget/model/types';
 import { cn } from '@/shared/lib/utils';
 import { AddButton, fabDesktopAddButtonClassName } from '@/shared/ui';
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList';
-import type { CategoryBudgetItem } from '@/entities/budget/model/types';
 import { expensePageListInTabClassName } from '../lib/expensePageLayout';
 import { categoryBudgetListCompactShellClassName } from '@/widgets/category-budget-list/lib/categoryBudgetListLayout';
 import { CategoryBudgetList } from '@/widgets/category-budget-list';
 
 type ExpenseWorkspaceProps = {
-  categories: Category[];
-  budgets: CategoryBudgetSnapshot[];
-  incomes: Income[];
-  allocations: Allocation[];
   budgetItems: CategoryBudgetItem[];
   selectedCategoryId: string | null;
   onAddExpense: () => void;
   stressCategoryId: string | null;
-  onStressCategoryChange: (categoryId: string | null) => void;
   onCategorySelect: (categoryId: string) => void;
   isBudgetPending: boolean;
   isBudgetError: boolean;
@@ -30,15 +21,10 @@ type ExpenseWorkspaceProps = {
 };
 
 export function ExpenseWorkspace({
-  categories,
-  budgets,
-  incomes,
-  allocations,
   budgetItems,
   selectedCategoryId,
   onAddExpense,
   stressCategoryId,
-  onStressCategoryChange,
   onCategorySelect,
   isBudgetPending,
   isBudgetError,

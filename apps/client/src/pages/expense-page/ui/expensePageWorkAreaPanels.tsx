@@ -8,10 +8,7 @@ import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList'
 import type { ExpenseListItem, ExpenseListViewMode } from '@/widgets/expense-list'
 import { ExpenseList } from '@/widgets/expense-list'
 
-import {
-  expensePageListInTabClassName,
-  getExpensePageHistoryListClassName,
-} from '../lib/expensePageLayout'
+import { getExpensePageHistoryListClassName } from '../lib/expensePageLayout'
 
 import { ExpensePageTabPanel } from './ExpensePageTabPanel'
 import { ExpenseWorkspace } from './ExpenseWorkspace'
@@ -59,15 +56,10 @@ type ExpensePagePanelProps = ExpensePageWorkAreaPanelsProps & {
 export function ExpensePageCategoriesPanel({
   listLayout,
   hideListTitle = false,
-  expenseCategories,
-  budgetSnapshots,
-  incomes,
-  allocations,
   budgetItems,
   selectedCategoryId,
   onAddExpense,
   stressCategoryId,
-  onStressCategoryChange,
   onCategorySelect,
   isBudgetPending,
   isBudgetError,
@@ -79,15 +71,10 @@ export function ExpensePageCategoriesPanel({
       <ExpenseWorkspace
         listLayout={listLayout}
         hideListTitle={hideListTitle}
-        categories={expenseCategories}
-        budgets={budgetSnapshots}
-        incomes={incomes}
-        allocations={allocations}
         budgetItems={budgetItems}
         selectedCategoryId={selectedCategoryId}
         onAddExpense={onAddExpense}
         stressCategoryId={stressCategoryId}
-        onStressCategoryChange={onStressCategoryChange}
         onCategorySelect={onCategorySelect}
         isBudgetPending={isBudgetPending}
         isBudgetError={isBudgetError}
