@@ -1,10 +1,10 @@
 /** Маршруты приложения (app shell): сегменты как `path` дочерних роутов layout и подписи для навигации. */
 export const APP_ROUTES = [
-  { id: 'income', label: 'Income', segment: 'income' },
-  { id: 'allocation', label: 'Allocation', segment: 'allocation' },
-  { id: 'expenses', label: 'Expenses', segment: 'expenses' },
-  { id: 'planning', label: 'Planning', segment: 'planning' },
-  { id: 'categories', label: 'Categories', segment: 'categories' },
+  { id: 'income', label: 'Доходы', segment: 'income' },
+  { id: 'allocation', label: 'Распределение', segment: 'allocation' },
+  { id: 'expenses', label: 'Расходы', segment: 'expenses' },
+  { id: 'planning', label: 'Планирование', segment: 'planning' },
+  { id: 'categories', label: 'Категории', segment: 'categories' },
 ] as const
 
 export type AppRouteId = (typeof APP_ROUTES)[number]['id']
