@@ -85,7 +85,6 @@ export function AllocationPage() {
     setPickedIncomeId,
     allocationCategories,
     incomeAmount,
-    selectedIncomeMonthLabel,
     allocatedTotal,
     remainingBalance,
     incomeCards,
@@ -122,7 +121,6 @@ export function AllocationPage() {
 
   const selectedIncomeTone =
     incomeCards.find((card) => card.id === selectedIncomeId)?.tone ?? 'empty';
-  const selectedToneAccentClassName = getToneAccentClassName(selectedIncomeTone)
   const selectedToneTextClassName = getToneTextClassName(selectedIncomeTone)
   const selectedToneSurfaceClassName = getToneSurfaceClassName(selectedIncomeTone)
 
@@ -213,9 +211,10 @@ export function AllocationPage() {
             )}
           </section>
 
+          <div className="space-y-4 md:flex md:items-stretch md:gap-4 md:space-y-0">
           <Card
             className={cn(
-              'relative isolate overflow-hidden text-main-black shadow-[0_10px_28px_-16px_rgba(20,24,36,0.32)] ring-1 ring-white/40 supports-backdrop-filter:backdrop-blur-[2px]',
+              'relative isolate min-w-0 overflow-hidden text-main-black shadow-[0_10px_28px_-16px_rgba(20,24,36,0.32)] ring-1 ring-white/40 supports-backdrop-filter:backdrop-blur-[2px] md:flex-[1.25]',
               selectedToneSurfaceClassName,
             )}
           >
@@ -229,10 +228,25 @@ export function AllocationPage() {
                   <p className="text-sm font-medium text-slate-hover">
                     Осталось
                   </p>
-                  <CardTitle className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-                    {incomeAmount !== null
-                      ? formatAmount(remainingBalance)
-                      : '—'}
+                  <CardTitle
+                    className={cn(
+                      'flex items-baseline gap-1 text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl',
+                      selectedToneTextClassName,
+                    )}
+                  >
+                    {incomeAmount !== null ? (
+                      <>
+                        {formatAmount(remainingBalance)}
+                        <span
+                          className="text-lg font-semibold text-current/45 sm:text-xl"
+                          aria-hidden
+                        >
+                          ₽
+                        </span>
+                      </>
+                    ) : (
+                      '—'
+                    )}
                   </CardTitle>
                 </div>
                 <div className="flex items-center gap-3">
@@ -261,44 +275,29 @@ export function AllocationPage() {
                   </div>
                 </div>
               </div>
-              <Progress
-                value={progressValue}
-                className="h-1 bg-white/45"
-                indicatorClassName={cn(
-                  'transition-all duration-500',
-                  selectedToneAccentClassName,
-                )}
-              />
-              <p className="text-sm font-medium text-slate-hover">
-                Из {incomeAmount !== null ? formatAmount(incomeAmount) : '—'} в{' '}
-                {selectedIncomeMonthLabel}
-              </p>
             </CardContent>
           </Card>
 
-          {!isMobile ? (
-            <div className="flex justify-start">
-              <button
-                type="button"
-                className="group w-full rounded-xl bg-linear-to-br from-teal-subtle to-blue-subtle px-4 py-4 text-left shadow-[0_10px_22px_-18px_rgba(20,24,36,0.5)] ring-1 ring-teal/10 transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_26px_-16px_rgba(20,24,36,0.45)] hover:ring-teal/25"
-                onClick={() => setAllocateSheetOpen(true)}
-                disabled={controlsDisabled || noCategories}
-              >
-                <p className="inline-flex items-center gap-2 text-base font-bold text-main-black">
-                  <span className="inline-flex size-6 items-center justify-center rounded-full bg-white/90 text-teal shadow-sm">
-                    +
-                  </span>
-                  Быстро распределить
-                  <span className="text-sm text-teal transition-transform group-hover:translate-x-0.5">
-                    →
-                  </span>
-                </p>
-                <p className="mt-1 text-sm font-medium text-slate-hover">
-                  Категория, сумма и сохранение в один шаг
-                </p>
-              </button>
-            </div>
-          ) : null}
+          <button
+            type="button"
+            className="group hidden min-w-0 flex-1 rounded-xl bg-linear-to-br from-teal-subtle to-blue-subtle px-4 py-4 text-left shadow-[0_10px_22px_-18px_rgba(20,24,36,0.5)] ring-1 ring-teal/10 transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_26px_-16px_rgba(20,24,36,0.45)] hover:ring-teal/25 disabled:pointer-events-none disabled:opacity-50 md:flex md:flex-col md:justify-center"
+            onClick={() => setAllocateSheetOpen(true)}
+            disabled={controlsDisabled || noCategories}
+          >
+            <p className="inline-flex items-center gap-2 text-base font-bold text-main-black">
+              <span className="inline-flex size-6 items-center justify-center rounded-full bg-white/90 text-teal shadow-sm">
+                +
+              </span>
+              Быстро распределить
+              <span className="text-sm text-teal transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
+            </p>
+            <p className="mt-1 text-sm font-medium text-slate-hover">
+              Категория, сумма и сохранение в один шаг
+            </p>
+          </button>
+          </div>
         </div>
 
         <div
