@@ -35,7 +35,7 @@ export function ExpenseOverBudgetActions({
           <p className="text-sm text-emerald-900/90">
             В «{savingsTransfer.savingsName}» —{' '}
             {formatAmount(savingsTransfer.available)}. Можно перераспределить на
-            странице «Распределение».
+            странице «Бюджет».
           </p> */}
         </>
       ) : null}

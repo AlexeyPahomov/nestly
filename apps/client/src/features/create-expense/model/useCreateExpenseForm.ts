@@ -189,7 +189,7 @@ export function useCreateExpenseForm({
       const income = pickIncomeForTopUp(incomes, allocations, topUpAmount)
       if (!income) {
         setTopUpError(
-          'Недостаточно свободных средств в доходах. Добавьте доход или освободите лимит на странице «Распределение».',
+          'Недостаточно свободных средств в доходах. Добавьте доход или освободите лимит на странице «Бюджет».',
         )
         return
       }

@@ -35,7 +35,7 @@ export function AllocationCard({
   const activateProps = useCardActivate(handleEdit, {
     contextMenu: onEdit != null,
     ariaLabel: onEdit
-      ? `Распределение: ${allocation.category.name}, ${formatAmount(allocationAmount)}. Нажмите для редактирования.`
+      ? `Бюджет: ${allocation.category.name}, ${formatAmount(allocationAmount)}. Нажмите для редактирования.`
       : undefined,
   })
 

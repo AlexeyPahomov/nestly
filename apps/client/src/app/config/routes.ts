@@ -1,7 +1,7 @@
 /** Маршруты приложения (app shell): сегменты как `path` дочерних роутов layout и подписи для навигации. */
 export const APP_ROUTES = [
   { id: 'income', label: 'Доходы', segment: 'income' },
-  { id: 'allocation', label: 'Распределение', segment: 'allocation' },
+  { id: 'allocation', label: 'Бюджет', segment: 'allocation' },
   { id: 'expenses', label: 'Расходы', segment: 'expenses' },
   { id: 'planning', label: 'Планирование', segment: 'planning' },
   { id: 'categories', label: 'Категории', segment: 'categories' },
@@ -13,6 +13,14 @@ export type AppRouteSegment = (typeof APP_ROUTES)[number]['segment']
 
 /** Сегмент главного экрана — цель редиректа с `/`. */
 export const APP_DEFAULT_SEGMENT = 'planning' satisfies AppRouteSegment
+
+export function appRouteLabel(id: AppRouteId): string {
+  const route = APP_ROUTES.find((item) => item.id === id)
+  if (!route) {
+    throw new Error(`Unknown route id: ${id}`)
+  }
+  return route.label
+}
 
 /** Полный путь: `/income`, `/allocation`, … */
 export function appRouteHref(segment: AppRouteSegment): string {

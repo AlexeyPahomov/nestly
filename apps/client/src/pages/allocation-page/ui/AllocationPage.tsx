@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 
+import { appRouteLabel } from '@/app/config/routes'
 import { isAllocationListBackgroundFetch } from '@/entities/allocation/api/allocationQueryFlags'
 import { allocationIncomePercentOrZero } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
@@ -31,7 +32,7 @@ function toCategoryOptions(categories: Category[]) {
 
 export function AllocationPage() {
   const isMobile = useIsMobile()
-  const pageTitle = useDesktopPageSectionTitle('Распределение')
+  const pageTitle = useDesktopPageSectionTitle(appRouteLabel('allocation'))
   const [allocateSheetOpen, setAllocateSheetOpen] = useState(false)
   const [editingAllocation, setEditingAllocation] = useState<Allocation | null>(
     null,
