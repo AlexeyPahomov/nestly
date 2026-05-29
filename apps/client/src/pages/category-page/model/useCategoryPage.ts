@@ -4,8 +4,6 @@ import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
 import type { Category } from '@/entities/category/model/types'
 import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { usePageListLayout } from '@/shared/hooks/use-page-list-layout'
-import { isQueryLoading } from '@/shared/lib/queryStatus'
-
 import { useCategoryFormDialog } from './useCategoryFormDialog'
 
 export function useCategoryPage() {
@@ -20,10 +18,7 @@ export function useCategoryPage() {
   return {
     categoriesQuery,
     listLayout,
-    isLoading: isQueryLoading(
-      categoriesQuery.isPending,
-      categoriesQuery.isFetching,
-    ),
+    isLoading: categoriesQuery.isPending,
     onEditCategory: setEditingCategory,
     onAddCategory: isMobile ? undefined : dialog.openForAdd,
     formDialog: {

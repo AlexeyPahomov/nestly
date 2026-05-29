@@ -95,6 +95,7 @@ export function ExpensePageHistoryPanel({
   sortedExpenses,
   expenseCategoryFilter,
   expensesQuery,
+  isBudgetPending,
   editingExpenseId,
   deletingExpenseId,
   onEditExpense,
@@ -112,7 +113,7 @@ export function ExpensePageHistoryPanel({
         monthFilter={periodMonth}
         expenses={sortedExpenses}
         categoryFilter={expenseCategoryFilter}
-        isPending={expensesQuery.isPending}
+        isPending={isBudgetPending}
         isError={expensesQuery.isError}
         error={expensesQuery.error}
         isFetching={expensesQuery.isFetching}

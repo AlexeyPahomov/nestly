@@ -42,10 +42,11 @@ export function usePeriodBudgetCore(periodMonth: string) {
   )
 
   const isCoreLoading =
-    categoriesQuery.isLoading ||
-    incomesQuery.isLoading ||
-    allocationsQuery.isLoading ||
-    expensesQuery.isLoading
+    categoriesQuery.isPending ||
+    incomesQuery.isPending ||
+    allocationsQuery.isPending ||
+    expensesQuery.isPending ||
+    (budgetMonthQuery.isPending && budgetMonthQuery.data === undefined)
 
   return {
     categories,

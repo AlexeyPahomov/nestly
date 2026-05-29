@@ -99,6 +99,7 @@ export {
   pageSectionToolbarClassName,
 } from './page-section'
 export { PagePlaceholder } from './page-placeholder/PagePlaceholder'
+export { PageContentLoader } from './page-content-loader'
 export { Spinner } from './spinner/Spinner'
 export {
   SummaryMetricCard,

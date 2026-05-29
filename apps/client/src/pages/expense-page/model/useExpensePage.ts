@@ -76,7 +76,9 @@ export function useExpensePage() {
     core.categoriesQuery.isPending ||
     core.incomesQuery.isPending ||
     core.allocationsQuery.isPending ||
-    core.expensesQuery.isPending
+    core.expensesQuery.isPending ||
+    (core.budgetMonthQuery.isPending &&
+      core.budgetMonthQuery.data === undefined)
 
   const isBudgetError =
     core.categoriesQuery.isError ||

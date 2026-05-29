@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { Spinner, TooltipProvider } from '@/shared/ui';
+import { TooltipProvider } from '@/shared/ui';
 import { SidebarInset, SidebarProvider } from '@/shared/ui/sidebar';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { Sidebar } from '@/widgets/sidebar';
@@ -8,12 +8,9 @@ import { Sidebar } from '@/widgets/sidebar';
 import { appInsetClassName, appMainClassName } from './appLayoutLayout';
 import { PageTransitionOutlet } from './PageTransitionOutlet';
 
+/** Пустой fallback: лоадеры списков на странице, без второго спиннера подряд. */
 function RouteFallback() {
-  return (
-    <div className="flex min-h-[40vh] flex-col items-center justify-center">
-      <Spinner className="size-8 text-zinc-500" />
-    </div>
-  );
+  return <div className="min-h-0 min-w-0 flex-1" aria-hidden />;
 }
 
 export function AppLayout() {

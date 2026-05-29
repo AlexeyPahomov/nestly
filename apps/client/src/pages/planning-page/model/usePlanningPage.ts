@@ -92,6 +92,6 @@ export function usePlanningPage() {
       : undefined,
     incomeTotal: operationalSummary.incomeTotal,
     allocatedTotal: operationalSummary.allocatedTotal,
-    isLoading: plannedQuery.isLoading || core.isCoreLoading,
+    isLoading: plannedQuery.isPending || core.isCoreLoading,
   }
 }

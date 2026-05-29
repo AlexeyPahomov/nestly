@@ -1,4 +1,4 @@
-import type { ReactNode, UIEventHandler } from 'react';
+import { useEffect, useRef, type ReactNode, type UIEventHandler } from 'react';
 
 import { useCollapsePresence } from '@/shared/hooks/useCollapsePresence';
 import { cn } from '@/shared/lib/utils';
@@ -87,8 +87,18 @@ export function ItemsList<T>({
   pendingLoaderPlacement,
   forceShowList = false,
 }: ItemsListProps<T>) {
+  const hasCompletedInitialLoadRef = useRef(false);
   const bodyPresence = useCollapsePresence(!bodyCollapsed, true);
   const bodyLayoutExpanded = !bodyCollapsed || bodyPresence.isMounted;
+
+  useEffect(() => {
+    if (!isPending && !isError) {
+      hasCompletedInitialLoadRef.current = true;
+    }
+  }, [isPending, isError]);
+
+  const enableListTransitions = hasCompletedInitialLoadRef.current;
+  const listFadeClassName = enableListTransitions ? 'coffer-list-fade' : '';
   const resolvedPendingLoaderPlacement =
     pendingLoaderPlacement ?? (layout === 'fit' ? 'footer' : 'overlay');
 
@@ -146,7 +156,10 @@ export function ItemsList<T>({
       {showOverlayLoader ? (
             <div
               aria-hidden={!showOverlayLoader}
-              className="coffer-list-fade flex min-h-0 flex-1 flex-col opacity-100"
+              className={cn(
+                listFadeClassName,
+                'flex min-h-0 flex-1 flex-col opacity-100',
+              )}
             >
               <ItemsListInteractive className="flex min-h-0 flex-1 flex-col">
                 <ListLoader />
@@ -156,7 +169,8 @@ export function ItemsList<T>({
 
           <div
             className={cn(
-              'coffer-list-fade flex min-h-0 flex-col gap-3',
+              listFadeClassName,
+              'flex min-h-0 flex-col gap-3',
               showOverlayLoader
                 ? cn(
                     itemsListShellClassName,
@@ -182,6 +196,7 @@ export function ItemsList<T>({
                     listUlClassName,
                     layout === 'fill' && 'p-1',
                     listAnimateEnter &&
+                      enableListTransitions &&
                       'coffer-list-enter motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300',
                     listClassName,
                   )}

@@ -1,11 +1,24 @@
+import type { Income } from '@/entities/income/model/types'
 import { useDeleteIncomeMutation } from '@/entities/income/api/useDeleteIncomeMutation'
-import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
 import { IncomeCard } from '@/entities/income/ui/IncomeCard'
 import { getErrorMessage } from '@/shared/lib/errors'
 import { ItemsList } from '@/shared/ui'
 
-export function IncomeList() {
-  const { data, isPending, isError, error, isFetching } = useIncomesQuery()
+export type IncomeListProps = {
+  data: Income[] | undefined
+  isPending: boolean
+  isError: boolean
+  error: unknown
+  isFetching?: boolean
+}
+
+export function IncomeList({
+  data,
+  isPending,
+  isError,
+  error,
+  isFetching = false,
+}: IncomeListProps) {
   const deleteMutation = useDeleteIncomeMutation()
 
   const headerAddon =
@@ -22,6 +35,7 @@ export function IncomeList() {
       error={error}
       data={data}
       isFetching={isFetching}
+      showPendingLoader={false}
       title="Список доходов"
       emptyMessage="Пока нет доходов. Добавьте первую запись."
       errorFallback="Не удалось загрузить доходы"

@@ -36,8 +36,11 @@ export function PlanningPageMonthBody({
 }: PlanningPageMonthViewsProps) {
   if (page.isLoading) {
     return (
-      <div className="flex justify-center py-12">
-        <Spinner className="size-8 text-zinc-500" />
+      <div
+        className="flex min-h-[min(50vh,28rem)] flex-col items-center justify-center"
+        aria-busy="true"
+      >
+        <Spinner className="size-8 text-zinc-500" aria-label="Загрузка" />
       </div>
     )
   }
