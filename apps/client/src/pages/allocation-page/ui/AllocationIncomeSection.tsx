@@ -31,7 +31,7 @@ export function AllocationIncomeSection({
   return (
     <section className="space-y-1.5 md:space-y-2">
       <p className="text-xs font-medium text-slate-hover md:text-sm">
-        Доходы по месяцам
+        Доход по месяцам
       </p>
       {hasIncome ? (
         <>

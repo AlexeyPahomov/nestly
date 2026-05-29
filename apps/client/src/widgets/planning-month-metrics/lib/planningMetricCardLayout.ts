@@ -1,12 +1,20 @@
 import { cn } from '@/shared/lib/utils'
 
-export type PlanningMetricAccent = 'forecast' | 'pool' | 'planned' | 'reserved'
+export type PlanningMetricAccent =
+  | 'forecast'
+  | 'pool'
+  | 'planned'
+  | 'reserved'
+  | 'savings'
+  | 'spent'
 
 const accentBorderClassName: Record<PlanningMetricAccent, string> = {
   forecast: 'border-l-green',
   pool: 'border-l-teal',
   planned: 'border-l-blue',
   reserved: 'border-l-orange',
+  savings: 'border-l-green',
+  spent: 'border-l-slate',
 }
 
 const accentValueClassName: Record<PlanningMetricAccent, string> = {
@@ -14,6 +22,8 @@ const accentValueClassName: Record<PlanningMetricAccent, string> = {
   pool: 'text-zinc-900',
   planned: 'text-blue',
   reserved: 'text-orange',
+  savings: 'text-green',
+  spent: 'text-slate',
 }
 
 export const planningMetricCardShellClassName =

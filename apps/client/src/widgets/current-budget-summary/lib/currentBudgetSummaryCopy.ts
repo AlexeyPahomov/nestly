@@ -22,3 +22,22 @@ export const CURRENT_BUDGET_RESERVE_INFO =
 export const CURRENT_BUDGET_RESERVE_LABEL = 'В резерве'
 
 export const CURRENT_BUDGET_RESERVE_MOBILE_LABEL = 'Накопления'
+
+export const CURRENT_BUDGET_METRIC_COPY = {
+  available: {
+    title: 'Доступно',
+    caption: 'Свободный остаток в месяце',
+  },
+  reserve: {
+    desktopTitle: CURRENT_BUDGET_RESERVE_LABEL,
+    mobileTitle: CURRENT_BUDGET_RESERVE_MOBILE_LABEL,
+    caption: 'Резерв и накопления',
+    infoText: CURRENT_BUDGET_RESERVE_INFO,
+  },
+  spent: {
+    desktopTitle: 'Потрачено в месяце',
+    mobileTitle: 'Потрачено',
+    caption: 'Фактические расходы',
+    infoText: 'Сумма проведённых трат за выбранный месяц.',
+  },
+} as const

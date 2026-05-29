@@ -33,7 +33,7 @@ export const remainingBalanceCardCaptionInlineClassName =
 export const remainingBalanceCardCaptionStackedClassName =
   'hidden max-[460px]:col-span-2 max-[460px]:flex max-[460px]:flex-wrap gap-x-1 text-sm'
 
-/** Карточка месяца в блоке «Доходы по месяцам» (мобилка). */
+/** Карточка месяца в блоке «Доход по месяцам» (мобилка). */
 export const allocationIncomeMonthCardMobileClassName =
   'max-md:h-11 max-md:min-h-11'
 

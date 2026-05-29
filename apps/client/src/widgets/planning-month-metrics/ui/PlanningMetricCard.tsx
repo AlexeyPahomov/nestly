@@ -3,7 +3,7 @@ import { useRef, type ReactNode } from 'react'
 import { useElementWidthThreshold } from '@/shared/hooks/use-element-width-threshold'
 import { formatAmount } from '@/shared/lib/format'
 import { cn } from '@/shared/lib/utils'
-import { InfoHint, getInfoHintLabel } from '@/shared/ui'
+import { getInfoHintLabel } from '@/shared/ui'
 import {
   infoHintTitleRowClassName,
   infoHintTitleTextClassName,
@@ -14,6 +14,12 @@ import {
   planningMetricValueClassName,
   type PlanningMetricAccent,
 } from '../lib/planningMetricCardLayout'
+import {
+  planningMetricCardMobileCompactLayout,
+  whenMobileCompact,
+} from '../lib/planningMetricCardMobileCompactLayout'
+
+import { PlanningMetricCardInfo } from './PlanningMetricCardInfo'
 
 export type PlanningMetricCardProps = {
   title: ReactNode
@@ -25,6 +31,8 @@ export type PlanningMetricCardProps = {
   infoText: string
   /** До 240px переносит info-иконку в правый нижний угол карточки. */
   infoBottomOnMax240?: boolean
+  /** Компактный вид на мобилке (три колонки): контент внизу, info сверху справа. */
+  mobileCompact?: boolean
 }
 
 export function PlanningMetricCard({
@@ -34,36 +42,58 @@ export function PlanningMetricCard({
   accent,
   infoText,
   infoBottomOnMax240 = false,
+  mobileCompact = false,
 }: PlanningMetricCardProps) {
   const rootRef = useRef<HTMLElement | null>(null)
-  const isCompactInfoLayout = useElementWidthThreshold(
+  const isNarrowCard = useElementWidthThreshold(
     rootRef,
     240,
-    infoBottomOnMax240,
+    infoBottomOnMax240 && !mobileCompact,
   )
+  const useBottomInfo = infoBottomOnMax240 && isNarrowCard && !mobileCompact
+  const infoLabel = getInfoHintLabel(title)
+  const infoProps = { label: infoLabel, infoText }
+  const compact = planningMetricCardMobileCompactLayout
 
   return (
     <article
       ref={rootRef}
       className={cn(
         planningMetricCardAccentClassName(accent),
-        infoBottomOnMax240 && isCompactInfoLayout && 'pb-10',
+        whenMobileCompact(mobileCompact, compact.shell),
+        useBottomInfo && 'pb-10',
       )}
     >
-      <div className="space-y-1">
-        <div className={infoHintTitleRowClassName}>
+      {mobileCompact ? (
+        <PlanningMetricCardInfo placement="mobileCompactTop" {...infoProps} />
+      ) : null}
+
+      <div
+        className={cn('space-y-1', whenMobileCompact(mobileCompact, compact.body))}
+      >
+        <div
+          className={cn(
+            infoHintTitleRowClassName,
+            whenMobileCompact(mobileCompact, compact.titleRow),
+          )}
+        >
           <p
             className={cn(
               'text-xs font-medium text-zinc-600 sm:text-sm',
               infoHintTitleTextClassName,
+              whenMobileCompact(mobileCompact, compact.title),
             )}
           >
             {title}
           </p>
-          {!isCompactInfoLayout ? (
-            <InfoHint label={getInfoHintLabel(title)} className="shrink-0">
-              {infoText}
-            </InfoHint>
+          {!mobileCompact && !isNarrowCard ? (
+            <PlanningMetricCardInfo placement="inline" {...infoProps} />
+          ) : null}
+          {mobileCompact ? (
+            <PlanningMetricCardInfo
+              placement="mobileCompactDesktopInline"
+              {...infoProps}
+            />
           ) : null}
         </div>
 
@@ -71,6 +101,7 @@ export function PlanningMetricCard({
           className={cn(
             'text-lg font-bold tracking-tight tabular-nums sm:text-2xl',
             planningMetricValueClassName(accent, value),
+            whenMobileCompact(mobileCompact, compact.value),
           )}
         >
           {formatAmount(value)}
@@ -78,13 +109,9 @@ export function PlanningMetricCard({
 
         <p className="hidden text-xs text-zinc-500 sm:block">{caption}</p>
       </div>
-      {infoBottomOnMax240 && isCompactInfoLayout ? (
-        <InfoHint
-          label={getInfoHintLabel(title)}
-          className="absolute bottom-2.5 right-2.5"
-        >
-          {infoText}
-        </InfoHint>
+
+      {useBottomInfo ? (
+        <PlanningMetricCardInfo placement="narrowBottom" {...infoProps} />
       ) : null}
     </article>
   )
