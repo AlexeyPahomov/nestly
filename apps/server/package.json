@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "pnpm -w run build:deps && node ./scripts/patch-prisma-client.cjs && nest build",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "pnpm -w run build:deps && node ./scripts/patch-prisma-client.cjs && nest start --watch",
     "start": "pnpm -w run build:deps && node ./scripts/patch-prisma-client.cjs && nest start",
