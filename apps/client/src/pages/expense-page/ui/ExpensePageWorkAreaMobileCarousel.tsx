@@ -1,7 +1,12 @@
 import { useCallback, useState } from 'react'
 
 import type { ItemsListLayout } from '@/shared/ui/items-list/ItemsList'
-import { Carousel, CarouselContent, CarouselItem, mobileFabRowStartWrapClassName } from '@/shared/ui'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  MobileFixedStartCorner,
+} from '@/shared/ui'
 import {
   ExpenseListToolbar,
   type ExpenseListViewMode,
@@ -95,13 +100,13 @@ export function ExpensePageWorkAreaMobileCarousel({
       </Carousel>
 
       {isHistorySlide ? (
-        <div className={mobileFabRowStartWrapClassName}>
+        <MobileFixedStartCorner>
           <ExpenseListToolbar
             className="pointer-events-auto"
             viewMode={historyViewMode}
             onViewModeChange={setHistoryViewMode}
           />
-        </div>
+        </MobileFixedStartCorner>
       ) : null}
     </div>
   )

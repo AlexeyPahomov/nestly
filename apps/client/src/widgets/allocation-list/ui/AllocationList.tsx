@@ -14,6 +14,7 @@ type AllocationListProps = {
   hasSelectedMonth: boolean
   incomeAmount?: number | null
   layout?: ItemsListLayout
+  listClassName?: string
   onEditAllocation?: (allocation: Allocation) => void
 }
 
@@ -26,6 +27,7 @@ export function AllocationList({
   hasSelectedMonth,
   incomeAmount = null,
   layout = 'fill',
+  listClassName,
   onEditAllocation,
 }: AllocationListProps) {
   const sortedAllocations = useMemo(
@@ -54,6 +56,7 @@ export function AllocationList({
       emptyMessage="Пока нет распределений за этот месяц."
       errorFallback="Не удалось загрузить распределения"
       layout={layout}
+      listClassName={listClassName}
     >
       {(items) =>
         items.map((allocation) => (

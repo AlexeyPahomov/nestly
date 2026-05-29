@@ -1,5 +1,5 @@
 import { cn } from '@/shared/lib/utils'
-import { mobilePageScrollPaddingClassName } from '@/shared/lib/scrollLayout'
+import { pageScrollRingInsetClassName } from '@/shared/lib/scrollLayout'
 import { mobileFabScrollReserveClassName } from '@/shared/ui/fab'
 
 /** Оболочка страницы: на мобилке шапка фиксирована, скролл — только у списка. */
@@ -10,13 +10,15 @@ export const allocationPageShellClassName = cn(
 
 export const allocationPageHeaderClassName = 'shrink-0 space-y-4'
 
-/** Прокрутка списка распределений (единственная вертикальная на мобилке). */
-export const allocationPageListScrollClassName = cn(
-  'flex min-h-0 min-w-0 flex-1 flex-col',
-  'max-md:overflow-y-auto max-md:overscroll-y-contain max-md:[overflow-anchor:none]',
-  mobilePageScrollPaddingClassName,
+/** Область списка: скролл внутри ItemsList, не у оболочки (иначе обрезка карточек). */
+export const allocationPageListScrollClassName =
+  'flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden'
+
+/** Отступы и резерв под FAB у прокручиваемого `<ul>`. */
+export const allocationPageListUlClassName = cn(
+  pageScrollRingInsetClassName,
+  'max-md:pe-2 max-md:pb-8',
   mobileFabScrollReserveClassName,
-  'md:overflow-hidden',
 )
 
 /** Блок «Осталось»: ниже 460px подпись справа — отдельной строкой на всю ширину. */

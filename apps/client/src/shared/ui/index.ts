@@ -3,6 +3,7 @@ export type { AddButtonProps } from './add-button'
 export {
   Fab,
   fabDesktopAddButtonClassName,
+  MobileFixedStartCorner,
   mobileFabRowStartWrapClassName,
   mobileFabScrollReserveClassName,
 } from './fab'

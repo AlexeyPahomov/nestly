@@ -9,13 +9,13 @@ export const mobileFabRowBottomClassName =
   'pb-[calc(4rem+0.5rem+env(safe-area-inset-bottom))]';
 
 export const fabWrapClassName = cn(
-  'pointer-events-none fixed end-0 bottom-0 z-40 p-3 pe-[max(0.5rem,env(safe-area-inset-right))] md:hidden',
+  'pointer-events-none fixed end-0 bottom-0 z-40 inline-flex w-max max-w-[calc(100vw-0.5rem)] flex-col items-end p-3 pe-[max(0.5rem,env(safe-area-inset-right))] md:hidden',
   mobileFabRowBottomClassName,
 );
 
 /** Левый нижний угол — на одной линии с FAB (мобилка). */
 export const mobileFabRowStartWrapClassName = cn(
-  'pointer-events-none fixed start-0 bottom-0 z-40 p-3 ps-[max(0.5rem,env(safe-area-inset-left))] md:hidden',
+  'pointer-events-none fixed start-0 bottom-0 z-40 inline-flex w-max max-w-[calc(100vw-0.5rem)] flex-col items-start p-3 ps-[max(0.5rem,env(safe-area-inset-left))] md:hidden',
   mobileFabRowBottomClassName,
 );
 

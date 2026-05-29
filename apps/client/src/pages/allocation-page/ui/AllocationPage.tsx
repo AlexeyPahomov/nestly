@@ -10,6 +10,7 @@ import { useEditAllocationForm } from '@/features/create-allocation/model/useEdi
 import {
   allocationPageHeaderClassName,
   allocationPageListScrollClassName,
+  allocationPageListUlClassName,
   allocationPageShellClassName,
 } from '@/pages/allocation-page/lib/allocationPageLayout'
 import { useActiveIncomeScroll } from '@/pages/allocation-page/model/useActiveIncomeScroll'
@@ -135,7 +136,8 @@ export function AllocationPage() {
             isFetching={isAllocationListBackgroundFetch(allocationsQuery)}
             hasSelectedMonth={selectedPeriodMonth !== null}
             incomeAmount={incomeAmount}
-            layout={isMobile ? 'fit' : 'fill'}
+            layout="fill"
+            listClassName={allocationPageListUlClassName}
             onEditAllocation={setEditingAllocation}
           />
         </ContentTransition>
