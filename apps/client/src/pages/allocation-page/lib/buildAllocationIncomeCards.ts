@@ -1,7 +1,7 @@
 import { getMonthKeyFromIso } from '@coffer/shared'
 
+import { formatPeriodMonthLabel } from '@/entities/budget/lib/periodLabels'
 import type { Income } from '@/entities/income/model/types'
-import { formatMonthLabel } from '@/shared/lib/format'
 import { toMoneyNumber } from '@/shared/lib/money'
 
 import {
@@ -32,7 +32,7 @@ export function buildAllocationIncomeCards(
   }
 
   return [...byMonth.entries()]
-    .sort(([monthA], [monthB]) => monthB.localeCompare(monthA))
+    .sort(([monthA], [monthB]) => monthA.localeCompare(monthB))
     .map(([periodMonth, totals]) => {
       const allocatedPercent =
         totals.amount > 0
@@ -42,7 +42,7 @@ export function buildAllocationIncomeCards(
       return {
         id: periodMonth,
         periodMonth,
-        periodLabel: formatMonthLabel(`${periodMonth}-01`),
+        periodLabel: formatPeriodMonthLabel(periodMonth, { omitYear: true }),
         amount: totals.amount,
         tone: resolveIncomeCardTone(totals.allocated, allocatedPercent),
       }

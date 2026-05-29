@@ -1,15 +1,16 @@
-import { useEffect, type RefObject } from 'react'
+import { useLayoutEffect, type RefObject } from 'react'
 
 import type { IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
 import type { CarouselApi } from '@/shared/ui'
 
+/** Прокрутка к активному месяцу: он у левого края, более ранние — левее за скроллом. */
 export function useActiveIncomeScroll(
   selectedPeriodMonth: string | null,
   incomeCards: IncomeCardView[],
   incomeCarouselApi: CarouselApi | undefined,
   desktopIncomeScrollRef: RefObject<HTMLDivElement | null>,
 ) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!selectedPeriodMonth) {
       return
     }
@@ -21,16 +22,21 @@ export function useActiveIncomeScroll(
       return
     }
 
-    incomeCarouselApi?.scrollTo(activeIndex)
+    incomeCarouselApi?.scrollTo(activeIndex, false)
 
     const activeDesktopCard =
       desktopIncomeScrollRef.current?.querySelector<HTMLElement>(
         `[data-income-card-id="${selectedPeriodMonth}"]`,
       )
     activeDesktopCard?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
+      behavior: 'auto',
+      inline: 'start',
       block: 'nearest',
     })
-  }, [desktopIncomeScrollRef, incomeCards, incomeCarouselApi, selectedPeriodMonth])
+  }, [
+    desktopIncomeScrollRef,
+    incomeCards,
+    incomeCarouselApi,
+    selectedPeriodMonth,
+  ])
 }

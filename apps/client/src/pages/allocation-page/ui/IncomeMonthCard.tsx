@@ -1,5 +1,9 @@
 import type { IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
 import {
+  allocationIncomeMonthCardContentClassName,
+  allocationIncomeMonthCardMobileClassName,
+} from '@/pages/allocation-page/lib/allocationPageLayout'
+import {
   getToneAccentClassName,
   getToneGradientClassName,
 } from '@/pages/allocation-page/lib/incomeCardTone'
@@ -29,6 +33,7 @@ export function IncomeMonthCard({
       data-income-card-id={cardId}
       className={cn(
         'w-full min-w-20 rounded-xl border border-transparent text-left transition-all duration-200 md:w-24 md:border-2',
+        allocationIncomeMonthCardMobileClassName,
         isActive
           ? 'border-main-black/20 md:scale-[1.02] md:border-main-black/20'
           : 'hover:-translate-y-0.5',
@@ -38,7 +43,7 @@ export function IncomeMonthCard({
       <Card
         size="sm"
         className={cn(
-          'relative gap-0.5! overflow-hidden py-0.5! bg-linear-to-br transition-all duration-200 active:scale-[0.99] md:gap-1! md:py-1!',
+          'relative h-full gap-0.5! overflow-hidden py-0.5! bg-linear-to-br transition-all duration-200 active:scale-[0.99] md:gap-1! md:py-1!',
           cardToneClassName,
           isActive && 'md:shadow-sm',
         )}
@@ -51,11 +56,16 @@ export function IncomeMonthCard({
           )}
           aria-hidden
         />
-        <CardContent className="space-y-0.5 px-1 py-1 md:space-y-1 md:px-1 md:py-2">
-          <p className="text-[7px] font-medium uppercase tracking-wide text-slate-hover md:text-[8px]">
+        <CardContent
+          className={cn(
+            'space-y-0.5 px-1 py-1 md:space-y-1 md:px-1 md:py-2',
+            allocationIncomeMonthCardContentClassName,
+          )}
+        >
+          <p className="truncate text-[7px] font-medium uppercase tracking-wide text-slate-hover md:text-[8px]">
             {incomeCard.periodLabel}
           </p>
-          <p className="text-[10px] font-extrabold tabular-nums text-main-black md:text-[11px]">
+          <p className="truncate text-[10px] font-extrabold tabular-nums text-main-black md:text-[11px]">
             {formatAmount(incomeCard.amount)}
           </p>
         </CardContent>

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { computeOperationalSummary } from '@/entities/budget/lib/computeOperationalSummary'
 import { monthProjectionFromSummary } from '@/entities/budget/lib/monthProjectionFromSummary'
-import { formatPeriodMonthLabel } from '@/entities/budget/lib/periodLabels'
+import { formatPlanningPeriodLabel } from '@/entities/budget/lib/periodLabels'
 import {
   fullReserveMutationArgs,
   unreservePlannedExpenseMutationArgs,
@@ -59,7 +59,7 @@ export function usePlanningPage() {
   const periodLabels = useMemo(() => {
     const months = buildPlanningTimelineMonths(periodMonth)
     return Object.fromEntries(
-      months.map((month) => [month, formatPeriodMonthLabel(month)]),
+      months.map((month) => [month, formatPlanningPeriodLabel(month)]),
     )
   }, [periodMonth])
 

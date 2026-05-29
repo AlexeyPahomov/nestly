@@ -1,4 +1,4 @@
-import { formatPeriodMonthLabel } from '@/entities/budget/lib/periodLabels'
+import { formatPlanningPeriodLabel } from '@/entities/budget/lib/periodLabels'
 
 import { buildPlanningCarouselMonths } from './buildPlanningCarouselMonths'
 
@@ -8,7 +8,7 @@ export function buildCarouselPeriodLabels(
   return Object.fromEntries(
     buildPlanningCarouselMonths(periodMonth).map((month) => [
       month,
-      formatPeriodMonthLabel(month),
+      formatPlanningPeriodLabel(month),
     ]),
   )
 }

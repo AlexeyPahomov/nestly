@@ -1,4 +1,4 @@
-import { formatPeriodMonthLabel } from '@/entities/budget/lib/periodLabels'
+import { formatPlanningPeriodLabel } from '@/entities/budget/lib/periodLabels'
 import { cn } from '@/shared/lib/utils'
 import { Carousel, CarouselContent, CarouselItem } from '@/shared/ui'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -61,7 +61,7 @@ export function PlanningMonthTimeline({
               )}
             >
               <PlanningMonthCard
-                label={periodLabels[month] ?? formatPeriodMonthLabel(month)}
+                label={periodLabels[month] ?? formatPlanningPeriodLabel(month)}
                 planCount={itemCounts[month] ?? 0}
                 swatches={itemSwatches[month] ?? []}
                 active={month === periodMonth}

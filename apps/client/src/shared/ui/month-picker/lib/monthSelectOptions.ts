@@ -17,8 +17,16 @@ function buildMonthRange(start: Date, end: Date): string[] {
   return options
 }
 
-/** Подпись пункта: «май 2026», «апрель 2026» (именительный падеж). */
-export function formatPeriodMonthSelectLabel(periodMonth: string): string {
+type FormatPeriodMonthSelectLabelOptions = {
+  /** Без года, например «Май» вместо «май 2026». */
+  omitYear?: boolean
+}
+
+/** Подпись пункта: «май 2026» или «Май» (именительный падеж). */
+export function formatPeriodMonthSelectLabel(
+  periodMonth: string,
+  options?: FormatPeriodMonthSelectLabelOptions,
+): string {
   const date = parseMonthStringToDate(periodMonth)
 
   if (!date) {
@@ -30,6 +38,10 @@ export function formatPeriodMonthSelectLabel(periodMonth: string): string {
   })
     .format(date)
     .toLowerCase()
+
+  if (options?.omitYear) {
+    return monthPart.charAt(0).toUpperCase() + monthPart.slice(1)
+  }
 
   return `${monthPart} ${date.getFullYear()}`
 }
@@ -43,6 +55,7 @@ export type PeriodMonthSelectOption = {
 export function buildPeriodMonthSelectOptions(
   anchorPeriodMonth: string,
   spanMonths = 24,
+  options?: FormatPeriodMonthSelectLabelOptions,
 ): PeriodMonthSelectOption[] {
   const anchorDate = parseMonthStringToDate(anchorPeriodMonth) ?? new Date()
   const start = addMonths(anchorDate, -spanMonths)
@@ -50,6 +63,6 @@ export function buildPeriodMonthSelectOptions(
 
   return buildMonthRange(start, end).map((value) => ({
     value,
-    label: formatPeriodMonthSelectLabel(value),
+    label: formatPeriodMonthSelectLabel(value, options),
   }))
 }

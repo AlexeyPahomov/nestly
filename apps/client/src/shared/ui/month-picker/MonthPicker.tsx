@@ -20,6 +20,8 @@ type MonthPickerProps = {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  /** Без года в подписи выбранного месяца и пунктов списка. */
+  omitYear?: boolean;
   containerClassName?: string;
   triggerClassName?: string;
   /** Иконка слева от значения (например, календарь в шапке страницы). */
@@ -32,6 +34,7 @@ export function MonthPicker({
   value,
   onChange,
   disabled,
+  omitYear = false,
   containerClassName,
   triggerClassName,
   leadingIcon,
@@ -41,8 +44,8 @@ export function MonthPicker({
     idProp ?? (label != null && label !== '' ? generatedId : undefined);
 
   const options = React.useMemo(
-    () => buildPeriodMonthSelectOptions(value),
-    [value],
+    () => buildPeriodMonthSelectOptions(value, 24, { omitYear }),
+    [omitYear, value],
   );
 
   const [open, setOpen] = React.useState(false);

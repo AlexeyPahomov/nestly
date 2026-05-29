@@ -20,6 +20,7 @@ export function ExpensePageMonthPicker({
     <MonthPicker
       value={value}
       onChange={onChange}
+      omitYear
       containerClassName={expensePageMonthPickerClassName}
       leadingIcon={
         <CalendarIcon
