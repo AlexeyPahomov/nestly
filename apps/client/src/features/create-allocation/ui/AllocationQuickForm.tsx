@@ -1,15 +1,18 @@
+import type { Category } from '@/entities/category/model/types'
 import {
   bindMoneyAmountField,
   moneyAmountToFormValue,
 } from '@/shared/lib/moneyInput'
-import { Button, MoneyInput, Select } from '@/shared/ui'
+import { Button, MoneyInput } from '@/shared/ui'
 
 import type { AllocationFormController } from '../model/types'
+
+import { AllocationCategorySelect } from './AllocationCategorySelect'
 
 const QUICK_AMOUNT_STEPS = [1000, 5000] as const
 
 export type AllocationQuickFormProps = {
-  categoryOptions: { value: string; label: string }[]
+  categories: readonly Category[]
   noCategories: boolean
   controlsDisabled: boolean
   form: AllocationFormController
@@ -18,7 +21,7 @@ export type AllocationQuickFormProps = {
 }
 
 export function AllocationQuickForm({
-  categoryOptions,
+  categories,
   noCategories,
   controlsDisabled,
   form,
@@ -33,13 +36,13 @@ export function AllocationQuickForm({
         void onSubmit()
       }}
     >
-      <Select
+      <AllocationCategorySelect
         id="allocation-category"
         value={form.values.category_id}
         onValueChange={(category_id) => {
           form.patchValues({ category_id })
         }}
-        options={categoryOptions}
+        categories={categories}
         placeholder={
           noCategories
             ? 'Нет категорий расходов или накоплений'

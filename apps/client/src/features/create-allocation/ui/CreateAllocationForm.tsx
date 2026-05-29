@@ -1,4 +1,5 @@
 import type { Category } from '@/entities/category/model/types'
+import { formLabelClassName } from '@/shared/config/formUi'
 import { formatMoneyWithRub } from '@/shared/lib/format'
 import { bindMoneyAmountField } from '@/shared/lib/moneyInput'
 import {
@@ -8,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
   MoneyInput,
-  Select,
 } from '@/shared/ui'
 
 import { useCreateAllocationForm } from '../model/useCreateAllocationForm'
+import { AllocationCategorySelect } from './AllocationCategorySelect'
 
 type CreateAllocationFormProps = {
   incomeId: string | null
@@ -25,11 +26,6 @@ export function CreateAllocationForm({
   remainingBalance,
 }: CreateAllocationFormProps) {
   const form = useCreateAllocationForm({ incomeId, remainingBalance })
-
-  const categoryOptions = categories.map((category) => ({
-    value: category.id,
-    label: category.name,
-  }))
 
   const noCategories = categories.length === 0
   const controlsDisabled = form.disabled || form.submitting
@@ -47,21 +43,25 @@ export function CreateAllocationForm({
             void form.submit()
           }}
         >
-          <Select
-            id="allocation-category"
-            label="Категория"
-            value={form.values.category_id}
-            onValueChange={(category_id) => {
-              form.patchValues({ category_id })
-            }}
-            options={categoryOptions}
-            placeholder={
-              noCategories
-                ? 'Нет категорий расходов или накоплений'
-                : 'Выберите категорию'
-            }
-            disabled={controlsDisabled || noCategories}
-          />
+          <div className="space-y-2">
+            <label htmlFor="allocation-category" className={formLabelClassName}>
+              Категория
+            </label>
+            <AllocationCategorySelect
+              id="allocation-category"
+              value={form.values.category_id}
+              onValueChange={(category_id) => {
+                form.patchValues({ category_id })
+              }}
+              categories={categories}
+              placeholder={
+                noCategories
+                  ? 'Нет категорий расходов или накоплений'
+                  : 'Выберите категорию'
+              }
+              disabled={controlsDisabled || noCategories}
+            />
+          </div>
 
           <MoneyInput
             id="allocation-amount"

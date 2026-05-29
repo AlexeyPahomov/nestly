@@ -1,10 +1,9 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { appRouteLabel } from '@/app/config/routes'
 import { isAllocationListBackgroundFetch } from '@/entities/allocation/api/allocationQueryFlags'
 import { allocationIncomePercentOrZero } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
-import type { Category } from '@/entities/category/model/types'
 import { useCreateAllocationForm } from '@/features/create-allocation/model/useCreateAllocationForm'
 import { useEditAllocationForm } from '@/features/create-allocation/model/useEditAllocationForm'
 import {
@@ -24,13 +23,6 @@ import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { ContentTransition } from '@/shared/ui/content-transition'
 import { Fab, PageSection, type CarouselApi } from '@/shared/ui'
 import { AllocationList } from '@/widgets/allocation-list'
-
-function toCategoryOptions(categories: Category[]) {
-  return categories.map((category) => ({
-    value: category.id,
-    label: category.name,
-  }))
-}
 
 export function AllocationPage() {
   const isMobile = useIsMobile()
@@ -67,11 +59,6 @@ export function AllocationPage() {
       setEditingAllocation(null)
     },
   })
-
-  const categoryOptions = useMemo(
-    () => toCategoryOptions(allocationCategories),
-    [allocationCategories],
-  )
 
   const noCategories = allocationCategories.length === 0
   const createDisabled = form.disabled || form.submitting
@@ -153,7 +140,7 @@ export function AllocationPage() {
 
       <AllocationFormSheets
         isMobile={isMobile}
-        categoryOptions={categoryOptions}
+        categories={allocationCategories}
         noCategories={noCategories}
         createOpen={allocateSheetOpen}
         onCreateOpenChange={setAllocateSheetOpen}

@@ -60,7 +60,7 @@ export function AllocationList({
     >
       {(items) =>
         items.map((allocation) => (
-          <li key={allocation.id}>
+          <li key={allocation.category_id}>
             <AllocationCard
               allocation={allocation}
               incomeAmount={incomeAmount}

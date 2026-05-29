@@ -5,7 +5,11 @@ import { EditPlannedExpenseDialog } from '@/features/create-planned-expense/ui/E
 import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
 import { PageSection } from '@/shared/ui'
 
-import { planningPageContentClassName } from '../lib/planningPageLayout'
+import {
+  planningPageMonthBodyClassName,
+  planningPageMonthTransitionClassName,
+  planningPageShellClassName,
+} from '../lib/planningPageLayout'
 import { usePlanningPage } from '../model/usePlanningPage'
 
 import { PlanningPageHeader } from './PlanningPageHeader'
@@ -24,16 +28,21 @@ export function PlanningPage() {
       title={pageTitle}
       header={<PlanningPageHeader page={page} />}
       mobileSidebarOnHeader={false}
+      className="max-md:gap-2"
     >
-      <PlanningPageMonthTransition
-        periodMonth={page.periodMonth}
-        className={planningPageContentClassName}
-      >
-        <PlanningPageMonthBody
-          page={page}
-          onEditPlanned={setEditingPlanned}
-        />
-      </PlanningPageMonthTransition>
+      <div className={planningPageShellClassName}>
+        <PlanningPageMonthTransition
+          periodMonth={page.periodMonth}
+          className={planningPageMonthTransitionClassName}
+        >
+          <div className={planningPageMonthBodyClassName}>
+            <PlanningPageMonthBody
+              page={page}
+              onEditPlanned={setEditingPlanned}
+            />
+          </div>
+        </PlanningPageMonthTransition>
+      </div>
 
       <EditPlannedExpenseDialog
         open={editingPlanned != null}

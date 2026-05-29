@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react'
 import { sumMoneyAmounts } from '@coffer/shared'
 
 import { useAllAllocationsQuery } from '@/entities/allocation/api/useAllAllocationsQuery'
-import { filterAllocationsForIncomes } from '@/entities/allocation/lib/filterAllocationsForIncomes'
 import { pickIncomeWithMaxRemaining } from '@/entities/allocation/lib/pickIncomeWithMaxRemaining'
+import { resolveAllocationsForPeriodMonth } from '@/entities/allocation/lib/filterAllocationsByPeriod'
 import { sumAllocatedByIncome } from '@/entities/allocation/lib/sumAllocatedByIncome'
 import { sumAllocationAmounts } from '@/entities/allocation/model/calculations'
 import { useCategoriesQuery } from '@/entities/category/api/useCategoriesQuery'
-import type { Category } from '@/entities/category/model/types'
+import { isBudgetEnvelopeCategory } from '@/entities/category/lib/categoryKind'
 import { useIncomesQuery } from '@/entities/income/api/useIncomesQuery'
 import { buildAllocationIncomeCards } from '@/pages/allocation-page/lib/buildAllocationIncomeCards'
 import {
@@ -18,10 +18,6 @@ import { combineAllocationListQuery } from '@/pages/allocation-page/lib/combineA
 import { formatMonthLabel } from '@/shared/lib/format'
 
 export type { IncomeCardTone, IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
-
-function filterAllocationCategories(categories: Category[]): Category[] {
-  return categories.filter((category) => category.type !== 'income')
-}
 
 export function useAllocationPage() {
   const [pickedPeriodMonth, setPickedPeriodMonth] = useState<string | null>(null)
@@ -57,17 +53,22 @@ export function useAllocationPage() {
     [allocatedByIncome, incomesInSelectedMonth],
   )
 
-  const monthAllocations = useMemo(
-    () =>
-      filterAllocationsForIncomes(
-        allAllocationsQuery.data ?? [],
-        incomesInSelectedMonth,
-      ),
-    [allAllocationsQuery.data, incomesInSelectedMonth],
-  )
+  const monthAllocations = useMemo(() => {
+    if (selectedPeriodMonth === null) {
+      return []
+    }
+
+    return resolveAllocationsForPeriodMonth(
+      allAllocationsQuery.data ?? [],
+      selectedPeriodMonth,
+    )
+  }, [allAllocationsQuery.data, selectedPeriodMonth])
 
   const allocationCategories = useMemo(
-    () => filterAllocationCategories(categoriesQuery.data ?? []),
+    () =>
+      (categoriesQuery.data ?? []).filter((category) =>
+        isBudgetEnvelopeCategory(category.type),
+      ),
     [categoriesQuery.data],
   )
 

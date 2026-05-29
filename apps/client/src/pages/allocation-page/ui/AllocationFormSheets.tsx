@@ -1,14 +1,13 @@
 import type { Allocation } from '@/entities/allocation/model/types'
+import type { Category } from '@/entities/category/model/types'
 import { allocationFormDialogBodyClassName } from '@/features/create-allocation/lib/allocationFormDialog'
 import type { AllocationFormController } from '@/features/create-allocation/model/types'
 import { AllocationQuickForm } from '@/features/create-allocation/ui/AllocationQuickForm'
 import { ResponsiveFormDialog } from '@/shared/ui'
 
-type CategoryOption = { value: string; label: string }
-
 type AllocationFormSheetsProps = {
   isMobile: boolean
-  categoryOptions: CategoryOption[]
+  categories: readonly Category[]
   noCategories: boolean
   createOpen: boolean
   onCreateOpenChange: (open: boolean) => void
@@ -22,7 +21,7 @@ type AllocationFormSheetsProps = {
 
 export function AllocationFormSheets({
   isMobile,
-  categoryOptions,
+  categories,
   noCategories,
   createOpen,
   onCreateOpenChange,
@@ -48,7 +47,7 @@ export function AllocationFormSheets({
         hideHeader
       >
         <AllocationQuickForm
-          categoryOptions={categoryOptions}
+          categories={categories}
           noCategories={noCategories}
           controlsDisabled={createDisabled}
           form={createForm}
@@ -70,7 +69,7 @@ export function AllocationFormSheets({
         hideHeader
       >
         <AllocationQuickForm
-          categoryOptions={categoryOptions}
+          categories={categories}
           noCategories={noCategories}
           controlsDisabled={editDisabled}
           form={editForm}

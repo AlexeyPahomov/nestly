@@ -2,8 +2,7 @@ import { useCallback } from 'react'
 
 import { allocationIncomePercent } from '@/entities/allocation/model/calculations'
 import type { Allocation } from '@/entities/allocation/model/types'
-import { CategoryLucideIcon } from '@/entities/category/lib/categoryIcon'
-import { toCategoryLucideIconProps } from '@/entities/category/lib/categoryLucideIconProps'
+import { CategoryListIcon } from '@/entities/category/ui/CategoryListIcon'
 import { useAnimatedPercent } from '@/shared/hooks/useAnimatedPercent'
 import { useCardActivate } from '@/shared/hooks/use-card-activate'
 import { formatAmount } from '@/shared/lib/format'
@@ -51,17 +50,15 @@ export function AllocationCard({
     >
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2">
-            <span
-              className={`inline-flex size-7 items-center justify-center rounded-full ${tone.avatarClassName} ${tone.iconClassName}`}
-            >
-              <CategoryLucideIcon
-                {...toCategoryLucideIconProps(allocation.category)}
-                className="size-4"
-                aria-hidden
-              />
+          <span className="inline-flex min-w-0 items-center gap-2">
+            <CategoryListIcon
+              category={allocation.category}
+              className="shrink-0"
+              iconClassName="size-4 md:size-[1.125rem]"
+            />
+            <span className="truncate font-semibold text-slate-hover">
+              {allocation.category.name}
             </span>
-            <span className="font-semibold text-slate-hover">{allocation.category.name}</span>
           </span>
           <span className="shrink-0 tabular-nums text-lg font-extrabold text-main-black">
             {formatAmount(allocationAmount)}

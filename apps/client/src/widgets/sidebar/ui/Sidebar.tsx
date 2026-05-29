@@ -1,7 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import type { ReactNode } from 'react'
 
-import { APP_ROUTES, appRouteHref, type AppRouteId } from '@/app/config/routes'
+import {
+  APP_ROUTES,
+  appRouteHref,
+  appRouteNavLabel,
+  type AppRouteId,
+} from '@/app/config/routes'
 import { Logo } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -113,7 +118,7 @@ export function Sidebar() {
                   <SidebarNavItem
                     key={to}
                     to={to}
-                    label={route.label}
+                    label={appRouteNavLabel(route)}
                     Icon={Icon}
                     isActive={location.pathname === to}
                     onNavigate={handleNavigate}

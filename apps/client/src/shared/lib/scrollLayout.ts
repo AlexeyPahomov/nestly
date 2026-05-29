@@ -1,3 +1,7 @@
+/** Safari iOS: вложенный flex-скролл без схлопывания высоты. */
+export const safariIosFlexFillClassName =
+  '[@supports(-webkit-touch-callout:none)]:flex-[1_1_0%] [@supports(-webkit-touch-callout:none)]:min-h-0'
+
 /** Вертикальный скролл с передачей жеста родителю после конца списка. */
 export const scrollAreaClassName =
   'coffer-scroll-list overflow-y-auto overscroll-y-auto [overflow-anchor:none]';

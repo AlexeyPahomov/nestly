@@ -26,7 +26,10 @@ export function useActiveIncomeScroll(
     incomeCarouselApi?.scrollTo(activeIndex, false)
 
     const desktopScrollContainer = desktopIncomeScrollRef.current
-    if (desktopScrollContainer?.offsetParent !== null) {
+    if (
+      desktopScrollContainer != null &&
+      desktopScrollContainer.offsetParent != null
+    ) {
       const activeDesktopCard =
         desktopScrollContainer.querySelector<HTMLElement>(
           `[data-income-card-id="${selectedPeriodMonth}"]`,

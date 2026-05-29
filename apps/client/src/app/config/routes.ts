@@ -1,8 +1,8 @@
 /** Маршруты приложения (app shell): сегменты как `path` дочерних роутов layout и подписи для навигации. */
 export const APP_ROUTES = [
-  { id: 'income', label: 'Доходы', segment: 'income' },
+  { id: 'income', label: 'Доходы', navLabel: 'Доход', segment: 'income' },
   { id: 'allocation', label: 'Бюджет', segment: 'allocation' },
-  { id: 'expenses', label: 'Расходы', segment: 'expenses' },
+  { id: 'expenses', label: 'Расходы', navLabel: 'Расход', segment: 'expenses' },
   { id: 'planning', label: 'Планирование', mobileLabel: 'План', segment: 'planning' },
   { id: 'categories', label: 'Категории', segment: 'categories' },
 ] as const
@@ -22,13 +22,18 @@ export function appRouteLabel(id: AppRouteId): string {
   return route.label
 }
 
-/** Короткая подпись пункта меню для мобильной навигации. */
+/** Короткая подпись пункта меню (боковое и нижнее). */
+export function appRouteNavLabel(route: (typeof APP_ROUTES)[number]): string {
+  return 'navLabel' in route && route.navLabel ? route.navLabel : route.label
+}
+
+/** Подпись для нижней мобильной панели (`mobileLabel` приоритетнее `navLabel`). */
 export function appRouteMobileNavLabel(
   route: (typeof APP_ROUTES)[number],
 ): string {
   return 'mobileLabel' in route && route.mobileLabel
     ? route.mobileLabel
-    : route.label
+    : appRouteNavLabel(route)
 }
 
 /** Полный путь: `/income`, `/allocation`, … */

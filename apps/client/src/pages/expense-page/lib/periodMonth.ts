@@ -1,6 +1,9 @@
 export {
   filterAllocationsBeforePeriod,
   filterAllocationsByPeriod,
+} from '@/entities/allocation/lib/filterAllocationsByPeriod'
+
+export {
   filterExpensesBeforePeriod,
   filterExpensesByPeriod,
   filterIncomesByPeriod,

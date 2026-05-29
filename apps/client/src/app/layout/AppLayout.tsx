@@ -21,7 +21,7 @@ export function AppLayout() {
     <TooltipProvider delayDuration={500}>
       <SidebarProvider
         defaultOpen={false}
-        className="h-screen min-h-0 overflow-hidden bg-zinc-100 text-zinc-900"
+        className="h-screen h-dvh max-h-dvh min-h-0 overflow-hidden bg-zinc-100 text-zinc-900"
       >
         <Sidebar />
 

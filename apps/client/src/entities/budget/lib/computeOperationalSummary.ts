@@ -1,3 +1,4 @@
+import { filterAllocationsByPeriod } from '@/entities/allocation/lib/filterAllocationsByPeriod'
 import { sumAllocationAmounts } from '@/entities/allocation/model/calculations'
 import { isSavingsCategory } from '@/entities/category/lib/categoryKind'
 import type { Allocation } from '@/entities/allocation/model/types'
@@ -11,11 +12,7 @@ import type { CategoryBudgetItem } from '../model/types'
 import type { OperationalSummary } from '../model/operationalSummary'
 
 import { getCarryForwardMeta } from './carryForward'
-import {
-  filterAllocationsByPeriod,
-  filterExpensesByPeriod,
-  filterIncomesByPeriod,
-} from './periodFilters'
+import { filterExpensesByPeriod, filterIncomesByPeriod } from './periodFilters'
 import { formatPeriodMonthLabel } from './periodLabels'
 
 function sumSavingsInReserve(
@@ -47,11 +44,7 @@ export function computeOperationalSummary(
   plannedExpenses: readonly PlannedExpense[] = [],
 ): OperationalSummary {
   const periodIncomes = filterIncomesByPeriod(incomes, periodMonth)
-  const periodAllocations = filterAllocationsByPeriod(
-    allocations,
-    incomes,
-    periodMonth,
-  )
+  const periodAllocations = filterAllocationsByPeriod(allocations, periodMonth)
   const periodExpenses = filterExpensesByPeriod(expenses, periodMonth)
 
   const incomeTotal = sumMoneyAmounts(
