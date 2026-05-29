@@ -35,7 +35,6 @@ export function CreateIncomeFormDialog({
       title={incomeFormDialogTitle(isEditing)}
       description={incomeFormDialogDescription(isEditing)}
       bodyClassName={incomeFormDialogBodyClassName}
-      showCloseButton={isMobile}
       hideHeader
     >
       <CreateIncomeForm

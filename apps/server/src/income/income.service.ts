@@ -1,3 +1,4 @@
+import { resolveIncomeType } from '@coffer/shared';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import type { Income } from '../generated/prisma/client';
@@ -16,6 +17,7 @@ export class IncomeService {
         user_id: '00000000-0000-0000-0000-000000000001',
         amount: dto.amount,
         source: dto.source,
+        income_type: resolveIncomeType(dto.income_type),
         period_month: new Date(dto.period_month),
       },
     });
@@ -40,6 +42,7 @@ export class IncomeService {
       data: {
         amount: dto.amount,
         source: dto.source,
+        income_type: resolveIncomeType(dto.income_type),
         period_month: new Date(dto.period_month),
       },
     });

@@ -1,3 +1,5 @@
+export const INCOME_ADD_LABEL = 'Добавить доход'
+
 export function incomeFormDialogTitle(isEditing: boolean): string {
   return isEditing ? 'Редактировать доход' : 'Новый доход'
 }
@@ -9,5 +11,5 @@ export function incomeFormDialogDescription(isEditing: boolean): string {
 }
 
 export function incomeFormSubmitLabel(isEditing: boolean): string {
-  return isEditing ? 'Сохранить' : 'Добавить доход'
+  return isEditing ? 'Сохранить' : INCOME_ADD_LABEL
 }

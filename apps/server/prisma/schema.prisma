@@ -36,6 +36,7 @@ model Income {
   user_id       String
   amount        Decimal
   source        String?
+  income_type   String   @default("salary")
   period_month  DateTime
   created_at    DateTime @default(now())
 

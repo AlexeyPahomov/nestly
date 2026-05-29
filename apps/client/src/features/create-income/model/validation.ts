@@ -1,6 +1,6 @@
-import { parseMoneyInput } from '@coffer/shared'
+import { isIncomeType, parseMoneyInput } from '@coffer/shared'
 
-import { monthInputToPeriodMonth } from '@/shared/lib/date'
+import { parseDateInputValue } from '@/shared/lib/date'
 
 import type { IncomeFormPayload, IncomeFormValues } from './types'
 
@@ -14,9 +14,13 @@ export function validateIncomeForm(
     return { ok: false as const, error: 'Укажите сумму больше нуля' }
   }
 
-  const period_month = monthInputToPeriodMonth(values.period_month)
-  if (!period_month) {
-    return { ok: false as const, error: 'Выберите месяц' }
+  const period_month = values.period_month.trim()
+  if (!parseDateInputValue(period_month)) {
+    return { ok: false as const, error: 'Выберите дату' }
+  }
+
+  if (!isIncomeType(values.income_type)) {
+    return { ok: false as const, error: 'Выберите тип дохода' }
   }
 
   return {
@@ -24,6 +28,7 @@ export function validateIncomeForm(
     payload: {
       amount: parsed,
       source: values.source.trim() || undefined,
+      income_type: values.income_type,
       period_month,
     },
   }

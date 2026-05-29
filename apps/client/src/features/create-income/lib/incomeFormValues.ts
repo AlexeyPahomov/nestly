@@ -1,7 +1,7 @@
-import { getMonthKeyFromIso } from '@coffer/shared'
+import { DEFAULT_INCOME_TYPE, resolveIncomeType } from '@coffer/shared'
 
 import type { Income } from '@/entities/income/model/types'
-import { currentMonthInputValue } from '@/shared/lib/date'
+import { isoToDateInputValue, todayDateInputValue } from '@/shared/lib/date'
 import { moneyAmountToFormValue } from '@/shared/lib/moneyInput'
 
 import type { IncomeFormValues } from '../model/types'
@@ -10,7 +10,8 @@ export function emptyIncomeFormValues(): IncomeFormValues {
   return {
     amount: '',
     source: '',
-    period_month: currentMonthInputValue(),
+    income_type: DEFAULT_INCOME_TYPE,
+    period_month: todayDateInputValue(),
   }
 }
 
@@ -24,7 +25,7 @@ export function resolveIncomeFormValues(
   return {
     amount: moneyAmountToFormValue(income.amount),
     source: income.source ?? '',
-    period_month:
-      getMonthKeyFromIso(income.period_month) ?? currentMonthInputValue(),
+    income_type: resolveIncomeType(income.income_type),
+    period_month: isoToDateInputValue(income.period_month),
   }
 }

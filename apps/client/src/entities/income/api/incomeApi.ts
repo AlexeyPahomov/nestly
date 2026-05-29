@@ -1,14 +1,23 @@
-import { apiDelete, apiGet, apiPatch, apiPost } from '@/shared/api/client'
+import { resolveIncomeType } from '@coffer/shared'
 import type {
   CreateIncomePayload,
   Income,
   UpdateIncomePayload,
 } from '@/entities/income/model/types'
+import { apiDelete, apiGet, apiPatch, apiPost } from '@/shared/api/client'
 
 const INCOME_PATH = '/income'
 
-export function getIncomes(): Promise<Income[]> {
-  return apiGet<Income[]>(INCOME_PATH)
+function normalizeIncome(income: Income): Income {
+  return {
+    ...income,
+    income_type: resolveIncomeType(income.income_type),
+  }
+}
+
+export async function getIncomes(): Promise<Income[]> {
+  const rows = await apiGet<Income[]>(INCOME_PATH)
+  return rows.map(normalizeIncome)
 }
 
 export function createIncome(payload: CreateIncomePayload): Promise<Income> {

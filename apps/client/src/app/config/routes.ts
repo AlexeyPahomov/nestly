@@ -28,7 +28,10 @@ export function appRouteLabel(id: AppRouteId): string {
 
 /** Короткая подпись пункта меню (боковое и нижнее). */
 export function appRouteNavLabel(route: (typeof APP_ROUTES)[number]): string {
-  return 'navLabel' in route && route.navLabel ? route.navLabel : route.label
+  if ('navLabel' in route && typeof route.navLabel === 'string') {
+    return route.navLabel
+  }
+  return route.label
 }
 
 /** Подпись для нижней мобильной панели (`mobileLabel` приоритетнее `navLabel`). */

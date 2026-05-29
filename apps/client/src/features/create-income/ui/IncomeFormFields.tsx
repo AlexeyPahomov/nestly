@@ -11,7 +11,8 @@ import {
 } from '../lib/incomeFormLayout'
 import type { IncomeFormController } from '../model/useIncomeForm'
 
-import { IncomeFormMonthPicker } from './IncomeFormMonthPicker'
+import { IncomeFormDatePicker } from './IncomeFormDatePicker'
+import { IncomeFormTypeSelect } from './IncomeFormTypeSelect'
 
 export type IncomeFormFieldsProps = {
   form: IncomeFormController
@@ -43,20 +44,28 @@ export function IncomeFormFields({
         )}
       />
 
+      <IncomeFormTypeSelect
+        value={form.values.income_type}
+        onChange={(income_type) =>
+          form.patchValues({ income_type })
+        }
+        disabled={form.submitting}
+      />
+
       <Input
         id="income-source"
         name="source"
         type="text"
         autoComplete="off"
-        placeholder="Источник — зарплата, фриланс…"
+        placeholder="Название — ООО Ромашка, Тинькофф…"
         className={incomeFormFieldClassName}
         value={form.values.source}
         onChange={form.handleChange}
         disabled={form.submitting}
       />
 
-      <IncomeFormMonthPicker
-        id="income-period"
+      <IncomeFormDatePicker
+        id="income-date"
         value={form.values.period_month}
         onChange={(period_month) => form.patchValues({ period_month })}
         disabled={form.submitting}

@@ -1,56 +1,60 @@
 import { getAppRoute, appRouteNavLabel } from '@/app/config/routes'
 import { CreateIncomeFormDialog } from '@/features/create-income/ui/CreateIncomeFormDialog'
 import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
-import { AddButton, Fab, PageSection, fabDesktopAddButtonClassName } from '@/shared/ui'
-import { IncomeList } from '@/widgets/income-list'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
+import { PageSection } from '@/shared/ui'
+import { ContentTransition } from '@/shared/ui/content-transition'
+import { planningPageToolbarStickyClassName } from '@/pages/planning-page/lib/planningPageLayout'
 
-import { INCOME_PAGE_ADD_LABEL } from '../lib/incomePageCopy'
 import {
-  incomePageListClassName,
-  incomePageListShellClassName,
+  incomePageMonthBodyClassName,
+  incomePageMonthTransitionClassName,
   incomePageSectionClassName,
   incomePageShellClassName,
 } from '../lib/incomePageLayout'
 import { useIncomePage } from '../model/useIncomePage'
 
+import { IncomePageMonthBody } from './IncomePageMonthBody'
+import { IncomePageToolbar } from './IncomePageToolbar'
+
 const incomeRoute = getAppRoute('income')
 
 export function IncomePage() {
+  const isMobile = useIsMobile()
   const pageTitle = useDesktopPageSectionTitle(appRouteNavLabel(incomeRoute))
   const page = useIncomePage()
-  const { data, isPending, isError, error, isFetching } = page.incomesQuery
-
-  const headerAction = page.onAddIncome ? (
-    <AddButton
-      className={fabDesktopAddButtonClassName}
-      onClick={page.onAddIncome}
-    >
-      {INCOME_PAGE_ADD_LABEL}
-    </AddButton>
-  ) : undefined
+  const { isPending, isError, error } = page.incomesQuery
 
   return (
     <PageSection
       title={pageTitle}
-      headerAction={headerAction}
+      header={isMobile ? <IncomePageToolbar {...page.toolbar} /> : undefined}
+      mobileSidebarOnHeader={false}
       className={incomePageSectionClassName}
     >
       <div className={incomePageShellClassName}>
-        <div className={incomePageListShellClassName}>
-          <IncomeList
-            className={incomePageListClassName}
-            data={data}
-            isPending={isPending}
-            isError={isError}
-            error={error}
-            isFetching={isFetching}
-            layout={page.listLayout}
-            onEdit={page.onEditIncome}
-          />
-        </div>
-      </div>
+        {!isMobile ? (
+          <div className={planningPageToolbarStickyClassName}>
+            <IncomePageToolbar {...page.toolbar} />
+          </div>
+        ) : null}
 
-      <Fab label={page.fab.label} onClick={page.fab.onClick} />
+        <ContentTransition
+          contentKey={page.selectedPeriodMonth}
+          className={incomePageMonthTransitionClassName}
+        >
+          <div className={incomePageMonthBodyClassName}>
+            <IncomePageMonthBody
+              metrics={page.metrics}
+              monthIncomes={page.monthIncomes}
+              isPending={isPending}
+              isError={isError}
+              error={error}
+              onEditIncome={page.onEditIncome}
+            />
+          </div>
+        </ContentTransition>
+      </div>
 
       <CreateIncomeFormDialog {...page.formDialog} />
     </PageSection>
