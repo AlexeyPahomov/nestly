@@ -9,16 +9,25 @@ type PlanningPageHeaderProps = {
   page: ReturnType<typeof usePlanningPage>
 }
 
+export function PlanningPageToolbarSlot({
+  page,
+}: PlanningPageHeaderProps) {
+  return (
+    <PlanningPageToolbar
+      periodMonth={page.periodMonth}
+      periodLabels={page.periodLabels}
+      itemCounts={page.itemCounts}
+      itemSwatches={page.itemSwatches}
+      onSelectMonth={page.setPeriodMonth}
+    />
+  )
+}
+
+/** Шапка страницы на мобилке: тулбар + ликвидность. */
 export function PlanningPageHeader({ page }: PlanningPageHeaderProps) {
   return (
     <>
-      <PlanningPageToolbar
-        periodMonth={page.periodMonth}
-        periodLabels={page.periodLabels}
-        itemCounts={page.itemCounts}
-        itemSwatches={page.itemSwatches}
-        onSelectMonth={page.setPeriodMonth}
-      />
+      <PlanningPageToolbarSlot page={page} />
 
       <PlanningPageMonthTransition periodMonth={page.periodMonth}>
         <PlanningPageMonthMobileHeader page={page} />
