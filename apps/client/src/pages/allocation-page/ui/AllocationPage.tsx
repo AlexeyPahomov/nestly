@@ -8,8 +8,9 @@ import type { Category } from '@/entities/category/model/types'
 import { useCreateAllocationForm } from '@/features/create-allocation/model/useCreateAllocationForm'
 import { useEditAllocationForm } from '@/features/create-allocation/model/useEditAllocationForm'
 import {
-  allocationPageListClassName,
-  allocationPageMainClassName,
+  allocationPageHeaderClassName,
+  allocationPageListScrollClassName,
+  allocationPageShellClassName,
 } from '@/pages/allocation-page/lib/allocationPageLayout'
 import { useActiveIncomeScroll } from '@/pages/allocation-page/model/useActiveIncomeScroll'
 import { useAllocationPage } from '@/pages/allocation-page/model/useAllocationPage'
@@ -97,8 +98,8 @@ export function AllocationPage() {
 
   return (
     <PageSection title={pageTitle}>
-      <div className={allocationPageMainClassName}>
-        <div className="shrink-0 space-y-4">
+      <div className={allocationPageShellClassName}>
+        <div className={allocationPageHeaderClassName}>
           <AllocationIncomeSection
             hasIncome={hasIncome}
             incomeCards={incomeCards}
@@ -124,7 +125,7 @@ export function AllocationPage() {
 
         <ContentTransition
           contentKey={selectedPeriodMonth ?? 'none'}
-          className={allocationPageListClassName}
+          className={allocationPageListScrollClassName}
         >
           <AllocationList
             isPending={allocationsQuery.isPending}

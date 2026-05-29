@@ -1,8 +1,23 @@
-export const allocationPageMainClassName =
-  'flex min-h-0 flex-1 flex-col gap-6 max-md:gap-2 max-md:overflow-y-auto max-md:pb-2'
+import { cn } from '@/shared/lib/utils'
+import { mobilePageScrollPaddingClassName } from '@/shared/lib/scrollLayout'
+import { mobileFabScrollReserveClassName } from '@/shared/ui/fab'
 
-export const allocationPageListClassName =
-  'flex min-h-0 flex-1 flex-col max-md:flex-none max-md:pb-[calc(4.75rem+env(safe-area-inset-bottom))]'
+/** Оболочка страницы: на мобилке шапка фиксирована, скролл — только у списка. */
+export const allocationPageShellClassName = cn(
+  'flex min-h-0 flex-1 flex-col gap-6 max-md:gap-2',
+  'max-md:overflow-hidden max-md:overscroll-none',
+)
+
+export const allocationPageHeaderClassName = 'shrink-0 space-y-4'
+
+/** Прокрутка списка распределений (единственная вертикальная на мобилке). */
+export const allocationPageListScrollClassName = cn(
+  'flex min-h-0 min-w-0 flex-1 flex-col',
+  'max-md:overflow-y-auto max-md:overscroll-y-contain max-md:[overflow-anchor:none]',
+  mobilePageScrollPaddingClassName,
+  mobileFabScrollReserveClassName,
+  'md:overflow-hidden',
+)
 
 /** Блок «Осталось»: ниже 460px подпись справа — отдельной строкой на всю ширину. */
 export const remainingBalanceCardBodyClassName =

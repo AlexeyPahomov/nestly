@@ -1,6 +1,7 @@
 import { useLayoutEffect, type RefObject } from 'react'
 
 import type { IncomeCardView } from '@/pages/allocation-page/lib/allocationIncomeCard'
+import { scrollIncomeMonthCardToStart } from '@/pages/allocation-page/lib/scrollIncomeMonthCardToStart'
 import type { CarouselApi } from '@/shared/ui'
 
 /** Прокрутка к активному месяцу: он у левого края, более ранние — левее за скроллом. */
@@ -24,15 +25,16 @@ export function useActiveIncomeScroll(
 
     incomeCarouselApi?.scrollTo(activeIndex, false)
 
-    const activeDesktopCard =
-      desktopIncomeScrollRef.current?.querySelector<HTMLElement>(
-        `[data-income-card-id="${selectedPeriodMonth}"]`,
-      )
-    activeDesktopCard?.scrollIntoView({
-      behavior: 'auto',
-      inline: 'start',
-      block: 'nearest',
-    })
+    const desktopScrollContainer = desktopIncomeScrollRef.current
+    if (desktopScrollContainer?.offsetParent !== null) {
+      const activeDesktopCard =
+        desktopScrollContainer.querySelector<HTMLElement>(
+          `[data-income-card-id="${selectedPeriodMonth}"]`,
+        )
+      if (activeDesktopCard) {
+        scrollIncomeMonthCardToStart(desktopScrollContainer, activeDesktopCard)
+      }
+    }
   }, [
     desktopIncomeScrollRef,
     incomeCards,

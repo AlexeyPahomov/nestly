@@ -5,6 +5,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
   background-color: #f8f9fa;
@@ -15,6 +23,12 @@ body {
     Segoe UI,
     Roboto,
     sans-serif;
+}
+
+#root {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
 }
 
 .coffer-list-fade {
