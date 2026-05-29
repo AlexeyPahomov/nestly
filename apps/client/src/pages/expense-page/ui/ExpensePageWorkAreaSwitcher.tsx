@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/utils'
+import { Button } from '@/shared/ui'
 
 import {
   expensePageWorkSwitcherButtonActiveClassName,
@@ -35,19 +36,22 @@ export function ExpensePageWorkAreaSwitcher({
         const isActive = slide.id === activeSlideId
 
         return (
-          <button
+          <Button
             key={slide.id}
             type="button"
             role="tab"
+            variant="ghost"
+            size="sm"
             aria-selected={isActive}
             className={cn(
               expensePageWorkSwitcherButtonClassName,
+              !isActive && 'text-zinc-500 hover:bg-zinc-200/60 hover:text-zinc-900',
               isActive && expensePageWorkSwitcherButtonActiveClassName,
             )}
             onClick={() => onSelect(slide.id)}
           >
             {slide.label}
-          </button>
+          </Button>
         )
       })}
       </div>

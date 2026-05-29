@@ -18,7 +18,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from '@/shared/ui/sidebar'
@@ -129,8 +128,6 @@ export function Sidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarRail />
     </ShadcnSidebar>
   )
 }

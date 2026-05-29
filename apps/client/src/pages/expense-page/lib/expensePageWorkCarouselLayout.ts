@@ -27,12 +27,14 @@ export const expensePageWorkCarouselItemClassName =
 
 /** Шапка табов — вне скролла списка. */
 export const expensePageWorkSwitcherBarClassName =
-  'z-10 shrink-0 bg-white max-md:border-b-0 md:border-b md:border-zinc-200/80';
+  'z-10 shrink-0 max-md:px-px max-md:pe-2 max-md:pb-1 md:border-b md:border-zinc-200/80 md:pb-3';
 
-export const expensePageWorkSwitcherClassName = 'flex w-full gap-1';
+/** Сегментированный переключатель: одна тень снаружи, без обводки у сегментов. */
+export const expensePageWorkSwitcherClassName =
+  'flex w-full gap-0.5 rounded-xl bg-zinc-100/90 p-1 shadow-sm';
 
 export const expensePageWorkSwitcherButtonClassName =
-  'flex-1 rounded-none border-b-2 border-transparent bg-transparent px-2 pb-2 pt-1 text-sm font-medium text-zinc-500 transition-colors';
+  'h-9 min-h-9 min-w-0 flex-1 rounded-lg border-0 px-2 text-xs font-medium shadow-none sm:text-sm';
 
 export const expensePageWorkSwitcherButtonActiveClassName =
-  'border-zinc-900 font-semibold text-zinc-900';
+  'bg-white font-semibold text-zinc-900 shadow-none hover:bg-white';

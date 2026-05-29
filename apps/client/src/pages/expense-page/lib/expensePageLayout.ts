@@ -43,7 +43,7 @@ export const expensePageTabPanelScrollClassName = cn(
   scrollAreaClassName,
   mobileFabScrollReserveClassName,
   'overflow-y-auto overscroll-y-auto',
-  'max-md:ps-px max-md:pt-px max-md:pe-2 max-md:pb-8',
+  'max-md:ps-px max-md:pt-0 max-md:pe-2 max-md:pb-8',
   'max-md:[&_ul>li]:ring-offset-0',
   'md:pt-0.5 md:ps-px md:pe-0',
 )
@@ -60,10 +60,10 @@ export const expensePageWorkAreaDesktopClassName =
 export const expensePageListInTabClassName = 'gap-1'
 
 /**
- * Отступ от линии табов до списка, если шапки ItemsList нет
- * (на «Категориях» тот же зазор даёт gap-3 между шапкой и телом).
+ * Отступ от табов до списка, если шапки ItemsList нет
+ * (компактнее прежнего gap-3 у скрытого заголовка).
  */
-export const expensePageTabListTopInsetClassName = 'max-md:pt-3'
+export const expensePageTabListTopInsetClassName = 'max-md:pt-1.5'
 
 /** Оболочка списка в табе: не задаёт высоту, чтобы скролл был у панели. */
 export const expensePageTabListShellClassName =
