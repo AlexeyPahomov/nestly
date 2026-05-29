@@ -2,12 +2,12 @@ import { parseMoneyInput } from '@coffer/shared'
 
 import { monthInputToPeriodMonth } from '@/shared/lib/date'
 
-import type { CreateIncomeFormValues, ValidCreateIncomeFormPayload } from './types'
+import type { IncomeFormPayload, IncomeFormValues } from './types'
 
-export function validateCreateIncomeForm(
-  values: CreateIncomeFormValues,
+export function validateIncomeForm(
+  values: IncomeFormValues,
 ):
-  | { ok: true; payload: ValidCreateIncomeFormPayload }
+  | { ok: true; payload: IncomeFormPayload }
   | { ok: false; error: string } {
   const parsed = parseMoneyInput(values.amount)
   if (parsed === null) {

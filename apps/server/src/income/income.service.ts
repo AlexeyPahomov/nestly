@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Income } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateIncomeDto } from './dto/create-income.dto';
+import { UpdateIncomeDto } from './dto/update-income.dto';
 
 @Injectable()
 export class IncomeService {
@@ -23,6 +24,24 @@ export class IncomeService {
   findAll(): Promise<Income[]> {
     return this.prisma.income.findMany({
       orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async update(id: string, dto: UpdateIncomeDto): Promise<Income> {
+    const existing = await this.prisma.income.findFirst({
+      where: { id, user_id: dto.user_id },
+    });
+    if (!existing) {
+      throw new NotFoundException();
+    }
+
+    return this.prisma.income.update({
+      where: { id },
+      data: {
+        amount: dto.amount,
+        source: dto.source,
+        period_month: new Date(dto.period_month),
+      },
     });
   }
 

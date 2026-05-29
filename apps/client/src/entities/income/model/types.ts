@@ -15,3 +15,6 @@ export type CreateIncomePayload = {
   source?: string
   period_month: string
 }
+
+/** Тело PATCH /income/:id (UpdateIncomeDto). */
+export type UpdateIncomePayload = CreateIncomePayload

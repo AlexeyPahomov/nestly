@@ -1,6 +1,6 @@
 import { CategoryFormDialog } from '@/features/create-category/ui/CategoryFormDialog'
 import { useDesktopPageSectionTitle } from '@/shared/hooks/use-desktop-page-section-title'
-import { Fab, PageContentLoader, PageSection } from '@/shared/ui'
+import { Fab, PageSection } from '@/shared/ui'
 import { CategoryList } from '@/widgets/category-list'
 
 import {
@@ -19,27 +19,21 @@ export function CategoryPage() {
   return (
     <PageSection title={pageTitle} className={categoryPageSectionClassName}>
       <div className={categoryPageShellClassName}>
-        {page.isLoading ? (
-          <PageContentLoader />
-        ) : (
-          <div className={categoryPageListShellClassName}>
-            <CategoryList
-              className={categoryPageListClassName}
-              data={data}
-              isPending={isPending}
-              isError={isError}
-              error={error}
-              layout={page.listLayout}
-              onEdit={page.onEditCategory}
-              onAdd={page.onAddCategory}
-            />
-          </div>
-        )}
+        <div className={categoryPageListShellClassName}>
+          <CategoryList
+            className={categoryPageListClassName}
+            data={data}
+            isPending={isPending}
+            isError={isError}
+            error={error}
+            layout={page.listLayout}
+            onEdit={page.onEditCategory}
+            onAdd={page.onAddCategory}
+          />
+        </div>
       </div>
 
-      {!page.isLoading ? (
-        <Fab label={page.fab.label} onClick={page.fab.onClick} />
-      ) : null}
+      <Fab label={page.fab.label} onClick={page.fab.onClick} />
 
       <CategoryFormDialog {...page.formDialog} />
     </PageSection>

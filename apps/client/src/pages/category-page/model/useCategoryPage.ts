@@ -18,7 +18,6 @@ export function useCategoryPage() {
   return {
     categoriesQuery,
     listLayout,
-    isLoading: categoriesQuery.isPending,
     onEditCategory: setEditingCategory,
     onAddCategory: isMobile ? undefined : dialog.openForAdd,
     formDialog: {

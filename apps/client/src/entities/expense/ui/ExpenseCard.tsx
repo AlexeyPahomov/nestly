@@ -1,17 +1,17 @@
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback } from 'react'
+import { Trash2 } from 'lucide-react'
 
 import type { Expense } from '@/entities/expense/model/types'
-import { cancelMenuItemClassName } from '@/shared/lib/cancelMenuItemLayout'
+import {
+  categoryCardPressableClassName,
+  categoryCardPressingClassName,
+} from '@/entities/category/lib/categoryTileLayout'
 import type { CategoryType } from '@coffer/shared'
 import { formatExpenseDate, formatMoneyWithRub } from '@/shared/lib/format'
+import { useCardActivate } from '@/shared/hooks/use-card-activate'
+import { useLongPress } from '@/shared/hooks/use-long-press'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/shared/ui/popover/Popover'
 
 import { ExpenseCategoryBadge } from './ExpenseCategoryBadge'
 
@@ -34,16 +34,37 @@ export function ExpenseCard({
   onDelete,
   isDeleting = false,
 }: ExpenseCardProps) {
-  const [menuOpen, setMenuOpen] = useState(false)
   const description = expense.description?.trim()
-  const hasActions = onEdit != null || onDelete != null
+  const title = description || categoryName
+
+  const handleEdit = useCallback(() => {
+    onEdit?.()
+  }, [onEdit])
+
+  const isEditable = onEdit != null
+
+  const { isPressing, longPressHandlers } = useLongPress({
+    onLongPress: handleEdit,
+    disabled: !isEditable,
+  })
+
+  const activateProps = useCardActivate(handleEdit, {
+    contextMenu: isEditable,
+    ariaLabel: isEditable
+      ? `${title}, ${formatMoneyWithRub(expense.amount)}. Удерживайте для редактирования.`
+      : undefined,
+  })
 
   return (
     <div
       className={cn(
         'flex items-center gap-3 rounded-xl bg-white px-3 py-3 ring-1 ring-zinc-200/80',
-        'transition-colors hover:bg-zinc-50/60',
+        isEditable && categoryCardPressableClassName,
+        isPressing && categoryCardPressingClassName,
+        !isEditable && 'transition-colors hover:bg-zinc-50/60',
       )}
+      {...(isEditable ? activateProps : {})}
+      {...(isEditable ? longPressHandlers : {})}
     >
       <ExpenseCategoryBadge
         name={categoryName}
@@ -67,56 +88,22 @@ export function ExpenseCard({
         {formatExpenseDate(expense.date)}
       </span>
 
-      {hasActions ? (
-        <Popover open={menuOpen} onOpenChange={setMenuOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="shrink-0 text-zinc-400 hover:text-zinc-700"
-              aria-label="Действия с расходом"
-              disabled={isDeleting}
-            >
-              <MoreVertical />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="end" className="w-40 p-1">
-            {onEdit ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start gap-2"
-                disabled={isDeleting}
-                onClick={() => {
-                  setMenuOpen(false)
-                  onEdit()
-                }}
-              >
-                <Pencil className="size-4" />
-                Изменить
-              </Button>
-            ) : null}
-            {onDelete ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className={cancelMenuItemClassName}
-                disabled={isDeleting}
-                isLoading={isDeleting}
-                onClick={() => {
-                  setMenuOpen(false)
-                  onDelete()
-                }}
-              >
-                <Trash2 className="size-4 shrink-0" />
-                Удалить
-              </Button>
-            ) : null}
-          </PopoverContent>
-        </Popover>
+      {onDelete ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          className="shrink-0 text-zinc-400 hover:text-destructive"
+          aria-label="Удалить расход"
+          disabled={isDeleting}
+          isLoading={isDeleting}
+          onClick={(event) => {
+            event.stopPropagation()
+            onDelete()
+          }}
+        >
+          <Trash2 />
+        </Button>
       ) : null}
     </div>
   )

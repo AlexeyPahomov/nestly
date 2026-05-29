@@ -16,12 +16,22 @@ export function useContentTransition(contentKey: string, content: ReactNode) {
   const prevKeyRef = useRef(contentKey)
   const pendingContentRef = useRef(content)
   const enterTimerRef = useRef<number | undefined>(undefined)
+  /** Первый сменный маршрут (напр. `/` → `/planning`) без exit/enter. */
+  const skipNextRouteTransitionRef = useRef(true)
 
   useLayoutEffect(() => {
     pendingContentRef.current = content
 
     if (prevKeyRef.current === contentKey) {
       setRenderedContent(content)
+      return
+    }
+
+    if (skipNextRouteTransitionRef.current) {
+      skipNextRouteTransitionRef.current = false
+      prevKeyRef.current = contentKey
+      setRenderedContent(content)
+      setPhase('idle')
       return
     }
 

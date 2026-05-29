@@ -26,6 +26,10 @@ type MonthPickerProps = {
   triggerClassName?: string;
   /** Иконка слева от значения (например, календарь в шапке страницы). */
   leadingIcon?: React.ReactNode;
+  /** `popper` — для диалогов и sheet (без смещения меню из-за transform). */
+  contentPosition?: 'item-aligned' | 'popper';
+  /** См. Radix Select: внутри Dialog обычно `false`. */
+  modal?: boolean;
 };
 
 export function MonthPicker({
@@ -38,6 +42,8 @@ export function MonthPicker({
   containerClassName,
   triggerClassName,
   leadingIcon,
+  contentPosition = 'item-aligned',
+  modal,
 }: MonthPickerProps) {
   const generatedId = React.useId();
   const inputId =
@@ -57,6 +63,7 @@ export function MonthPicker({
       disabled={disabled}
       open={open}
       onOpenChange={setOpen}
+      modal={modal}
     >
       <SelectTrigger
         id={inputId}
@@ -72,10 +79,16 @@ export function MonthPicker({
         <SelectValue placeholder="Выберите месяц" />
       </SelectTrigger>
       <SelectContent
-        position="item-aligned"
+        position={contentPosition}
         hideScrollButtons
-        centerSelectedValue={open ? value : undefined}
-        className={monthPickerSelectMenuClassName}
+        centerSelectedValue={
+          contentPosition === 'item-aligned' && open ? value : undefined
+        }
+        className={cn(
+          monthPickerSelectMenuClassName,
+          contentPosition === 'popper' &&
+            'min-w-(--radix-select-trigger-width)',
+        )}
         viewportClassName={monthPickerSelectMenuClassName}
       >
         {options.map((option) => (

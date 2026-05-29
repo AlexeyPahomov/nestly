@@ -45,7 +45,7 @@ export function CategoryList({
       error={error}
       data={data}
       isFetching={false}
-      showPendingLoader={false}
+      showPendingLoader
       forceShowList={showAddTile}
       emptyMessage={showAddTile ? undefined : CATEGORY_LIST_EMPTY_MESSAGE}
       errorFallback={CATEGORY_LIST_ERROR_FALLBACK}

@@ -1,8 +1,8 @@
 /** Маршруты приложения (app shell): сегменты как `path` дочерних роутов layout и подписи для навигации. */
 export const APP_ROUTES = [
-  { id: 'income', label: 'Доходы', navLabel: 'Доход', segment: 'income' },
+  { id: 'income', label: 'Доход', segment: 'income' },
   { id: 'allocation', label: 'Бюджет', segment: 'allocation' },
-  { id: 'expenses', label: 'Расходы', navLabel: 'Расход', segment: 'expenses' },
+  { id: 'expenses', label: 'Расход', segment: 'expenses' },
   { id: 'planning', label: 'Планирование', mobileLabel: 'План', segment: 'planning' },
   { id: 'categories', label: 'Категории', segment: 'categories' },
 ] as const
@@ -14,12 +14,16 @@ export type AppRouteSegment = (typeof APP_ROUTES)[number]['segment']
 /** Сегмент главного экрана — цель редиректа с `/`. */
 export const APP_DEFAULT_SEGMENT = 'planning' satisfies AppRouteSegment
 
-export function appRouteLabel(id: AppRouteId): string {
+export function getAppRoute(id: AppRouteId): (typeof APP_ROUTES)[number] {
   const route = APP_ROUTES.find((item) => item.id === id)
   if (!route) {
     throw new Error(`Unknown route id: ${id}`)
   }
-  return route.label
+  return route
+}
+
+export function appRouteLabel(id: AppRouteId): string {
+  return getAppRoute(id).label
 }
 
 /** Короткая подпись пункта меню (боковое и нижнее). */
